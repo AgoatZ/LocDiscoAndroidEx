@@ -1,5 +1,7 @@
 package com.example.class2demo2.model;
 
+import com.example.class2demo2.R;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -8,7 +10,7 @@ public class Model {
 
     private Model(){
         for(int i=0;i<100;i++){
-            Student s = new Student("name",""+i, false);
+            Student s = new Student("name",""+i, "052222"+i,"herzel"+i, false, R.drawable.avatarsmith);
             data.add(s);
         }
     }

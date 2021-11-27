@@ -3,11 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_add_student.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_main2.xml" value="0.1" />
         <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_main3.xml" value="0.12" />
+        <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_student_details.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_student_details2.xml" value="0.24010416666666667" />
         <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_student_list.xml" value="0.1" />
-        <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_student_list_rv.xml" value="0.1" />
+        <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_student_list_rv.xml" value="0.536" />
         <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/student_list_row.xml" value="0.1" />
       </map>
     </option>

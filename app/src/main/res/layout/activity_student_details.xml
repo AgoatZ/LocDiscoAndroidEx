@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".StudentDetailsActivity">
+
+    <LinearLayout
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="100dp"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/details_student_imgv"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/morpheus_avatar" />
+
+        <TextView
+            android:id="@+id/details_name_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="name"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/details_id_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="id"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/details_phone_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="phone"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/details_address_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="address"
+            android:textSize="24sp" />
+
+        <CheckBox
+            android:id="@+id/details_checked_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:enabled="false"
+            android:hint="Checked"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:id="@+id/details_to_edit_btn"
+            android:text="Edit" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
