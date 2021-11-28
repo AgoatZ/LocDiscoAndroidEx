@@ -46,12 +46,7 @@ public class StudentListRvActivity extends AppCompatActivity {
                 detailsIntent = new
                         Intent(getApplicationContext(),
                         StudentDetailsActivity.class);
-                detailsIntent.putExtra("nameTv",data.get(position).getName());
-                detailsIntent.putExtra("idTv",data.get(position).getId());
-                detailsIntent.putExtra("phoneTv",data.get(position).getPhone());
-                detailsIntent.putExtra("addressTv",data.get(position).getAddress());
-                detailsIntent.putExtra("cb",data.get(position).isFlag());
-                detailsIntent.putExtra("avatarIv",data.get(position).getAvatar());
+                detailsIntent.putExtra("pos",position);
                 startActivity(detailsIntent);
             }
             @Override public void onCheckboxClick(int position, boolean isChecked){
@@ -82,6 +77,7 @@ public class StudentListRvActivity extends AppCompatActivity {
              idTv = itemView.findViewById(R.id.listrow_id_tv);
              cb = itemView.findViewById(R.id.listrow_cb);
              avatar = itemView.findViewById(R.id.listrow_avatar_imv);
+             addBtn = findViewById(R.id.studentlist_add_btn);
              itemView.setOnClickListener(v -> {
                  int pos = getAdapterPosition();
                  listener.onItemClick(pos);
@@ -133,5 +129,30 @@ public class StudentListRvActivity extends AppCompatActivity {
         public int getItemCount() {
             return data.size();
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }
