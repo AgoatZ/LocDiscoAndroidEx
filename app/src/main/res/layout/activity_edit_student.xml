@@ -5,5 +5,75 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".EditStudentActivity">
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_margin="100dp"
+        android:orientation="vertical">
 
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginBottom="15dp"
+            android:src="@drawable/avatarsmith"
+            android:id="@+id/details_student_imgv"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/edit_name_txt"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:enabled="false"
+            android:id="@+id/edit_id_txt"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/edit_phone_txt"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/edit_address_txt"/>
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:id="@+id/edit_checked_chk"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:id="@+id/edit_cancel_btn"
+            android:text="Cancel" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:id="@+id/edit_delete_btn"
+            android:text="Delete" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:id="@+id/edit_save_btn"
+            android:text="Save" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
