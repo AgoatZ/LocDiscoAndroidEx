@@ -41,8 +41,6 @@ public class EditStudentActivity extends AppCompatActivity {
         saveBtn=findViewById(R.id.edit_save_btn);
         cancelBtn=findViewById(R.id.edit_cancel_btn);
         deleteBtn=findViewById(R.id.edit_delete_btn);
-        saveIntent = new Intent(this,
-                StudentListRvActivity.class);
         cancelIntent = new Intent(this,
                 StudentListRvActivity.class);
         deleteIntent = new Intent(this,
@@ -59,14 +57,19 @@ public class EditStudentActivity extends AppCompatActivity {
             avatar.setImageResource(student.getAvatar());
         }
         saveBtn.setOnClickListener(v -> {
-            student= Model.instance.getAllStudents().get(pos);
+
+
+            student = Model.instance.getAllStudents().get(pos);
             student.setAddress(address.getText().toString());
             student.setId(id.getText().toString());
             student.setAvatar(avatar.getId());
             student.setFlag(checked.isChecked());
             student.setName(name.getText().toString());
             student.setPhone(phone.getText().toString());
-
+            saveIntent = new Intent(v.getContext(),
+                    StudentDetailsActivity.class);
+            saveIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            saveIntent.putExtra("pos",pos);
             startActivity(saveIntent);
         });
         cancelBtn.setOnClickListener(v -> {
@@ -77,5 +80,29 @@ public class EditStudentActivity extends AppCompatActivity {
             Model.instance.getAllStudents().remove(pos);
             startActivity(deleteIntent);
         });
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 }

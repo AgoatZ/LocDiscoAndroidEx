@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -31,8 +32,6 @@ public class StudentDetailsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_details);
-        EditIntent = new Intent(this,
-                EditStudentActivity.class);
         nameTv = findViewById(R.id.details_name_txt);
         idTv = findViewById(R.id.details_id_txt);
         phoneTv = findViewById(R.id.details_phone_txt);
@@ -52,6 +51,9 @@ public class StudentDetailsActivity extends AppCompatActivity {
             avatar.setImageResource(student.getAvatar());
         }
         editBtn.setOnClickListener(v -> {
+            EditIntent = new Intent(v.getContext(),
+                    EditStudentActivity.class);
+            //EditIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             EditIntent.putExtra("pos",pos);
             startActivity(EditIntent);
         });
@@ -62,10 +64,12 @@ public class StudentDetailsActivity extends AppCompatActivity {
         super.onPause();
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-    }
+        }
+
 
     @Override
     protected void onDestroy() {
@@ -75,6 +79,20 @@ public class StudentDetailsActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            pos = extras.getInt("pos");
+            Log.d("TAG", "position is: "+pos);
+            student = Model.instance.getAllStudents().get(pos);
+            nameTv.setText(student.getName());
+            Log.d("TAG", "Name is: "+student.getName());
+            idTv.setText(student.getId());
+            addressTv.setText(student.getAddress());
+            phoneTv.setText(student.getPhone());
+            cb.setChecked(student.isFlag());
+            Log.d("TAG", "Avatar is: "+student.getAvatar());
+            avatar.setImageResource(student.getAvatar());
+        }
     }
 
     @Override
