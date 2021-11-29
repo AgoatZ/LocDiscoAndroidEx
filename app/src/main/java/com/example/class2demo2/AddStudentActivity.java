@@ -23,13 +23,13 @@ public class AddStudentActivity extends AppCompatActivity {
     Button saveBtn;
     CheckBox cb;
     ImageView avatar;
-    Intent detailsIntent;
+    Intent ListIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_student);
-        detailsIntent = new Intent(this,
-                StudentDetailsActivity.class);
+        ListIntent = new Intent(this,
+                StudentListRvActivity.class);
          nameTv = findViewById(R.id.add_name_txt);
          idTv =findViewById(R.id.add_id_txt);
          phoneTv =findViewById(R.id.add_phone_txt);
@@ -39,13 +39,12 @@ public class AddStudentActivity extends AppCompatActivity {
          cancelBtn = findViewById(R.id.add_cancel_btn);
          saveBtn = findViewById(R.id.add_save_btn);
          cancelBtn.setOnClickListener(v -> {
-             startActivity(detailsIntent);
+             startActivity(ListIntent);
          });
          saveBtn.setOnClickListener(v -> {
              student = new Student(nameTv.getText().toString(),idTv.getText().toString(),phoneTv.getText().toString(),addressTv.getText().toString(),cb.isChecked(),avatar.getId());
              Model.instance.addStudent(student);
-             detailsIntent.putExtra("pos",Model.instance.getAllStudents().indexOf(student));
-             startActivity(detailsIntent);
+             startActivity(ListIntent);
          });
     }
 
