@@ -139,6 +139,8 @@ public class StudentListRvActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        data=Model.instance.getAllStudents();
+        adapter.notifyDataSetChanged();
     }
 
     @Override
