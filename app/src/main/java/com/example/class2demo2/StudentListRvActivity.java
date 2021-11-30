@@ -3,10 +3,12 @@ package com.example.class2demo2;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +30,7 @@ public class StudentListRvActivity extends AppCompatActivity {
     MyAdapter adapter;
     Intent detailsIntent;
     Intent addIntent;
+    RecyclerView.SmoothScroller scroller;
 
 
     @Override

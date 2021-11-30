@@ -9,8 +9,8 @@ public class Model {
     public static final Model instance = new Model();
 
     private Model(){
-        for(int i=0;i<100;i++){
-            Student s = new Student("name",""+i, "052222"+i,"herzel"+i, false, R.drawable.avatarsmith);
+        for(int i=0;i<10;i++){
+            Student s = new Student("Agent Smith clone no."+i,""+i, "052497558"+i,"Telephone Booth "+i, false, R.drawable.avatarsmith);
             data.add(s);
         }
     }
