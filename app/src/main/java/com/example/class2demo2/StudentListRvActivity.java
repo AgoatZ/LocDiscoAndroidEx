@@ -22,11 +22,14 @@ import java.util.List;
 
 public class StudentListRvActivity extends AppCompatActivity {
 
+    //MEMBERS
     List<Student> data;
     RecyclerView listRv;
     MyAdapter adapter;
     Intent detailsIntent;
     Intent addIntent;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +67,7 @@ public class StudentListRvActivity extends AppCompatActivity {
 
     }
 
-
+    //HOLDER CLASS
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nameTv;
         TextView idTv;

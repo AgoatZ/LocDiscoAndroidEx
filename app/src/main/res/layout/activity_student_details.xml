@@ -20,7 +20,7 @@
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginBottom="15dp"
-            android:src="@drawable/morpheus_avatar" />
+            app:srcCompat="@drawable/avatarsmith" />
 
         <TextView
             android:id="@+id/details_name_txt"

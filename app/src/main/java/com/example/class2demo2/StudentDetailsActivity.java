@@ -48,14 +48,10 @@ public class StudentDetailsActivity extends AppCompatActivity {
             addressTv.setText(student.getAddress());
             phoneTv.setText(student.getPhone());
             cb.setChecked(student.isFlag());
-            Drawable av;
-            av.fin
-            avatar.setImageResource(student.getAvatar());
         }
         editBtn.setOnClickListener(v -> {
             EditIntent = new Intent(v.getContext(),
                     EditStudentActivity.class);
-            //EditIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             EditIntent.putExtra("pos",pos);
             startActivity(EditIntent);
         });
@@ -84,16 +80,12 @@ public class StudentDetailsActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             pos = extras.getInt("pos");
-            Log.d("TAG", "position is: "+pos);
             student = Model.instance.getAllStudents().get(pos);
             nameTv.setText(student.getName());
-            Log.d("TAG", "Name is: "+student.getName());
             idTv.setText(student.getId());
             addressTv.setText(student.getAddress());
             phoneTv.setText(student.getPhone());
             cb.setChecked(student.isFlag());
-            Log.d("TAG", "Avatar is: "+student.getAvatar());
-            avatar.setImageResource(student.getAvatar());
         }
     }
 

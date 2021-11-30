@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
@@ -23,12 +22,12 @@ public class AddStudentActivity extends AppCompatActivity {
     Button saveBtn;
     CheckBox cb;
     ImageView avatar;
-    Intent ListIntent;
+    Intent listIntent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_student);
-        ListIntent = new Intent(this,
+        listIntent = new Intent(this,
                 StudentListRvActivity.class);
          nameTv = findViewById(R.id.add_name_txt);
          idTv =findViewById(R.id.add_id_txt);
@@ -39,12 +38,14 @@ public class AddStudentActivity extends AppCompatActivity {
          cancelBtn = findViewById(R.id.add_cancel_btn);
          saveBtn = findViewById(R.id.add_save_btn);
          cancelBtn.setOnClickListener(v -> {
-             startActivity(ListIntent);
+             finish();
+             listIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+             startActivity(listIntent);
          });
          saveBtn.setOnClickListener(v -> {
              student = new Student(nameTv.getText().toString(),idTv.getText().toString(),phoneTv.getText().toString(),addressTv.getText().toString(),cb.isChecked(),avatar.getId());
              Model.instance.addStudent(student);
-             startActivity(ListIntent);
+             startActivity(listIntent);
          });
     }
 
