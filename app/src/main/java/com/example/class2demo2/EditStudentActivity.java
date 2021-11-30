@@ -37,7 +37,7 @@ public class EditStudentActivity extends AppCompatActivity {
         phone = findViewById(R.id.edit_phone_txt);
         address = findViewById(R.id.edit_address_txt);
         checked = findViewById(R.id.edit_checked_chk);
-        avatar = findViewById(R.id.details_student_imgv);
+        avatar = findViewById(R.id.edit_student_imgv);
         saveBtn=findViewById(R.id.edit_save_btn);
         cancelBtn=findViewById(R.id.edit_cancel_btn);
         deleteBtn=findViewById(R.id.edit_delete_btn);
@@ -54,7 +54,6 @@ public class EditStudentActivity extends AppCompatActivity {
             address.setText(student.getAddress());
             phone.setText(student.getPhone());
             checked.setChecked(student.isFlag());
-            avatar.setImageResource(student.getAvatar());
         }
         saveBtn.setOnClickListener(v -> {
 
@@ -68,16 +67,17 @@ public class EditStudentActivity extends AppCompatActivity {
             student.setPhone(phone.getText().toString());
             saveIntent = new Intent(v.getContext(),
                     StudentDetailsActivity.class);
-            saveIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            saveIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             saveIntent.putExtra("pos",pos);
             startActivity(saveIntent);
         });
         cancelBtn.setOnClickListener(v -> {
-
+            cancelIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(cancelIntent);
         });
         deleteBtn.setOnClickListener(v -> {
             Model.instance.getAllStudents().remove(pos);
+            deleteIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(deleteIntent);
         });
     }
