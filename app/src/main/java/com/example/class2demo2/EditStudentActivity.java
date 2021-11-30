@@ -58,19 +58,21 @@ public class EditStudentActivity extends AppCompatActivity {
         }
         saveBtn.setOnClickListener(v -> {
 
-
-            student = Model.instance.getAllStudents().get(pos);
-            student.setAddress(address.getText().toString());
-            student.setId(id.getText().toString());
-            student.setAvatar(avatar.getId());
-            student.setFlag(checked.isChecked());
-            student.setName(name.getText().toString());
-            student.setPhone(phone.getText().toString());
-            saveIntent = new Intent(v.getContext(),
-                    StudentDetailsActivity.class);
-            saveIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            saveIntent.putExtra("pos",pos);
-            startActivity(saveIntent);
+            if (extras != null) {
+                pos = extras.getInt("pos");
+                student = Model.instance.getAllStudents().get(pos);
+                student.setAddress(address.getText().toString());
+                student.setId(id.getText().toString());
+                student.setAvatar(avatar.getId());
+                student.setFlag(checked.isChecked());
+                student.setName(name.getText().toString());
+                student.setPhone(phone.getText().toString());
+                saveIntent = new Intent(v.getContext(),
+                        StudentDetailsActivity.class);
+                saveIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                saveIntent.putExtra("pos", pos);
+                startActivity(saveIntent);
+            }
         });
         cancelBtn.setOnClickListener(v -> {
 

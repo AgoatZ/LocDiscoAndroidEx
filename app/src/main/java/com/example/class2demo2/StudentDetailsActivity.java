@@ -48,6 +48,8 @@ public class StudentDetailsActivity extends AppCompatActivity {
             addressTv.setText(student.getAddress());
             phoneTv.setText(student.getPhone());
             cb.setChecked(student.isFlag());
+            Drawable av;
+            av.fin
             avatar.setImageResource(student.getAvatar());
         }
         editBtn.setOnClickListener(v -> {
