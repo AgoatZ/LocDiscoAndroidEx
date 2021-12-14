@@ -28,7 +28,7 @@ public class AddStudentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_student);
         listIntent = new Intent(this,
-                StudentListRvActivity.class);
+                StudentListRvFragment.class);
          nameTv = findViewById(R.id.add_name_txt);
          idTv =findViewById(R.id.add_id_txt);
          phoneTv =findViewById(R.id.add_phone_txt);
