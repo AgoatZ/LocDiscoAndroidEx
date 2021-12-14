@@ -42,9 +42,9 @@ public class EditStudentActivity extends AppCompatActivity {
         cancelBtn=findViewById(R.id.edit_cancel_btn);
         deleteBtn=findViewById(R.id.edit_delete_btn);
         cancelIntent = new Intent(this,
-                StudentListRvActivity.class);
+                StudentListRvFragment.class);
         deleteIntent = new Intent(this,
-                StudentListRvActivity.class);
+                StudentListRvFragment.class);
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             pos = extras.getInt("pos");
