@@ -3,10 +3,12 @@ package com.example.class2demo2;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.class2demo2.model.Model;
@@ -54,6 +56,8 @@ public class StudentDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_student_details, container, false);
+
+        studentId = StudentDetailsFragmentArgs.fromBundle(getArguments()).getStudentId();
         Student student = Model.instance.getAllStudents().get(Integer.parseInt(studentId));
 
         TextView nameTv = view.findViewById(R.id.detailsfrag_name_tv);
@@ -61,6 +65,11 @@ public class StudentDetailsFragment extends Fragment {
 
         nameTv.setText(student.getName());
         idTv.setText(student.getId());
+
+        Button backBtn = view.findViewById(R.id.details_back_btn);
+        backBtn.setOnClickListener(v->{
+            Navigation.findNavController(v).navigateUp();
+        });
 
         return view;
     }

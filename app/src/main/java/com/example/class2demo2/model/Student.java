@@ -1,12 +1,19 @@
 package com.example.class2demo2.model;
 
-import android.graphics.drawable.Drawable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
 
+@Entity
 public class Student {
-    String name;
+    @PrimaryKey
+            @NonNull
     String id;
+    String name;
     String phone;
     String address;
+    @Nullable
     int avatar;
     boolean flag;
 
