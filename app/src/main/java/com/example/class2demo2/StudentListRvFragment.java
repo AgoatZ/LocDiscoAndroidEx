@@ -5,6 +5,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -14,10 +15,14 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -49,10 +54,15 @@ public class StudentListRvFragment extends Fragment {
         adapter = new MyAdapter();
         listRv.setAdapter(adapter);
 
+
         adapter.setOnItemClickListener(new OnItemClickListener()
         {
+
             @Override
-            public void onItemClick(int position) {
+            public void onItemClick(View v, int position) {
+                String stId= data.get(position).getId();
+                Navigation.findNavController(v).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToStudentDetailsFragment(stId));
+                /*
                 Log.d("TAG", "row was clicked "+position);
                 String id = data.get(position).getId();
                 StudentDetailsFragment frag = StudentDetailsFragment.newInstance(id);
@@ -60,6 +70,8 @@ public class StudentListRvFragment extends Fragment {
                 tran.add(R.id.base_frag_container,frag);
                 tran.addToBackStack("");
                 tran.commit();
+
+                 */
             }
 
 
@@ -69,6 +81,8 @@ public class StudentListRvFragment extends Fragment {
 
             @Override
             public void onAddBtnClick(int position) {
+
+                Navigation.createNavigateOnClickListener(StudentListRvFragmentDirections.actionGlobalAboutFragment());
                 /*
                 addIntent = new
                         Intent(getApplicationContext(),
@@ -78,6 +92,12 @@ public class StudentListRvFragment extends Fragment {
                  */
             }
         });
+        ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
+        //add.setOnClickListener(v->{
+          //  Navigation.findNavController(v).navigate(R.id.action_studentListRvFragment_to_studentDetailsFragment);
+        //});
+        add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_studentDetailsFragment));
+        setHasOptionsMenu(true);
         return view;
     }
 
@@ -98,21 +118,23 @@ public class StudentListRvFragment extends Fragment {
             //addBtn = findViewById(R.id.studentlist_add_btn);
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
-                listener.onItemClick(pos);
+                listener.onItemClick(itemView, pos);
             });
             cb.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onCheckboxClick(pos, cb.isChecked());
             });
-            addBtn.setOnClickListener(v->{
+            /*addBtn.setOnClickListener(v->{
                 int pos = getAdapterPosition();
                 listener.onAddBtnClick(pos);
             });
+
+             */
         }
     }
 
     interface OnItemClickListener{
-        void onItemClick(int position);
+        void onItemClick(View v, int position);
         void onCheckboxClick(int position, boolean isChecked);
         void onAddBtnClick(int position);
     }
@@ -145,8 +167,26 @@ public class StudentListRvFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            return data.size();
-        }
+            if(data==null){
+                return 0;
+            }
+            return data.size(); }
+
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.student_list_menu,menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.menu_add) {
+            Log.d("TAG","BLAR");
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+    }
 }
