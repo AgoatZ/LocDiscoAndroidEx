@@ -6,59 +6,71 @@
     android:layout_height="match_parent"
     tools:context=".StudentDetailsFragment">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:src="@drawable/morpheus_avatar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/detailsfrag_id_tv"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="350dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:text="ID"
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        android:layout_margin="100dp"
+        android:orientation="vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <TextView
-        android:id="@+id/detailsfrag_name_tv"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="20dp"
-        android:text="TextView"
-        android:textSize="34sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailsfrag_id_tv" />
+        <ImageView
+            android:id="@+id/details_student_imgv"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginBottom="15dp"
+            app:srcCompat="@drawable/avatarsmith" />
 
-    <CheckBox
-        android:id="@+id/detailsfrag_cb"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:text="Signed"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detailsfrag_name_tv" />
+        <TextView
+            android:id="@+id/details_name_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="name"
+            android:textSize="24sp" />
 
-    <Button
-        android:id="@+id/details_back_btn"
-        android:layout_width="0dp"
+        <TextView
+            android:id="@+id/details_id_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="id"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/details_phone_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="phone"
+            android:textSize="24sp" />
+
+        <TextView
+            android:id="@+id/details_address_txt"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:hint="address"
+            android:textSize="24sp" />
+
+        <CheckBox
+            android:id="@+id/details_checked_chk"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:enabled="false"
+            android:hint="Checked"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="14dp"
-        android:text="Button"
+        android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintRight_toRightOf="parent">
+
+        <Button
+            android:id="@+id/details_to_edit_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Edit" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

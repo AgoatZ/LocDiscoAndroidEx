@@ -60,18 +60,8 @@ public class StudentListRvFragment extends Fragment {
 
             @Override
             public void onItemClick(View v, int position) {
-                String stId= data.get(position).getId();
+                String stId = data.get(position).getId();
                 Navigation.findNavController(v).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToStudentDetailsFragment(stId));
-                /*
-                Log.d("TAG", "row was clicked "+position);
-                String id = data.get(position).getId();
-                StudentDetailsFragment frag = StudentDetailsFragment.newInstance(id);
-                FragmentTransaction tran = getParentFragmentManager().beginTransaction();
-                tran.add(R.id.base_frag_container,frag);
-                tran.addToBackStack("");
-                tran.commit();
-
-                 */
             }
 
 
@@ -81,15 +71,7 @@ public class StudentListRvFragment extends Fragment {
 
             @Override
             public void onAddBtnClick(int position) {
-
-                Navigation.createNavigateOnClickListener(StudentListRvFragmentDirections.actionGlobalAboutFragment());
-                /*
-                addIntent = new
-                        Intent(getApplicationContext(),
-                        AddStudentActivity.class);
-                startActivity(addIntent);
-
-                 */
+                Navigation.createNavigateOnClickListener(StudentListRvFragmentDirections.actionStudentListRvFragmentToAddFragment());
             }
         });
         ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
@@ -115,7 +97,7 @@ public class StudentListRvFragment extends Fragment {
             idTv = itemView.findViewById(R.id.listrow_id_tv);
             cb = itemView.findViewById(R.id.listrow_cb);
             avatar = itemView.findViewById(R.id.listrow_avatar_imv);
-            //addBtn = findViewById(R.id.studentlist_add_btn);
+            addBtn = listRv.findViewById(R.id.listfrag_plus_imgbtn);
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(itemView, pos);
@@ -124,12 +106,14 @@ public class StudentListRvFragment extends Fragment {
                 int pos = getAdapterPosition();
                 listener.onCheckboxClick(pos, cb.isChecked());
             });
-            /*addBtn.setOnClickListener(v->{
-                int pos = getAdapterPosition();
-                listener.onAddBtnClick(pos);
-            });
+            if(addBtn!=null) {
+                addBtn.setOnClickListener(v -> {
+                    int pos = getAdapterPosition();
+                    listener.onAddBtnClick(pos);
+                });
+            }
 
-             */
+
         }
     }
 
