@@ -1,5 +1,6 @@
 package com.example.class2demo2;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.class2demo2.model.Model;
@@ -24,7 +27,6 @@ public class StudentDetailsFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_STUDENT_ID = "ARG_STUDENT_ID";
-    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String studentId;
@@ -58,17 +60,27 @@ public class StudentDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_student_details, container, false);
 
         studentId = StudentDetailsFragmentArgs.fromBundle(getArguments()).getStudentId();
-        Student student = Model.instance.getAllStudents().get(Integer.parseInt(studentId));
+        Student student = Model.instance.getStudentById(studentId);
 
-        TextView nameTv = view.findViewById(R.id.detailsfrag_name_tv);
-        TextView idTv = view.findViewById(R.id.detailsfrag_id_tv);
+        TextView nameTv = view.findViewById(R.id.details_name_txt);
+        TextView idTv = view.findViewById(R.id.details_id_txt);
+        TextView phoneTv = view.findViewById(R.id.details_phone_txt);
+        TextView addressTv = view.findViewById(R.id.details_address_txt);
+        CheckBox cb = view.findViewById(R.id.details_checked_chk);
+        Button editBtn = view.findViewById(R.id.details_to_edit_btn);
+        ImageView avatar = view.findViewById(R.id.details_student_imgv);
+
 
         nameTv.setText(student.getName());
         idTv.setText(student.getId());
+        addressTv.setText(student.getAddress());
+        phoneTv.setText(student.getPhone());
+        cb.setChecked(student.isFlag());
 
-        Button backBtn = view.findViewById(R.id.details_back_btn);
+
+        Button backBtn = view.findViewById(R.id.details_to_edit_btn);
         backBtn.setOnClickListener(v->{
-            Navigation.findNavController(v).navigateUp();
+            Navigation.findNavController(v).navigate(StudentDetailsFragmentDirections.actionStudentDetailsFragmentToEditFragment(studentId));
         });
 
         return view;

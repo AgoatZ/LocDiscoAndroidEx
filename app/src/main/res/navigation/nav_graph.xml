@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_studentListRvFragment_to_studentDetailsFragment"
             app:destination="@id/studentDetailsFragment" />
+        <action
+            android:id="@+id/action_studentListRvFragment_to_addFragment"
+            app:destination="@id/addFragment" />
     </fragment>
     <fragment
         android:id="@+id/studentDetailsFragment"
@@ -22,6 +25,9 @@
         <argument
             android:name="studentId"
             app:argType="string" />
+        <action
+            android:id="@+id/action_studentDetailsFragment_to_editFragment"
+            app:destination="@id/editFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -29,4 +35,21 @@
         android:label="About"
         tools:layout="@layout/fragment_about" />
     <action android:id="@+id/action_global_aboutFragment" app:destination="@id/aboutFragment" />
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="com.example.class2demo2.EditFragment"
+        android:label="fragment_edit"
+        tools:layout="@layout/fragment_edit" >
+        <argument
+            android:name="studentId"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_editFragment_to_studentListRvFragment"
+            app:destination="@id/studentListRvFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addFragment"
+        android:name="com.example.class2demo2.AddFragment"
+        android:label="fragment_add"
+        tools:layout="@layout/fragment_add" />
 </navigation>
