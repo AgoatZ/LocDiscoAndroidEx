@@ -54,6 +54,8 @@ public class StudentListRvFragment extends Fragment {
         adapter = new MyAdapter();
         listRv.setAdapter(adapter);
 
+        ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
+        add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_addFragment));
 
         adapter.setOnItemClickListener(new OnItemClickListener()
         {
@@ -68,17 +70,21 @@ public class StudentListRvFragment extends Fragment {
             @Override public void onCheckboxClick(int position, boolean isChecked){
                 data.get(position).setFlag(isChecked);
             }
-
+/*
             @Override
-            public void onAddBtnClick(int position) {
-                Navigation.createNavigateOnClickListener(StudentListRvFragmentDirections.actionStudentListRvFragmentToAddFragment());
+            public void onAddBtnClick(View v) {
+                //Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_studentDetailsFragment);
+                Navigation.findNavController(view).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToAddFragment());
+                //Navigation.createNavigateOnClickListener(StudentListRvFragmentDirections.actionStudentListRvFragmentToAddFragment());
             }
+
+ */
         });
-        ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
+        //ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
         //add.setOnClickListener(v->{
           //  Navigation.findNavController(v).navigate(R.id.action_studentListRvFragment_to_studentDetailsFragment);
         //});
-        add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_studentDetailsFragment));
+        //add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_studentDetailsFragment));
         setHasOptionsMenu(true);
         return view;
     }
@@ -106,12 +112,14 @@ public class StudentListRvFragment extends Fragment {
                 int pos = getAdapterPosition();
                 listener.onCheckboxClick(pos, cb.isChecked());
             });
+            /*
             if(addBtn!=null) {
                 addBtn.setOnClickListener(v -> {
-                    int pos = getAdapterPosition();
-                    listener.onAddBtnClick(pos);
+                    listener.onAddBtnClick(v);
                 });
             }
+
+             */
 
 
         }
@@ -120,7 +128,7 @@ public class StudentListRvFragment extends Fragment {
     interface OnItemClickListener{
         void onItemClick(View v, int position);
         void onCheckboxClick(int position, boolean isChecked);
-        void onAddBtnClick(int position);
+        //void onAddBtnClick(View v);
     }
     //ADAPTER CLASS
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
