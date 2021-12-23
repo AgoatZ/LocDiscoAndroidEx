@@ -7,11 +7,21 @@
         <entry key="..\:/Users/User/AndroidStudioProjects/StudentsList/app/src/main/res/layout/activity_edit_student.xml" value="0.14270833333333333" />
         <entry key="..\:/Users/User/AndroidStudioProjects/StudentsList/app/src/main/res/layout/activity_student_details.xml" value="0.14270833333333333" />
         <entry key="..\:/Users/User/AndroidStudioProjects/StudentsList/app/src/main/res/layout/activity_student_list_rv.xml" value="0.18" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListNavGraph/app/src/main/res/layout/fragment_add.xml" value="0.14270833333333333" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListNavGraph/app/src/main/res/layout/fragment_student_details.xml" value="0.14270833333333333" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListNavGraph/app/src/main/res/layout/fragment_student_list.xml" value="0.14270833333333333" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListNavGraph/app/src/main/res/menu/base_menu.xml" value="0.14270833333333333" />
-        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListNavGraph/app/src/main/res/menu/student_list_menu.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/activity_base.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/activity_main_drawer2.xml" value="0.25" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/app_bar_main_drawer.xml" value="0.16" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/content_main_drawer.xml" value="0.18" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/fragment_add.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/fragment_gallery.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/fragment_home.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/fragment_student_details.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/fragment_student_list.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/nav_header_main_drawer.xml" value="0.5" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/layout/student_list_row.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/menu/activity_main_drawer.xml" value="0.25" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/menu/base_menu.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/menu/main_drawer.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/User/AndroidStudioProjects/StudentsListDrawer/app/src/main/res/menu/student_list_menu.xml" value="0.14270833333333333" />
         <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_add_student.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_main.xml" value="0.176" />
         <entry key="..\:/Users/einav/AndroidStudioProjects/Class2Demo2/app/src/main/res/layout/activity_main2.xml" value="0.1" />

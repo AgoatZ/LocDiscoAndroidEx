@@ -1,23 +1,7 @@
 package com.example.class2demo2;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.LinearSmoothScroller;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -25,6 +9,13 @@ import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
@@ -37,9 +28,6 @@ public class StudentListRvFragment extends Fragment {
     List<Student> data;
     RecyclerView listRv;
     MyAdapter adapter;
-    Intent detailsIntent;
-    Intent addIntent;
-    RecyclerView.SmoothScroller scroller;
 
 
     @Nullable
@@ -85,7 +73,7 @@ public class StudentListRvFragment extends Fragment {
           //  Navigation.findNavController(v).navigate(R.id.action_studentListRvFragment_to_studentDetailsFragment);
         //});
         //add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_studentDetailsFragment));
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
         return view;
     }
 
@@ -166,6 +154,7 @@ public class StudentListRvFragment extends Fragment {
 
     }
 
+    /*
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -181,4 +170,6 @@ public class StudentListRvFragment extends Fragment {
             return super.onOptionsItemSelected(item);
         }
     }
+
+     */
 }

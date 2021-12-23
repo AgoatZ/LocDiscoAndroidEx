@@ -1,19 +1,9 @@
 package com.example.class2demo2;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.navigation.NavController;
-import androidx.navigation.NavHost;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-
-import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 public class BaseActivity extends AppCompatActivity {
+    /*
     NavController navCtl;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +13,10 @@ public class BaseActivity extends AppCompatActivity {
         NavHost navHost = (NavHost) getSupportFragmentManager().findFragmentById(R.id.base_navhost);
         navCtl = navHost.getNavController();
 
-        NavigationUI.setupActionBarWithNavController(this,navCtl);
+        //NavigationUI.setupActionBarWithNavController(this,navCtl);
     }
 
+    /*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -49,4 +40,5 @@ public class BaseActivity extends AppCompatActivity {
         }
         return false;
     }
+     */
 }
