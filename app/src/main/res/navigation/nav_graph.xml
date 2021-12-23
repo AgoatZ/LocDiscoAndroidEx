@@ -38,8 +38,8 @@
     <fragment
         android:id="@+id/editFragment"
         android:name="com.example.class2demo2.EditFragment"
-        android:label="fragment_edit"
-        tools:layout="@layout/fragment_edit" >
+        android:label="Edit"
+        tools:layout="@layout/fragment_edit">
         <argument
             android:name="studentId"
             app:argType="string" />
@@ -50,6 +50,6 @@
     <fragment
         android:id="@+id/addFragment"
         android:name="com.example.class2demo2.AddFragment"
-        android:label="fragment_add"
-        tools:layout="@layout/fragment_add" />
+        android:label="Add Student"
+        tools:layout="@layout/fragment_add" /><action android:id="@+id/action_global_addFragment" app:destination="@id/addFragment"/>
 </navigation>
