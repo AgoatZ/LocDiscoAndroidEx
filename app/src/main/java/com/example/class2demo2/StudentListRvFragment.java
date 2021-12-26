@@ -43,7 +43,7 @@ public class StudentListRvFragment extends Fragment {
         listRv.setAdapter(adapter);
 
         ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
-        add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_addFragment));
+        add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_global_addFragment));
 
         adapter.setOnItemClickListener(new OnItemClickListener()
         {
