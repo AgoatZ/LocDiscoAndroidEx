@@ -1,11 +1,6 @@
 package com.example.class2demo2;
 
-import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +8,9 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
@@ -96,11 +94,15 @@ public class EditFragment extends Fragment {
             student.setFlag(checked.isChecked());
             student.setName(name.getText().toString());
             student.setPhone(phone.getText().toString());
-            Navigation.findNavController(v).navigateUp();
+            Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToStudentDetailsFragment(student.getId()));
         });
+
+
         cancelBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigateUp();
         });
+
+
         deleteBtn.setOnClickListener(v -> {
             Model.instance.getAllStudents().remove(student);
             Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToStudentListRvFragment());

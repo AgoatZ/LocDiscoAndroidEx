@@ -33,9 +33,6 @@ public class Model {
     public List<Student> getAllStudents() {
         return data;
     }
-    /*{
-        return AppLocalDb.db.studentDao().getAll();
-    }*/
     public void addStudent(Student student){
         data.add(student);
     }

@@ -49,12 +49,13 @@ public class MainDrawerActivity extends AppCompatActivity{
                 // Passing each menu ID as a set of Ids because each
                 // menu should be considered as top level destinations.
                 mAppBarConfiguration = new AppBarConfiguration.Builder(
-                        R.id.studentListRvFragment, R.id.addFragment, R.id.nav_slideshow)
+                        R.id.studentListRvFragment, R.id.addFragment)
                         .setOpenableLayout(drawer)
                         .build();
                 NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main_drawer);
                 NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
                 NavigationUI.setupWithNavController(navigationView, navController);
+
 
 
 
@@ -84,6 +85,7 @@ public class MainDrawerActivity extends AppCompatActivity{
                         case android.R.id.home:
                             NavigationUI.navigateUp(navController, mAppBarConfiguration);
                             return true;
+
                         default:
                             NavigationUI.onNavDestinationSelected(item, navController);
                     }
