@@ -14,7 +14,7 @@
             android:id="@+id/action_studentListRvFragment_to_studentDetailsFragment"
             app:destination="@id/studentDetailsFragment" />
         <action
-            android:id="@+id/action_studentListRvFragment_to_addFragment"
+            android:id="@+id/action_global_addFragment"
             app:destination="@id/addFragment" />
     </fragment>
     <fragment
@@ -50,6 +50,7 @@
         android:id="@+id/addFragment"
         android:name="com.example.class2demo2.AddFragment"
         android:label="Add Student"
-        tools:layout="@layout/fragment_add" /><action android:id="@+id/action_global_addFragment" app:destination="@id/addFragment"/>
+        tools:layout="@layout/fragment_add" />
+    <action android:id="@+id/action_global_addFragment" app:destination="@id/addFragment"/>
     <action android:id="@+id/action_global_studentListRvFragment" app:destination="@id/studentListRvFragment" />
 </navigation>
