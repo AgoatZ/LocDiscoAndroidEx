@@ -1,12 +1,21 @@
 package com.example.class2demo2.model;
 
+import androidx.annotation.NonNull;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity
 public class Student {
+    @PrimaryKey
+    @NonNull
     String id;
     String name;
     String phone;
     String address;
     int avatar;
     boolean flag;
+
+    public Student(){}
 
     public Student(String name, String id,String phone,String address, boolean flag,int avatar) {
         this.name = name;

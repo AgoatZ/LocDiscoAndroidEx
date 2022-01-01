@@ -51,7 +51,7 @@ public class StudentDetailsFragment extends Fragment {
         }
     }
 
-
+    Student student;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -60,22 +60,23 @@ public class StudentDetailsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_student_details, container, false);
 
         studentId = StudentDetailsFragmentArgs.fromBundle(getArguments()).getStudentId();
-        Student student = Model.instance.getStudentById(studentId);
+        Model.instance.getStudentById(studentId,(s->{
+            student = s;
+            TextView nameTv = view.findViewById(R.id.details_name_txt);
+            TextView idTv = view.findViewById(R.id.details_id_txt);
+            TextView phoneTv = view.findViewById(R.id.details_phone_txt);
+            TextView addressTv = view.findViewById(R.id.details_address_txt);
+            CheckBox cb = view.findViewById(R.id.details_checked_chk);
+            Button editBtn = view.findViewById(R.id.details_to_edit_btn);
+            ImageView avatar = view.findViewById(R.id.details_student_imgv);
 
-        TextView nameTv = view.findViewById(R.id.details_name_txt);
-        TextView idTv = view.findViewById(R.id.details_id_txt);
-        TextView phoneTv = view.findViewById(R.id.details_phone_txt);
-        TextView addressTv = view.findViewById(R.id.details_address_txt);
-        CheckBox cb = view.findViewById(R.id.details_checked_chk);
-        Button editBtn = view.findViewById(R.id.details_to_edit_btn);
-        ImageView avatar = view.findViewById(R.id.details_student_imgv);
 
-
-        nameTv.setText(student.getName());
-        idTv.setText(student.getId());
-        addressTv.setText(student.getAddress());
-        phoneTv.setText(student.getPhone());
-        cb.setChecked(student.isFlag());
+            nameTv.setText(student.getName());
+            idTv.setText(student.getId());
+            addressTv.setText(student.getAddress());
+            phoneTv.setText(student.getPhone());
+            cb.setChecked(student.isFlag());
+        }));
 
 
         Button backBtn = view.findViewById(R.id.details_to_edit_btn);

@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,19 +23,22 @@ import com.example.class2demo2.model.Student;
 
 import java.util.List;
 
+
 public class StudentListRvFragment extends Fragment {
 
     //MEMBERS
     List<Student> data;
     RecyclerView listRv;
     MyAdapter adapter;
-
+    ProgressBar progressBar;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_list,container,false);
-        data= Model.instance.getAllStudents();
+        //data= Model.instance.getAllStudents();
+        progressBar = view.findViewById(R.id.studentlist_progressbar);
+        progressBar.setVisibility(View.GONE);
 
         listRv = view.findViewById(R.id.studentlist_rv);
         listRv.setHasFixedSize(true);
@@ -74,7 +78,17 @@ public class StudentListRvFragment extends Fragment {
         //});
         //add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_studentDetailsFragment));
         //setHasOptionsMenu(true);
+        refresh();
         return view;
+    }
+
+    private void refresh() {
+        progressBar.setVisibility(View.VISIBLE);
+        Model.instance.getAllStudents(list -> {
+            data = list;
+            adapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.GONE);
+        });
     }
 
 
