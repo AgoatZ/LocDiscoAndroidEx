@@ -50,6 +50,16 @@ public class EditFragment extends Fragment {
         }
     }
 
+    EditText name;
+    EditText id;
+    EditText phone;
+    EditText address;
+    CheckBox checked;
+    ImageView avatar;
+    Button cancelBtn;
+    Button saveBtn;
+    Button deleteBtn;
+    Student student;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,33 +67,24 @@ public class EditFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
         studentId = StudentDetailsFragmentArgs.fromBundle(getArguments()).getStudentId();
-        Student student = Model.instance.getStudentById(studentId);
+        Model.instance.getStudentById(studentId, s -> {
+            student = s;
 
-        EditText name;
-        EditText id;
-        EditText phone;
-        EditText address;
-        CheckBox checked;
-        ImageView avatar;
-        Button cancelBtn;
-        Button saveBtn;
-        Button deleteBtn;
+            name = view.findViewById(R.id.edit_name_txt);
+            id = view.findViewById(R.id.edit_id_txt);
+            phone = view.findViewById(R.id.edit_phone_txt);
+            address = view.findViewById(R.id.edit_address_txt);
+            checked = view.findViewById(R.id.edit_checked_chk);
+            avatar = view.findViewById(R.id.edit_student_imgv);
+            saveBtn = view.findViewById(R.id.edit_save_btn);
+            cancelBtn = view.findViewById(R.id.edit_cancel_btn);
+            deleteBtn = view.findViewById(R.id.edit_delete_btn);
 
-        name = view.findViewById(R.id.edit_name_txt);
-        id = view.findViewById(R.id.edit_id_txt);
-        phone = view.findViewById(R.id.edit_phone_txt);
-        address = view.findViewById(R.id.edit_address_txt);
-        checked = view.findViewById(R.id.edit_checked_chk);
-        avatar = view.findViewById(R.id.edit_student_imgv);
-        saveBtn = view.findViewById(R.id.edit_save_btn);
-        cancelBtn = view.findViewById(R.id.edit_cancel_btn);
-        deleteBtn = view.findViewById(R.id.edit_delete_btn);
-
-        name.setText(student.getName());
-        id.setText(student.getId());
-        phone.setText(student.getPhone());
-        address.setText(student.getAddress());
-        checked.setChecked(student.isFlag());
+            name.setText(student.getName());
+            id.setText(student.getId());
+            phone.setText(student.getPhone());
+            address.setText(student.getAddress());
+            checked.setChecked(student.isFlag());
 
 
         saveBtn.setOnClickListener(v -> {
@@ -94,7 +95,9 @@ public class EditFragment extends Fragment {
             student.setFlag(checked.isChecked());
             student.setName(name.getText().toString());
             student.setPhone(phone.getText().toString());
-            Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToStudentDetailsFragment(student.getId()));
+            Model.instance.addStudent(student,()-> {
+                Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToStudentDetailsFragment(student.getId()));
+            });
         });
 
 
@@ -104,9 +107,12 @@ public class EditFragment extends Fragment {
 
 
         deleteBtn.setOnClickListener(v -> {
-            Model.instance.getAllStudents().remove(student);
-            Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToStudentListRvFragment());
+            Model.instance.delete(student, () -> {
+                Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToStudentListRvFragment());
+            });
         });
+
+    });
         return view;
     }
 }

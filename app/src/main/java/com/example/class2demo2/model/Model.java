@@ -1,40 +1,76 @@
 package com.example.class2demo2.model;
 
+import android.os.Looper;
+
+import androidx.core.os.HandlerCompat;
+
 import com.example.class2demo2.R;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import android.os.Handler;
 
 public class Model {
     public static final Model instance = new Model();
 
+    Executor executor = Executors.newFixedThreadPool(1);
+    Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
+
     private Model(){
-        for(int i=0;i<10;i++)
-        {
-            Student s = new Student("Agent Smith","30098744"+i,"054472928"+i,"CellBox #"+i,false,R.drawable.avatarsmith);
-            data.add(s);
-        }
 
     }
 
-    List<Student> data = new LinkedList<Student>();
-
-    public Student getStudentById(String id) {
-        for(Student s:data)
-        {
-            if(s.getId().equals(id))
-            {
-                return s;
-            }
-        }
-        return null;
+    public interface GetAllStudentsListener{
+        void onComplete(List<Student> list);
     }
 
-    public List<Student> getAllStudents() {
-        return data;
+    public void getAllStudents(GetAllStudentsListener listener) {
+        executor.execute(() -> {
+            List<Student> list = AppLocalDb.db.studentDao().getAllStudents();
+            mainThread.post(() -> {
+                listener.onComplete(list);
+            });
+        });
     }
-    public void addStudent(Student student){
-        data.add(student);
+
+    public interface GetStudentByIdListener{
+        void onComplete(Student student);
+    }
+    public void getStudentById(String id, GetStudentByIdListener listener) {
+        executor.execute(()->{
+            Student student = AppLocalDb.db.studentDao().getStudentById(id);
+            mainThread.post(()->{
+                listener.onComplete(student);
+            });
+        });
+    }
+
+    public interface  AddStudentListener{
+        void onComplete();
+    }
+
+    public void addStudent(Student student, AddStudentListener listener){
+        executor.execute(()->{
+            AppLocalDb.db.studentDao().insertAll(student);
+            mainThread.post(()->{
+                listener.onComplete();
+            });
+        });
+    }
+
+    public interface DeleteListener{
+        void onComplete();
+    }
+
+    public void delete(Student student, DeleteListener listener){
+        executor.execute(()->{
+            AppLocalDb.db.studentDao().delete(student);
+            mainThread.post(()->{
+                listener.onComplete();
+            });
+        });
     }
 }
 
