@@ -4,6 +4,9 @@ import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.FieldValue;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,6 +21,7 @@ public class Student {
     String address;
     int avatar;
     boolean flag;
+    Long updateDate = new Long(0);
 
     public Student(){}
 
@@ -32,14 +36,18 @@ public class Student {
     }
 
     public static Student create(Map<String, Object> json) {
-         String id = (String) json.get("id");
-         String name = (String) json.get("name");
-         String phone = (String) json.get("phone");
-         String address = (String) json.get("address");
-         long avatar = (long) json.get("avatar")*1;
-         boolean flag = (boolean) json.get("flag");
-         Student student = new Student(name,id,phone,address,flag,(int)avatar);
-         return student;
+        String id = (String) json.get("id");
+        String name = (String) json.get("name");
+        String phone = (String) json.get("phone");
+        String address = (String) json.get("address");
+        long avatar = (long) json.get("avatar");
+        boolean flag = (boolean) json.get("flag");
+        Timestamp ts = (Timestamp)json.get("updateDate");
+        Long updateDate = ts.getSeconds();
+
+        Student student = new Student(name,id,phone,address,flag,(int)avatar);
+        student.setUpdateDate(updateDate);
+        return student;
     }
 
     public int getAvatar() {
@@ -99,6 +107,14 @@ public class Student {
         json.put("address",address);
         json.put("avatar",avatar);
         json.put("flag",flag);
+        json.put("updateDate", FieldValue.serverTimestamp());
         return json;
+    }
+//TODO:...
+    public Long getUpdateDate() {
+        return updateDate;
+    }
+    public void setUpdateDate(Long updateDate) {
+        this.updateDate = updateDate;
     }
 }

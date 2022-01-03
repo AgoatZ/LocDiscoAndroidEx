@@ -49,7 +49,7 @@ public class StudentListRvFragment extends Fragment {
 
         swipeRefresh = view.findViewById(R.id.studentlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{
-            refresh();
+            Model.instance.refreshStudentsList();
         });
         listRv = view.findViewById(R.id.studentlist_rv);
         listRv.setHasFixedSize(true);
@@ -65,26 +65,28 @@ public class StudentListRvFragment extends Fragment {
 
             @Override
             public void onItemClick(View v, int position) {
-                String stId = viewModel.getData().get(position).getId();
+                String stId = viewModel.getData().getValue().get(position).getId();
                 Navigation.findNavController(v).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToStudentDetailsFragment(stId));
             }
 
 
             @Override public void onCheckboxClick(int position, boolean isChecked){
-                viewModel.getData().get(position).setFlag(isChecked);
+                viewModel.getData().getValue().get(position).setFlag(isChecked);
             }
         });
-        refresh();
+        viewModel.getData().observe(this, list->{
+            refresh();
+        });
+        swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue()==Model.StudentsListLoadingState.loading);
+        Model.instance.getStudentsListLoadingState().observe(this,studentsListLoadingState -> {
+            swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue()==Model.StudentsListLoadingState.loading);
+        });
         return view;
     }
 
     private void refresh() {
-        swipeRefresh.setRefreshing(true);
-        Model.instance.getAllStudents(list -> {
-            viewModel.setData(list);
-            adapter.notifyDataSetChanged();
-            swipeRefresh.setRefreshing(false);
-        });
+        adapter.notifyDataSetChanged();
+        swipeRefresh.setRefreshing(false);
     }
 
 
@@ -138,7 +140,7 @@ public class StudentListRvFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-            Student student = viewModel.getData().get(position);
+            Student student = viewModel.getData().getValue().get(position);
             holder.nameTv.setText(student.getName());
             holder.idTv.setText(student.getId());
             holder.cb.setChecked(student.isFlag());
@@ -146,10 +148,10 @@ public class StudentListRvFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(viewModel.getData()==null){
+            if(viewModel.getData().getValue() == null){
                 return 0;
             }
-            return viewModel.getData().size(); }
+            return viewModel.getData().getValue().size(); }
 
     }
 }
