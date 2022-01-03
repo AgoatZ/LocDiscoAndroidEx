@@ -1,21 +1,22 @@
 package com.example.class2demo2;
 
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
 
 import java.util.List;
 
 public class StudentListRvViewModel extends ViewModel {
-    List<Student> data;
+    LiveData<List<Student>> data;
 
-    public List<Student> getData() {
+    public StudentListRvViewModel(){
+        data = Model.instance.getAllStudents();
+    }
+
+    public LiveData<List<Student>> getData() {
         return data;
     }
-
-    public void setData(List<Student> data) {
-        this.data = data;
-    }
-
 
 }
