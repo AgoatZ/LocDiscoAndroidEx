@@ -1,9 +1,11 @@
 package com.example.class2demo2;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
@@ -14,9 +16,11 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
@@ -27,19 +31,26 @@ import java.util.List;
 public class StudentListRvFragment extends Fragment {
 
     //MEMBERS
-    List<Student> data;
+    StudentListRvViewModel viewModel;
     RecyclerView listRv;
     MyAdapter adapter;
-    ProgressBar progressBar;
+    SwipeRefreshLayout swipeRefresh;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(StudentListRvViewModel.class);
+    }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_student_list,container,false);
-        //data= Model.instance.getAllStudents();
-        progressBar = view.findViewById(R.id.studentlist_progressbar);
-        progressBar.setVisibility(View.GONE);
 
+        swipeRefresh = view.findViewById(R.id.studentlist_swiperefresh);
+        swipeRefresh.setOnRefreshListener(() ->{
+            refresh();
+        });
         listRv = view.findViewById(R.id.studentlist_rv);
         listRv.setHasFixedSize(true);
         listRv.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -54,40 +65,25 @@ public class StudentListRvFragment extends Fragment {
 
             @Override
             public void onItemClick(View v, int position) {
-                String stId = data.get(position).getId();
+                String stId = viewModel.getData().get(position).getId();
                 Navigation.findNavController(v).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToStudentDetailsFragment(stId));
             }
 
 
             @Override public void onCheckboxClick(int position, boolean isChecked){
-                data.get(position).setFlag(isChecked);
+                viewModel.getData().get(position).setFlag(isChecked);
             }
-/*
-            @Override
-            public void onAddBtnClick(View v) {
-                //Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_studentDetailsFragment);
-                Navigation.findNavController(view).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToAddFragment());
-                //Navigation.createNavigateOnClickListener(StudentListRvFragmentDirections.actionStudentListRvFragmentToAddFragment());
-            }
-
- */
         });
-        //ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
-        //add.setOnClickListener(v->{
-          //  Navigation.findNavController(v).navigate(R.id.action_studentListRvFragment_to_studentDetailsFragment);
-        //});
-        //add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.action_studentListRvFragment_to_studentDetailsFragment));
-        //setHasOptionsMenu(true);
         refresh();
         return view;
     }
 
     private void refresh() {
-        progressBar.setVisibility(View.VISIBLE);
+        swipeRefresh.setRefreshing(true);
         Model.instance.getAllStudents(list -> {
-            data = list;
+            viewModel.setData(list);
             adapter.notifyDataSetChanged();
-            progressBar.setVisibility(View.GONE);
+            swipeRefresh.setRefreshing(false);
         });
     }
 
@@ -114,23 +110,12 @@ public class StudentListRvFragment extends Fragment {
                 int pos = getAdapterPosition();
                 listener.onCheckboxClick(pos, cb.isChecked());
             });
-            /*
-            if(addBtn!=null) {
-                addBtn.setOnClickListener(v -> {
-                    listener.onAddBtnClick(v);
-                });
-            }
-
-             */
-
-
         }
     }
 
     interface OnItemClickListener{
         void onItemClick(View v, int position);
         void onCheckboxClick(int position, boolean isChecked);
-        //void onAddBtnClick(View v);
     }
     //ADAPTER CLASS
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
@@ -153,7 +138,7 @@ public class StudentListRvFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-            Student student = data.get(position);
+            Student student = viewModel.getData().get(position);
             holder.nameTv.setText(student.getName());
             holder.idTv.setText(student.getId());
             holder.cb.setChecked(student.isFlag());
@@ -161,29 +146,10 @@ public class StudentListRvFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(data==null){
+            if(viewModel.getData()==null){
                 return 0;
             }
-            return data.size(); }
+            return viewModel.getData().size(); }
 
     }
-
-    /*
-    @Override
-    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.student_list_menu,menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.menu_add) {
-            Log.d("TAG","BLAR");
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-     */
 }
