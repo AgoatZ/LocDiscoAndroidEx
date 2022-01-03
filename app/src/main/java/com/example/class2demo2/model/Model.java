@@ -18,6 +18,7 @@ public class Model {
     Executor executor = Executors.newFixedThreadPool(1);
     Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
 
+    ModelFirebase modelFirebase = new ModelFirebase();
     private Model(){
 
     }
@@ -27,24 +28,14 @@ public class Model {
     }
 
     public void getAllStudents(GetAllStudentsListener listener) {
-        executor.execute(() -> {
-            List<Student> list = AppLocalDb.db.studentDao().getAllStudents();
-            mainThread.post(() -> {
-                listener.onComplete(list);
-            });
-        });
+        modelFirebase.getAllStudents(listener);
     }
 
     public interface GetStudentByIdListener{
         void onComplete(Student student);
     }
     public void getStudentById(String id, GetStudentByIdListener listener) {
-        executor.execute(()->{
-            Student student = AppLocalDb.db.studentDao().getStudentById(id);
-            mainThread.post(()->{
-                listener.onComplete(student);
-            });
-        });
+        modelFirebase.getStudentById(id,listener);
     }
 
     public interface  AddStudentListener{
@@ -52,12 +43,7 @@ public class Model {
     }
 
     public void addStudent(Student student, AddStudentListener listener){
-        executor.execute(()->{
-            AppLocalDb.db.studentDao().insertAll(student);
-            mainThread.post(()->{
-                listener.onComplete();
-            });
-        });
+        modelFirebase.addStudent(student, listener);
     }
 
     public interface DeleteListener{
@@ -65,12 +51,7 @@ public class Model {
     }
 
     public void delete(Student student, DeleteListener listener){
-        executor.execute(()->{
-            AppLocalDb.db.studentDao().delete(student);
-            mainThread.post(()->{
-                listener.onComplete();
-            });
-        });
+        modelFirebase.delete(student, listener);
     }
 }
 
