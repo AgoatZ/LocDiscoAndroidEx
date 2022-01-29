@@ -19,42 +19,39 @@ public class Student {
     String name;
     String phone;
     String address;
-    int avatar;
+    String avatar;
     boolean flag;
     Long updateDate = new Long(0);
+    boolean isDeleted;
 
     public Student(){}
 
-    public Student(String name, String id,String phone,String address, boolean flag,int avatar) {
+    public Student(Student s){
+        this.name = s.name;
+        this.id = s.id;
+        this.address = s.address;
+        this.phone = s.phone;
+        this.flag = s.flag;
+        this.avatar = s.avatar;
+        this.isDeleted = s.isDeleted;
+    }
+
+    public Student(String name, String id,String phone,String address, boolean flag,String avatar) {
         this.name = name;
         this.id = id;
         this.address = address;
         this.phone = phone;
         this.flag = flag;
         this.avatar = avatar;
+        this.isDeleted = false;
 
     }
 
-    public static Student create(Map<String, Object> json) {
-        String id = (String) json.get("id");
-        String name = (String) json.get("name");
-        String phone = (String) json.get("phone");
-        String address = (String) json.get("address");
-        long avatar = (long) json.get("avatar");
-        boolean flag = (boolean) json.get("flag");
-        Timestamp ts = (Timestamp)json.get("updateDate");
-        Long updateDate = ts.getSeconds();
-
-        Student student = new Student(name,id,phone,address,flag,(int)avatar);
-        student.setUpdateDate(updateDate);
-        return student;
-    }
-
-    public int getAvatar() {
+    public String getAvatar() {
         return avatar;
     }
 
-    public void setAvatar(int avatar) {
+    public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
 
@@ -99,6 +96,31 @@ public class Student {
         this.flag = flag;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public static Student create(Map<String, Object> json) {
+        String id = (String) json.get("id");
+        String name = (String) json.get("name");
+        String phone = (String) json.get("phone");
+        String address = (String) json.get("address");
+        String avatar = json.get("avatar").toString();
+        boolean flag = (boolean) json.get("flag");
+        Timestamp ts = (Timestamp)json.get("updateDate");
+        Long updateDate = ts.getSeconds();
+        boolean isDeleted = (boolean) json.get("isDeleted");
+
+        Student student = new Student(name,id,phone,address,flag,avatar);
+        student.setUpdateDate(updateDate);
+        student.setDeleted(isDeleted);
+        return student;
+    }
+
     public Map<String, Object> toJson() {
         Map<String, Object> json = new HashMap<String, Object>();
         json.put("id",id);
@@ -108,6 +130,7 @@ public class Student {
         json.put("avatar",avatar);
         json.put("flag",flag);
         json.put("updateDate", FieldValue.serverTimestamp());
+        json.put("isDeleted",isDeleted);
         return json;
     }
 //TODO:...
@@ -117,4 +140,5 @@ public class Student {
     public void setUpdateDate(Long updateDate) {
         this.updateDate = updateDate;
     }
+
 }

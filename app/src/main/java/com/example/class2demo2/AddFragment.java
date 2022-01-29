@@ -1,21 +1,33 @@
 package com.example.class2demo2;
 
+import static android.app.Activity.RESULT_OK;
+
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
+
+import java.io.InputStream;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,21 +65,34 @@ public class AddFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         saveBtn.setEnabled(false);
         cancelBtn.setEnabled(false);
-        Student student = new Student(nameTv.getText().toString(), idTv.getText().toString(), phoneTv.getText().toString(), addressTv.getText().toString(), cb.isChecked(), avatar.getId());
-        Model.instance.addStudent(student, () -> {
-            Navigation.findNavController(nameTv).navigateUp();
-        });
+        Student student = new Student(nameTv.getText().toString(), idTv.getText().toString(), phoneTv.getText().toString(), addressTv.getText().toString(), cb.isChecked(), null);
+        if (imageBitmap != null){
+            Model.instance.saveImage(imageBitmap, idTv.getText() + ".jpg", url -> {
+                student.setAvatar(url);
+                Model.instance.addStudent(student, () -> {
+                    Navigation.findNavController(nameTv).navigateUp();
+                });
+            });
+        }else{
+            Model.instance.addStudent(student, () -> {
+                Navigation.findNavController(nameTv).navigateUp();
+            });
+        }
     }
-
-        EditText nameTv;
-        EditText idTv;
-        EditText phoneTv;
-        EditText addressTv;
-        Button cancelBtn;
-        Button saveBtn;
-        CheckBox cb;
-        ImageView avatar;
-        ProgressBar progressBar;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int REQUEST_GALLERY_OPEN = 2;
+    Bitmap imageBitmap;
+    EditText nameTv;
+    EditText idTv;
+    EditText phoneTv;
+    EditText addressTv;
+    Button cancelBtn;
+    Button saveBtn;
+    CheckBox cb;
+    ImageView avatar;
+    ImageButton cameraBtn;
+    ImageButton galleryBtn;
+    ProgressBar progressBar;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -84,13 +109,58 @@ public class AddFragment extends Fragment {
         avatar = view.findViewById(R.id.add_student_imgv);
         cancelBtn = view.findViewById(R.id.add_cancel_btn);
         saveBtn = view.findViewById(R.id.add_save_btn);
+        cameraBtn = view.findViewById(R.id.add_camera_btn);
+        galleryBtn = view.findViewById(R.id.add_gallery_btn);
+
         cancelBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigateUp();
         });
         saveBtn.setOnClickListener(v -> {
             save();
-            });
+        });
+        cameraBtn.setOnClickListener(v -> {
+            openCamera();
+        });
+        galleryBtn.setOnClickListener(v -> {
+            openGallery();
+        });
 
         return view;
+    }
+
+    private void openGallery() {
+        Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);
+        openGalleryIntent.setType("image/*");
+        startActivityForResult(openGalleryIntent, REQUEST_GALLERY_OPEN);
+    }
+
+    private void openCamera() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE){
+            if(resultCode == RESULT_OK){
+                Bundle extras = data.getExtras();
+                imageBitmap = (Bitmap) extras.get("data");
+                avatar.setImageBitmap(imageBitmap);
+            }
+        }
+        else if(requestCode == REQUEST_GALLERY_OPEN){
+            if(resultCode == RESULT_OK){
+                try{
+                    final Uri imageUri = data.getData();
+                    final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
+                    imageBitmap = BitmapFactory.decodeStream(imageStream);
+                    avatar.setImageBitmap(imageBitmap);
+                } catch (Exception e){
+                    e.printStackTrace();
+                    Toast.makeText(getContext(), "Failed to select image from gallery", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
     }
 }

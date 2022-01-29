@@ -8,14 +8,12 @@ import com.example.class2demo2.model.Student;
 
 import java.util.List;
 
-public class StudentListRvViewModel extends ViewModel {
-    LiveData<List<Student>> data;
+public class EditViewModel extends ViewModel {
+    LiveData<Student> data;
 
-    public StudentListRvViewModel(){
-        data = Model.instance.getAllStudents();
-    }
+    public EditViewModel() {}
 
-    public LiveData<List<Student>> getData() {
+    public LiveData<Student> getData(String id) {
+        data = Model.instance.getStudentById(id);
         return data;
-    }
-}
+    }}

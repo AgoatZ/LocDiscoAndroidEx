@@ -24,6 +24,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -72,14 +73,15 @@ public class StudentListRvFragment extends Fragment {
 
             @Override public void onCheckboxClick(int position, boolean isChecked){
                 viewModel.getData().getValue().get(position).setFlag(isChecked);
+                Student student = viewModel.getData().getValue().get(position);
+                Model.instance.addStudent(student,()->{});
             }
         });
-        viewModel.getData().observe(this, list->{
-            refresh();
-        });
-        swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue()==Model.StudentsListLoadingState.loading);
-        Model.instance.getStudentsListLoadingState().observe(this,studentsListLoadingState -> {
-            swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue()==Model.StudentsListLoadingState.loading);
+        viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
+
+        swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue() == Model.StudentsListLoadingState.loading);
+        Model.instance.getStudentsListLoadingState().observe(getViewLifecycleOwner(), studentsListLoadingState -> {
+            swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue() == Model.StudentsListLoadingState.loading);
         });
         return view;
     }
@@ -113,6 +115,17 @@ public class StudentListRvFragment extends Fragment {
                 listener.onCheckboxClick(pos, cb.isChecked());
             });
         }
+        public void bind(Student student) {
+            nameTv.setText(student.getName());
+            idTv.setText(student.getId());
+            cb.setChecked(student.isFlag());
+            avatar.setImageResource(R.drawable.avatarsmith);
+            if(student.getAvatar()!=null) {
+                Picasso.get()
+                        .load(student.getAvatar())
+                        .into(avatar);
+            }
+        }
     }
 
     interface OnItemClickListener{
@@ -139,11 +152,8 @@ public class StudentListRvFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
             Student student = viewModel.getData().getValue().get(position);
-            holder.nameTv.setText(student.getName());
-            holder.idTv.setText(student.getId());
-            holder.cb.setChecked(student.isFlag());
+            holder.bind(student);
         }
 
         @Override
