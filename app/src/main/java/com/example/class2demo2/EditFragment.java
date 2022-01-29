@@ -1,5 +1,6 @@
 package com.example.class2demo2;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,7 +10,9 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import com.example.class2demo2.model.Model;
@@ -50,6 +53,7 @@ public class EditFragment extends Fragment {
         }
     }
 
+    EditViewModel viewModel;
     EditText name;
     EditText id;
     EditText phone;
@@ -60,6 +64,13 @@ public class EditFragment extends Fragment {
     Button saveBtn;
     Button deleteBtn;
     Student student;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(EditViewModel.class);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -67,8 +78,10 @@ public class EditFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
         studentId = StudentDetailsFragmentArgs.fromBundle(getArguments()).getStudentId();
-        Model.instance.getStudentById(studentId, s -> {
-            student = s;
+        student = viewModel.getData(studentId).getValue();
+
+        //Model.instance.getStudentById(studentId, s -> {
+            //student = s;
 
             name = view.findViewById(R.id.edit_name_txt);
             id = view.findViewById(R.id.edit_id_txt);
@@ -91,11 +104,12 @@ public class EditFragment extends Fragment {
 
             student.setAddress(address.getText().toString());
             student.setId(id.getText().toString());
-            student.setAvatar(avatar.getId());
+            student.setAvatar(student.getAvatar());
             student.setFlag(checked.isChecked());
             student.setName(name.getText().toString());
             student.setPhone(phone.getText().toString());
-            Model.instance.addStudent(student,()-> {
+
+            Model.instance.addStudent(student, ()-> {
                 Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToStudentDetailsFragment(student.getId()));
             });
         });
@@ -112,7 +126,8 @@ public class EditFragment extends Fragment {
             });
         });
 
-    });
+        viewModel.getData(studentId).observe(getViewLifecycleOwner(), student1 -> {});
+    //});
         return view;
     }
 }

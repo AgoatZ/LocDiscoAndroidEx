@@ -1,10 +1,17 @@
 package com.example.class2demo2.model;
 
+import android.graphics.Bitmap;
+import android.net.Uri;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -18,6 +25,7 @@ public class ModelFirebase {
                 .build();
         db.setFirestoreSettings(settings);
     }
+
 
     public interface GetAllStudentsListener{
         void onComplete(List<Student> list);
@@ -57,19 +65,64 @@ public class ModelFirebase {
                 });
     }
 
-    public void getStudentById(String id, Model.GetStudentByIdListener listener) {
+    public interface GetStudentByIdListener{
+        void onComplete(Student student);
+    }
+
+    public void getStudentById(String id, Long lastUpdateDate, GetStudentByIdListener listener) {
         db.collection(Student.COLLECTION_NAME)
                 .document(id)
                 .get()
                 .addOnCompleteListener(task ->{
                     Student student = null;
-                    if(task.isSuccessful() && task.getResult() != null){
+                    if(task.isSuccessful() && task.getResult() != null && (Long)task.getResult().getData().get("updateDate") >= lastUpdateDate){
                         student = Student.create(task.getResult().getData());
+                        listener.onComplete(student);
                     }
-                    listener.onComplete(student);
                 });
     }
 
     public void delete(Student student, Model.DeleteListener listener) {
+        db.collection(Student.COLLECTION_NAME)
+                .document(student.id)
+                .delete()
+                .addOnCompleteListener(task ->{
+                    if(task.isSuccessful() && task.getResult() != null){
+                        listener.onComplete();
+                    }
+                });
+    }
+
+    public void logicalDelete(Student student, Model.LogicalDeleteListener listener){
+        Map<String, Object> json = student.toJson();
+        db.collection(Student.COLLECTION_NAME)
+                .document(student.getId())
+                .update(json)
+                .addOnSuccessListener(unused -> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener(e -> {
+                    listener.onComplete();
+                });
+    }
+
+    /******************************STORAGE*******************************/
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+
+    public void saveImage(Bitmap imageBitmap, String imageName, Model.SaveImageListener listener) {
+        StorageReference storageReference = storage.getReference();
+        StorageReference imageReference = storageReference.child("/user_avatars/" + imageName);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = imageReference.putBytes(data);
+        uploadTask.addOnFailureListener(e -> listener.onComplete(null));
+        uploadTask.addOnSuccessListener(taskSnapshot -> {
+            imageReference.getDownloadUrl().addOnSuccessListener(uri -> {
+                Uri downloadUrl = uri;
+                listener.onComplete(downloadUrl.toString());
+            });
+        });
     }
 }

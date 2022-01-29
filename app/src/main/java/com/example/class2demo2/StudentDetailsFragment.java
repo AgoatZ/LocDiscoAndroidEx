@@ -1,5 +1,6 @@
 package com.example.class2demo2;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,11 +10,17 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.example.class2demo2.model.AppLocalDb;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
+import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -51,39 +58,59 @@ public class StudentDetailsFragment extends Fragment {
         }
     }
 
+    StudentDetailsViewModel viewModel;
     Student student;
+    TextView nameTv;
+    TextView idTv;
+    TextView phoneTv;
+    TextView addressTv;
+    CheckBox cb;
+    Button editBtn;
+    ImageView avatar;
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(StudentDetailsViewModel.class);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         // Inflate the layout for this fragment
+        Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading);
         View view = inflater.inflate(R.layout.fragment_student_details, container, false);
 
         studentId = StudentDetailsFragmentArgs.fromBundle(getArguments()).getStudentId();
-        Model.instance.getStudentById(studentId,(s->{
-            student = s;
-            TextView nameTv = view.findViewById(R.id.details_name_txt);
-            TextView idTv = view.findViewById(R.id.details_id_txt);
-            TextView phoneTv = view.findViewById(R.id.details_phone_txt);
-            TextView addressTv = view.findViewById(R.id.details_address_txt);
-            CheckBox cb = view.findViewById(R.id.details_checked_chk);
-            Button editBtn = view.findViewById(R.id.details_to_edit_btn);
-            ImageView avatar = view.findViewById(R.id.details_student_imgv);
+        student = viewModel.getData(studentId).getValue();
 
+        nameTv = view.findViewById(R.id.details_name_txt);
+        idTv = view.findViewById(R.id.details_id_txt);
+        phoneTv = view.findViewById(R.id.details_phone_txt);
+        addressTv = view.findViewById(R.id.details_address_txt);
+        cb = view.findViewById(R.id.details_checked_chk);
+        editBtn = view.findViewById(R.id.details_to_edit_btn);
+        avatar = view.findViewById(R.id.details_student_imgv);
 
-            nameTv.setText(student.getName());
-            idTv.setText(student.getId());
-            addressTv.setText(student.getAddress());
-            phoneTv.setText(student.getPhone());
-            cb.setChecked(student.isFlag());
-        }));
-
-
-        Button backBtn = view.findViewById(R.id.details_to_edit_btn);
-        backBtn.setOnClickListener(v->{
+        nameTv.setText(student.getName());
+        idTv.setText(student.getId());
+        addressTv.setText(student.getAddress());
+        phoneTv.setText(student.getPhone());
+        cb.setChecked(student.isFlag());
+        if(student.getAvatar()!=null) {
+            Picasso.get()
+                    .load(student.getAvatar())
+                    .into(avatar);
+        }
+        /***********************************/
+        editBtn.setOnClickListener(v->{
             Navigation.findNavController(v).navigate(StudentDetailsFragmentDirections.actionStudentDetailsFragmentToEditFragment(studentId));
         });
+        viewModel.getData(studentId).observe(getViewLifecycleOwner(), student1 -> {});
 
         return view;
+
+
     }
 }
