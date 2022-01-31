@@ -24,10 +24,10 @@ import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link StudentDetailsFragment#newInstance} factory method to
+ * Use the {@link PostFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StudentDetailsFragment extends Fragment {
+public class PostFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -37,13 +37,13 @@ public class StudentDetailsFragment extends Fragment {
     private String studentId;
 
 
-    public StudentDetailsFragment() {
+    public PostFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static StudentDetailsFragment newInstance(String studentId) {
-        StudentDetailsFragment fragment = new StudentDetailsFragment();
+    public static PostFragment newInstance(String studentId) {
+        PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_STUDENT_ID, studentId);
         fragment.setArguments(args);
@@ -58,7 +58,7 @@ public class StudentDetailsFragment extends Fragment {
         }
     }
 
-    StudentDetailsViewModel viewModel;
+    //PostViewModel viewModel;
     Student student;
     TextView nameTv;
     TextView idTv;
@@ -71,7 +71,7 @@ public class StudentDetailsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(StudentDetailsViewModel.class);
+        //viewModel = new ViewModelProvider(this).get(PostViewModel.class);
     }
 
     @Override
@@ -82,8 +82,8 @@ public class StudentDetailsFragment extends Fragment {
         Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading);
         View view = inflater.inflate(R.layout.fragment_student_details, container, false);
 
-        studentId = StudentDetailsFragmentArgs.fromBundle(getArguments()).getStudentId();
-        student = viewModel.getData(studentId).getValue();
+        //studentId = PostFragmentArgs.fromBundle(getArguments()).getStudentId();
+        //student = viewModel.getData(studentId).getValue();
 
         nameTv = view.findViewById(R.id.details_name_txt);
         idTv = view.findViewById(R.id.details_id_txt);
@@ -104,14 +104,12 @@ public class StudentDetailsFragment extends Fragment {
                     .into(avatar);
         }
         /***********************************/
+        /*
         editBtn.setOnClickListener(v->{
-            Navigation.findNavController(v).navigate(StudentDetailsFragmentDirections.actionStudentDetailsFragmentToEditFragment(studentId));
+            Navigation.findNavController(v).navigate(PostFragmentDirections.actionPostFragmentToEditFragment(studentId));
         });
-        viewModel.getData(studentId).observe(getViewLifecycleOwner(), student1 -> {
-            student = student1;
-            Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loaded);
-        });
-
+        viewModel.getData(studentId).observe(getViewLifecycleOwner(), student1 -> {});
+*/
         return view;
 
 
