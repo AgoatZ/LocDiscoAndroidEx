@@ -109,7 +109,10 @@ public class Student {
         String name = (String) json.get("name");
         String phone = (String) json.get("phone");
         String address = (String) json.get("address");
-        String avatar = json.get("avatar").toString();
+        String avatar = null;
+        if(json.get("avatar") != null) {
+            avatar = json.get("avatar").toString();
+        }
         boolean flag = (boolean) json.get("flag");
         Timestamp ts = (Timestamp)json.get("updateDate");
         Long updateDate = ts.getSeconds();
