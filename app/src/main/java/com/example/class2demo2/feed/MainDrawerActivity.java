@@ -1,4 +1,4 @@
-package com.example.class2demo2;
+package com.example.class2demo2.feed;
 
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +12,7 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.class2demo2.R;
 import com.example.class2demo2.databinding.ActivityMainDrawer2Binding;
 import com.google.android.material.navigation.NavigationView;
 

@@ -1,4 +1,4 @@
-package com.example.class2demo2;
+package com.example.class2demo2.feed;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
 

@@ -1,4 +1,4 @@
-package com.example.class2demo2;
+package com.example.class2demo2.feed;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,12 +12,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
 
-import com.example.class2demo2.model.AppLocalDb;
+import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
 import com.squareup.picasso.Picasso;

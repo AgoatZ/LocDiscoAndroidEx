@@ -1,4 +1,4 @@
-package com.example.class2demo2;
+package com.example.class2demo2.feed;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;

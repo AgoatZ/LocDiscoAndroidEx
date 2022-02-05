@@ -1,4 +1,4 @@
-package com.example.class2demo2;
+package com.example.class2demo2.feed;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,12 +12,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
-import com.example.class2demo2.model.AppLocalDb;
+import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
 import com.squareup.picasso.Picasso;
@@ -109,7 +107,9 @@ public class StudentDetailsFragment extends Fragment {
         });
         viewModel.getData(studentId).observe(getViewLifecycleOwner(), student1 -> {
             student = student1;
-            Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loaded);
+            Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading == Model.instance.getStudentsListLoadingState().getValue()
+                    ? Model.StudentsListLoadingState.loading
+                    : Model.StudentsListLoadingState.loaded);
         });
 
         return view;

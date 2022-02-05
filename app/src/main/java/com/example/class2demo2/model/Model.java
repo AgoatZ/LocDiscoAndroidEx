@@ -19,8 +19,8 @@ import android.util.Log;
 
 public class Model {
     public static final Model instance = new Model();
-    Executor executor = Executors.newFixedThreadPool(1);
-    Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
+    public Executor executor = Executors.newFixedThreadPool(1);
+    public Handler mainThread = HandlerCompat.createAsync(Looper.getMainLooper());
 
     ModelFirebase modelFirebase = new ModelFirebase();
 
@@ -55,6 +55,10 @@ public class Model {
         // get last local update date
         Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("StudentLastUpdateDate",0);
 
+        executor.execute(()->{
+            List<Student> updatedList = AppLocalDb.db.studentDao().getAllStudents();
+            studentsList.postValue(updatedList);
+        });
         // firebase get all updates since last local update date
         modelFirebase.getAllStudents(lastUpdateDate, list -> {
 
@@ -154,6 +158,11 @@ public class Model {
 
     public void logicalDelete(Student student, LogicalDeleteListener listener){
         modelFirebase.logicalDelete(student, listener);
+    }
+
+    /********Authentication********/
+    public boolean isSignedIn(){
+        return modelFirebase.isSignedIn();
     }
 }
 

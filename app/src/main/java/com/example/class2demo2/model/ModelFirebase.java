@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -124,5 +126,13 @@ public class ModelFirebase {
                 listener.onComplete(downloadUrl.toString());
             });
         });
+    }
+
+    /*********************Authentication*********************************/
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    public boolean isSignedIn(){
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        return (currentUser != null);
     }
 }

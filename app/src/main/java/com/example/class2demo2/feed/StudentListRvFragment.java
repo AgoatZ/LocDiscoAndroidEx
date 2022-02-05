@@ -1,16 +1,14 @@
-package com.example.class2demo2;
+package com.example.class2demo2.feed;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,11 +20,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Student;
 import com.squareup.picasso.Picasso;
-
-import java.util.List;
 
 
 public class StudentListRvFragment extends Fragment {
@@ -88,7 +85,7 @@ public class StudentListRvFragment extends Fragment {
 
     private void refresh() {
         adapter.notifyDataSetChanged();
-        swipeRefresh.setRefreshing(false);
+        //swipeRefresh.setRefreshing(false);
     }
 
 
