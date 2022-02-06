@@ -122,7 +122,7 @@ public class EditFragment extends Fragment {
 
 
         deleteBtn.setOnClickListener(v -> {
-            Model.instance.delete(student, () -> {
+            Model.instance.logicalDelete(student, () -> {
                 Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToStudentListRvFragment());
             });
         });

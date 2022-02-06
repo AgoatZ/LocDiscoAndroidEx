@@ -96,6 +96,7 @@ public class ModelFirebase {
     }
 
     public void logicalDelete(Student student, Model.LogicalDeleteListener listener){
+        student.setDeleted(true);
         Map<String, Object> json = student.toJson();
         db.collection(Student.COLLECTION_NAME)
                 .document(student.getId())
