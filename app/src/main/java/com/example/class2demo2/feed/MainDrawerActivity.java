@@ -1,6 +1,8 @@
 package com.example.class2demo2.feed;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -14,6 +16,8 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.class2demo2.R;
 import com.example.class2demo2.databinding.ActivityMainDrawer2Binding;
+import com.example.class2demo2.login.LoginActivity;
+import com.example.class2demo2.model.Model;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainDrawerActivity extends AppCompatActivity {
@@ -32,6 +36,16 @@ public class MainDrawerActivity extends AppCompatActivity {
 
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
+
+        //logout click
+        navigationView.getMenu().findItem(R.id.loginFragment).setOnMenuItemClickListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.loginFragment) {
+                Intent intent = new Intent(this, LoginActivity.class);
+                startActivity(intent);
+                finish();
+            }
+            return true;
+        });
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
@@ -66,7 +80,6 @@ public class MainDrawerActivity extends AppCompatActivity {
                 case android.R.id.home:
                     NavigationUI.navigateUp(navController, mAppBarConfiguration);
                     return true;
-
                 default:
                     NavigationUI.onNavDestinationSelected(item, navController);
             }
@@ -75,5 +88,18 @@ public class MainDrawerActivity extends AppCompatActivity {
         }
         return false;
     }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.loginFragment) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivity(intent);
+            finish();
+            return true;
+        } else {
+            return super.onContextItemSelected(item);
+        }
+    }
+
 
 }

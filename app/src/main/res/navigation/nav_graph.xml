@@ -53,4 +53,9 @@
         tools:layout="@layout/fragment_add" />
     <action android:id="@+id/action_global_addFragment" app:destination="@id/addFragment"/>
     <action android:id="@+id/action_global_studentListRvFragment" app:destination="@id/studentListRvFragment" />
+    <fragment
+        android:id="@+id/postListRvFragment"
+        android:name="com.example.class2demo2.feed.PostListRvFragment"
+        android:label="fragment_post_list_rv"
+        tools:layout="@layout/fragment_post_list_rv" /><action android:id="@+id/action_global_postListRvFragment" app:destination="@id/postListRvFragment"/>
 </navigation>

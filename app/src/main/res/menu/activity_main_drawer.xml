@@ -12,5 +12,9 @@
             android:id="@+id/addFragment"
             android:icon="@android:drawable/ic_menu_add"
             android:title="Add Student" />
+        <item
+            android:id="@+id/loginFragment"
+            android:icon="@android:drawable/ic_menu_revert"
+            android:title="Sign Out" />
     </group>
 </menu>
