@@ -2,8 +2,16 @@ package com.example.class2demo2.model;
 
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
+import com.example.class2demo2.login.LoginActivity;
 import com.google.firebase.Timestamp;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -94,6 +102,7 @@ public class ModelFirebase {
     }
 
     public void logicalDelete(Student student, Model.LogicalDeleteListener listener){
+        student.setDeleted(true);
         Map<String, Object> json = student.toJson();
         db.collection(Student.COLLECTION_NAME)
                 .document(student.getId())
@@ -124,5 +133,36 @@ public class ModelFirebase {
                 listener.onComplete(downloadUrl.toString());
             });
         });
+    }
+
+    /*********************Authentication*********************************/
+    private FirebaseAuth mAuth = FirebaseAuth.getInstance();
+
+    public boolean isSignedIn(){
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        return (currentUser != null);
+    }
+
+    public void signIn(@NonNull String email, @NonNull String password, Model.SignInListener listener){
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("TAG", "signInWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            listener.onComplete(user);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "signInWithEmail:failure", task.getException());
+                            listener.onComplete(null);
+                        }
+                });
+    }
+
+    public void signOut(){
+        mAuth.signOut();
+    }
+
+    public String getUId(){
+        return mAuth.getUid();
     }
 }

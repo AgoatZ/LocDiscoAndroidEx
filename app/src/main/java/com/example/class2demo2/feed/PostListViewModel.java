@@ -1,4 +1,4 @@
-package com.example.class2demo2;
+package com.example.class2demo2.feed;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -8,10 +8,10 @@ import com.example.class2demo2.model.Student;
 
 import java.util.List;
 
-public class StudentListRvViewModel extends ViewModel {
+public class PostListViewModel extends ViewModel {
     LiveData<List<Student>> data;
 
-    public StudentListRvViewModel(){
+    public PostListViewModel(){
         data = Model.instance.getAllStudents();
     }
 

@@ -17,4 +17,8 @@
     <string name="id">id</string>
     <string name="phone">phone</string>
     <string name="address">address</string>
+    <string name="welcome_to_app">Welcome To App</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
 </resources>

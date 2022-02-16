@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/studentListRvFragment"
-        android:name="com.example.class2demo2.StudentListRvFragment"
+        android:name="com.example.class2demo2.feed.StudentListRvFragment"
         android:label="Students"
         tools:layout="@layout/fragment_student_list">
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/studentDetailsFragment"
-        android:name="com.example.class2demo2.StudentDetailsFragment"
+        android:name="com.example.class2demo2.feed.StudentDetailsFragment"
         android:label="Details"
         tools:layout="@layout/fragment_student_details">
         <argument
@@ -31,7 +31,7 @@
     </fragment>
     <fragment
         android:id="@+id/editFragment"
-        android:name="com.example.class2demo2.EditFragment"
+        android:name="com.example.class2demo2.feed.EditFragment"
         android:label="Edit"
         tools:layout="@layout/fragment_edit">
         <argument
@@ -48,9 +48,14 @@
     </fragment>
     <fragment
         android:id="@+id/addFragment"
-        android:name="com.example.class2demo2.AddFragment"
+        android:name="com.example.class2demo2.feed.AddFragment"
         android:label="Add Student"
         tools:layout="@layout/fragment_add" />
     <action android:id="@+id/action_global_addFragment" app:destination="@id/addFragment"/>
     <action android:id="@+id/action_global_studentListRvFragment" app:destination="@id/studentListRvFragment" />
+    <fragment
+        android:id="@+id/postListRvFragment"
+        android:name="com.example.class2demo2.feed.PostListRvFragment"
+        android:label="fragment_post_list_rv"
+        tools:layout="@layout/fragment_post_list_rv" /><action android:id="@+id/action_global_postListRvFragment" app:destination="@id/postListRvFragment"/>
 </navigation>
