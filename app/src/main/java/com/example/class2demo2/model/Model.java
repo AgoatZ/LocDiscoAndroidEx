@@ -29,6 +29,14 @@ public class Model {
 
     MutableLiveData<List<Student>> studentsList = new MutableLiveData<List<Student>>();
 
+    //TODO ADD POST
+    public interface AddPostListener{
+        void onComplete();
+    }
+    public void addPost(Post post, AddPostListener listener) {
+        listener.onComplete();
+    }
+
 
     public enum StudentsListLoadingState {
         loading,
@@ -129,6 +137,7 @@ public class Model {
         if (studentsList.getValue() == null) {
             refreshStudentsList();
         }
+        refreshStudentsList();
         for (Student student : studentsList.getValue()) {
             if (student.getId().equals(id)) {
                 retStudent.setValue(student);

@@ -3,15 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="#000000"
-    tools:context=".feed.PostFragment">
+    android:clickable="false"
+    tools:context=".feed.Post.PostFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:clickable="true"
         tools:layout_editor_absoluteX="31dp"
-        tools:layout_editor_absoluteY="577dp" >
+        tools:layout_editor_absoluteY="577dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -71,6 +73,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:hint="description"
+                android:text="Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before..."
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"

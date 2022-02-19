@@ -1,4 +1,4 @@
-package com.example.class2demo2.feed;
+package com.example.class2demo2.feed.Details;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -80,9 +81,15 @@ public class StudentDetailsFragment extends Fragment {
         Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading);
         View view = inflater.inflate(R.layout.fragment_student_details, container, false);
 
+        //GET RELEVANT DATA FROM DB
         studentId = StudentDetailsFragmentArgs.fromBundle(getArguments()).getStudentId();
         student = viewModel.getData(studentId).getValue();
+        if(student.isDeleted()) {
+            Toast.makeText(this.getContext(),"This member does no longer exist", Toast.LENGTH_SHORT);
+            Navigation.findNavController(view).navigate(StudentDetailsFragmentDirections.actionGlobalStudentListRvFragment());
+        }
 
+        //SET VIEW COMPONENTS
         nameTv = view.findViewById(R.id.details_name_txt);
         idTv = view.findViewById(R.id.details_id_txt);
         phoneTv = view.findViewById(R.id.details_phone_txt);
@@ -91,27 +98,27 @@ public class StudentDetailsFragment extends Fragment {
         editBtn = view.findViewById(R.id.details_to_edit_btn);
         avatar = view.findViewById(R.id.details_student_imgv);
 
-        nameTv.setText(student.getName());
-        idTv.setText(student.getId());
-        addressTv.setText(student.getAddress());
-        phoneTv.setText(student.getPhone());
-        cb.setChecked(student.isFlag());
-        if(student.getAvatar()!=null) {
-            Picasso.get()
-                    .load(student.getAvatar())
-                    .into(avatar);
-        }
-        /***********************************/
-        editBtn.setOnClickListener(v->{
-            Navigation.findNavController(v).navigate(StudentDetailsFragmentDirections.actionStudentDetailsFragmentToEditFragment(studentId));
-        });
-        viewModel.getData(studentId).observe(getViewLifecycleOwner(), student1 -> {
-            student = student1;
-            Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading == Model.instance.getStudentsListLoadingState().getValue()
-                    ? Model.StudentsListLoadingState.loading
-                    : Model.StudentsListLoadingState.loaded);
-        });
-
+        //SET DATA TO DISPLAY FROM DB
+            nameTv.setText(student.getName());
+            idTv.setText(student.getId());
+            addressTv.setText(student.getAddress());
+            phoneTv.setText(student.getPhone());
+            cb.setChecked(student.isFlag());
+            if (student.getAvatar() != null) {
+                Picasso.get()
+                        .load(student.getAvatar())
+                        .into(avatar);
+            }
+            /***********************************/
+            editBtn.setOnClickListener(v -> {
+                Navigation.findNavController(v).navigate(StudentDetailsFragmentDirections.actionStudentDetailsFragmentToEditFragment(studentId));
+            });
+            viewModel.getData(studentId).observe(getViewLifecycleOwner(), student1 -> {
+                student = student1;
+                Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading == Model.instance.getStudentsListLoadingState().getValue()
+                        ? Model.StudentsListLoadingState.loading
+                        : Model.StudentsListLoadingState.loaded);
+            });
         return view;
 
 

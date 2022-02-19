@@ -1,4 +1,4 @@
-package com.example.class2demo2.feed;
+package com.example.class2demo2.feed.Post;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -27,10 +27,10 @@ public class PostFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_STUDENT_ID = "ARG_STUDENT_ID";
+    private static final String ARG_POST_ID = "ARG_POST_ID";
 
     // TODO: Rename and change types of parameters
-    private String studentId;
+    private String postId;
 
 
     public PostFragment() {
@@ -38,10 +38,10 @@ public class PostFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static PostFragment newInstance(String studentId) {
+    public static PostFragment newInstance(String postId) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_STUDENT_ID, studentId);
+        args.putString(ARG_POST_ID, postId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,19 +50,20 @@ public class PostFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            studentId = getArguments().getString(ARG_STUDENT_ID);
+            postId = getArguments().getString(ARG_POST_ID);
         }
     }
 
-    //PostViewModel viewModel;
+    PostViewModel viewModel;
     Student student;
     TextView nameTv;
-    TextView idTv;
-    TextView phoneTv;
+    TextView areaTv;
+    TextView categoryTv;
     TextView addressTv;
+    TextView descriptionTv;
     CheckBox cb;
     Button editBtn;
-    ImageView avatar;
+    ImageView image;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -76,28 +77,31 @@ public class PostFragment extends Fragment {
         super.onCreateView(inflater, container, savedInstanceState);
         // Inflate the layout for this fragment
         Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading);
-        View view = inflater.inflate(R.layout.fragment_student_details, container, false);
+        View view = inflater.inflate(R.layout.fragment_post, container, false);
 
-        //studentId = PostFragmentArgs.fromBundle(getArguments()).getStudentId();
+        postId = PostFragmentArgs.fromBundle(getArguments()).getPostId();
         //student = viewModel.getData(studentId).getValue();
 
-        nameTv = view.findViewById(R.id.details_name_txt);
-        idTv = view.findViewById(R.id.details_id_txt);
-        phoneTv = view.findViewById(R.id.details_phone_txt);
-        addressTv = view.findViewById(R.id.details_address_txt);
-        cb = view.findViewById(R.id.details_checked_chk);
-        editBtn = view.findViewById(R.id.details_to_edit_btn);
-        avatar = view.findViewById(R.id.details_student_imgv);
+        nameTv = view.findViewById(R.id.post_name_txt);
+        areaTv = view.findViewById(R.id.post_area_txt);
+        addressTv = view.findViewById(R.id.post_address_txt);
+        categoryTv = view.findViewById(R.id.post_category_txt);
+        nameTv = view.findViewById(R.id.post_name_txt);
+        addressTv = view.findViewById(R.id.post_address_txt);
+        image = view.findViewById(R.id.post_student_imgv);
+        editBtn = view.findViewById(R.id.post_to_edit_btn);
+        descriptionTv = view.findViewById(R.id.post_description_txt);
 
-        nameTv.setText(student.getName());
-        idTv.setText(student.getId());
-        addressTv.setText(student.getAddress());
-        phoneTv.setText(student.getPhone());
-        cb.setChecked(student.isFlag());
-        if(student.getAvatar()!=null) {
-            Picasso.get()
-                    .load(student.getAvatar())
-                    .into(avatar);
+        if(student != null) {
+            nameTv.setText(student.getName());
+            areaTv.setText(student.getId());
+            addressTv.setText(student.getAddress());
+            categoryTv.setText(student.getPhone());
+            if (student.getAvatar() != null) {
+                Picasso.get()
+                        .load(student.getAvatar())
+                        .into(image);
+            }
         }
         /***********************************/
         /*

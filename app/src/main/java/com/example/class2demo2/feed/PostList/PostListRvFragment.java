@@ -1,13 +1,10 @@
-package com.example.class2demo2.feed;
+package com.example.class2demo2.feed.PostList;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -26,10 +23,10 @@ import com.example.class2demo2.model.Student;
 import com.squareup.picasso.Picasso;
 
 
-public class StudentListRvFragment extends Fragment {
+public class PostListRvFragment extends Fragment {
 
     //MEMBERS
-    StudentListRvViewModel viewModel;
+    PostListViewModel viewModel;
     RecyclerView listRv;
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
@@ -37,41 +34,39 @@ public class StudentListRvFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(StudentListRvViewModel.class);
+        viewModel = new ViewModelProvider(this).get(PostListViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student_list,container,false);
+        View view = inflater.inflate(R.layout.fragment_post_list_rv,container,false);
 
-        swipeRefresh = view.findViewById(R.id.studentlist_swiperefresh);
+        //setting the recycler view
+        swipeRefresh = view.findViewById(R.id.postlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{
             Model.instance.refreshStudentsList();
         });
-        listRv = view.findViewById(R.id.studentlist_rv);
+
+        listRv = view.findViewById(R.id.postlist_rv);
         listRv.setHasFixedSize(true);
         listRv.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MyAdapter();
         listRv.setAdapter(adapter);
 
-        ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
-        add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.postListRvFragment));
-
+        //setting the adapter listeners
         adapter.setOnItemClickListener(new OnItemClickListener()
         {
-
             @Override
             public void onItemClick(View v, int position) {
                 String stId = viewModel.getData().getValue().get(position).getId();
-                //Navigation.findNavController(v).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToStudentDetailsFragment(stId));
+                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(stId));
             }
 
-
-            @Override public void onCheckboxClick(int position, boolean isChecked){
-                viewModel.getData().getValue().get(position).setFlag(isChecked);
-                Student student = viewModel.getData().getValue().get(position);
-                Model.instance.addStudent(student,()->{});
+            @Override
+            public void onImageClick(View v, int position) {
+                String stId = viewModel.getData().getValue().get(position).getId();
+                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(stId));
             }
         });
         viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
@@ -85,50 +80,59 @@ public class StudentListRvFragment extends Fragment {
 
     private void refresh() {
         adapter.notifyDataSetChanged();
-        //swipeRefresh.setRefreshing(false);
     }
 
 
     //HOLDER CLASS
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nameTv;
-        TextView idTv;
-        CheckBox cb;
-        ImageView avatar;
-        Button addBtn;
+        TextView categoryTv;
+        TextView areaTv;
+        ImageView image;
+
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
-            nameTv = itemView.findViewById(R.id.listrow_name_tv);
-            idTv = itemView.findViewById(R.id.listrow_id_tv);
-            cb = itemView.findViewById(R.id.listrow_cb);
-            avatar = itemView.findViewById(R.id.listrow_avatar_imv);
-            addBtn = listRv.findViewById(R.id.listfrag_plus_imgbtn);
+            nameTv = itemView.findViewById(R.id.postrow_name_tv);
+            categoryTv = itemView.findViewById(R.id.postrow_category_tv);
+            image = itemView.findViewById(R.id.postrow_image_imv);
+            areaTv = itemView.findViewById(R.id.postrow_area_tv);
+
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(itemView, pos);
             });
-            cb.setOnClickListener(v -> {
+            image.setOnClickListener(v->{
                 int pos = getAdapterPosition();
-                listener.onCheckboxClick(pos, cb.isChecked());
+                listener.onImageClick(itemView, pos);
             });
         }
+
+        //TODO: change student to post
         public void bind(Student student) {
             nameTv.setText(student.getName());
-            idTv.setText(student.getId());
-            cb.setChecked(student.isFlag());
-            avatar.setImageResource(R.drawable.avatarsmith);
+            categoryTv.setText(student.getPhone());
+            areaTv.setText(student.getAddress());
+
+            /*
+            if(Model.instance.getUid()!=student.getId()) {
+                editBtn.setVisibility(View.GONE);
+            }
+             */
+
+            image.setImageResource(R.drawable.avatarsmith);
             if(student.getAvatar()!=null) {
                 Picasso.get()
                         .load(student.getAvatar())
-                        .into(avatar);
+                        .into(image);
             }
         }
     }
 
     interface OnItemClickListener{
         void onItemClick(View v, int position);
-        void onCheckboxClick(int position, boolean isChecked);
+        void onImageClick(View v, int position);
     }
+
     //ADAPTER CLASS
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
 
@@ -141,12 +145,13 @@ public class StudentListRvFragment extends Fragment {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.student_list_row,parent,false);
+            View view = getLayoutInflater().inflate(R.layout.post_list_row,parent,false);
             MyViewHolder holder = new MyViewHolder(view, listener);
 
             return holder;
         }
 
+        //TODO: change student to post
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Student student = viewModel.getData().getValue().get(position);
