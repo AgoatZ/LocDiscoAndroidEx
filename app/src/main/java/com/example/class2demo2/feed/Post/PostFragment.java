@@ -12,9 +12,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
 import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
+import com.example.class2demo2.model.Post;
 import com.example.class2demo2.model.Student;
 import com.squareup.picasso.Picasso;
 
@@ -25,12 +28,12 @@ import com.squareup.picasso.Picasso;
  */
 public class PostFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POST_ID = "ARG_POST_ID";
+    private static final String ARG_POST_UID = "ARG_POST_UID";
 
     // TODO: Rename and change types of parameters
     private String postId;
+    private String postUid;
 
 
     public PostFragment() {
@@ -38,10 +41,11 @@ public class PostFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static PostFragment newInstance(String postId) {
+    public static PostFragment newInstance(String postId, String postUid) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_POST_ID, postId);
+        args.putString(ARG_POST_UID, postUid);
         fragment.setArguments(args);
         return fragment;
     }
@@ -51,24 +55,24 @@ public class PostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             postId = getArguments().getString(ARG_POST_ID);
+            postUid = getArguments().getString(ARG_POST_UID);
         }
     }
 
     PostViewModel viewModel;
-    Student student;
+    Post post;
     TextView nameTv;
     TextView areaTv;
     TextView categoryTv;
     TextView addressTv;
     TextView descriptionTv;
-    CheckBox cb;
     Button editBtn;
     ImageView image;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        //viewModel = new ViewModelProvider(this).get(PostViewModel.class);
+        viewModel = new ViewModelProvider(this).get(PostViewModel.class);
     }
 
     @Override
@@ -76,11 +80,11 @@ public class PostFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         // Inflate the layout for this fragment
-        Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading);
+        Model.instance.getPostsListLoadingState().postValue(Model.PostsListLoadingState.loading);
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
         postId = PostFragmentArgs.fromBundle(getArguments()).getPostId();
-        //student = viewModel.getData(studentId).getValue();
+        post = viewModel.getData(postId).getValue();
 
         nameTv = view.findViewById(R.id.post_name_txt);
         areaTv = view.findViewById(R.id.post_area_txt);
@@ -92,26 +96,25 @@ public class PostFragment extends Fragment {
         editBtn = view.findViewById(R.id.post_to_edit_btn);
         descriptionTv = view.findViewById(R.id.post_description_txt);
 
-        if(student != null) {
-            nameTv.setText(student.getName());
-            areaTv.setText(student.getId());
-            addressTv.setText(student.getAddress());
-            categoryTv.setText(student.getPhone());
-            if (student.getAvatar() != null) {
+        if(post != null) {
+            nameTv.setText(post.getName());
+            areaTv.setText(post.getArea());
+            addressTv.setText(post.getAddress());
+            categoryTv.setText(post.getCategory());
+            if (post.getImage() != null) {
                 Picasso.get()
-                        .load(student.getAvatar())
+                        .load(post.getImage())
                         .into(image);
             }
         }
-        /***********************************/
+        //TODO: MAKE EDIT POST FRAGMENT
+        if(Model.instance.getUid() != postUid) { editBtn.setVisibility(View.GONE); }
         /*
         editBtn.setOnClickListener(v->{
-            Navigation.findNavController(v).navigate(PostFragmentDirections.actionPostFragmentToEditFragment(studentId));
+            Navigation.findNavController(v).navigate(PostFragmentDirections.actionPostFragmentToEditFragment(postId));
         });
-        viewModel.getData(studentId).observe(getViewLifecycleOwner(), student1 -> {});
-*/
+        viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {});
+        */
         return view;
-
-
     }
 }

@@ -110,6 +110,7 @@ public class Model {
 
  */
 
+    //TODO: PUT retval INSIDE
     MutableLiveData<Student> retStudent = new MutableLiveData<Student>();
 
     public void refreshStudentDetails(String id) {
@@ -235,6 +236,22 @@ public class Model {
             refreshPostsList();
         }
         return postsList;
+    }
+
+    //TODO: PUT retval INSIDE
+    MutableLiveData<Post> retPost = new MutableLiveData<Post>();
+
+    public LiveData<Post> getPostById(String id) {
+        if (postsList.getValue() == null) {
+            refreshPostsList();
+        }
+        refreshPostsList();
+        for (Post post : postsList.getValue()) {
+            if (post.getId().equals(id)) {
+                retPost.setValue(post);
+            }
+        }
+        return retPost;
     }
 
 
