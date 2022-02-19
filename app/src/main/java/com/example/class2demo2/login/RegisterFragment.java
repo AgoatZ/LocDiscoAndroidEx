@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,32 +19,32 @@ import com.example.class2demo2.model.Model;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
-public class LoginFragment extends Fragment {
+public class RegisterFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-       View view = inflater.inflate(R.layout.fragment_login, container, false);
+        View view = inflater.inflate(R.layout.fragment_register, container, false);
 
-        Button loginBtn = view.findViewById(R.id.login_login_btn);
-        TextInputEditText emailTil = view.findViewById(R.id.login_email_et);
-        TextInputEditText passwordTil = view.findViewById(R.id.login_password_et);
-        TextView registerTv = view.findViewById(R.id.login_register_tv);
+        Button registerBtn = view.findViewById(R.id.register_register_btn);
+        TextInputEditText emailTil = view.findViewById(R.id.register_email_et);
+        TextInputEditText passwordTil = view.findViewById(R.id.register_password_et);
+        TextView loginTv = view.findViewById(R.id.register_login_tv);
 
-        registerTv.setOnClickListener(v ->{
-            Navigation.findNavController(v).navigate(LoginFragmentDirections.actionGlobalRegisterFragment());
+        loginTv.setOnClickListener(v ->{
+            Navigation.findNavController(v).navigate(RegisterFragmentDirections.actionGlobalLoginFragment());
         });
 
-        loginBtn.setOnClickListener(v ->{
+        registerBtn.setOnClickListener(v ->{
             //TODO - CONNECT TO MODEL LOGIN FUNCTION
-            Model.instance.signIn(emailTil.getEditableText().toString(),
+            Model.instance.register(emailTil.getEditableText().toString(),
                     passwordTil.getEditableText().toString(),
                     (user,error) -> {
-                        if(user!=null)
-                            toFeedActivity();
-                        else
-                            Toast.makeText(this.getContext(), error.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                    if(user!=null)
+                        toFeedActivity();
+                    else
+                        Toast.makeText(this.getContext(), error.getMessage().toString(), Toast.LENGTH_SHORT).show();
             });
         });
         return view;

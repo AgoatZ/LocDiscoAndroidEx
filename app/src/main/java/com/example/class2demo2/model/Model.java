@@ -29,15 +29,6 @@ public class Model {
 
     MutableLiveData<List<Student>> studentsList = new MutableLiveData<List<Student>>();
 
-    //TODO ADD POST
-    public interface AddPostListener{
-        void onComplete();
-    }
-    public void addPost(Post post, AddPostListener listener) {
-        listener.onComplete();
-    }
-
-
     public enum StudentsListLoadingState {
         loading,
         loaded
@@ -47,6 +38,7 @@ public class Model {
 
     private Model() {
         studentsListLoadingState.setValue(StudentsListLoadingState.loaded);
+        postsListLoadingState.setValue(PostsListLoadingState.loaded);
     }
 
     public MutableLiveData<StudentsListLoadingState> getStudentsListLoadingState() {
@@ -86,9 +78,8 @@ public class Model {
                         localUpdateDate = student.getUpdateDate();
                     }
                 }
+
                 // update last local update date
-                //AppLocalDb.db.studentDao().delete(new Student("", "1234", "", "", false, null));
-                //AppLocalDb.db.studentDao().delete(new Student("", "101010", "", "", false, null));
                 MyApplication.getContext()
                         .getSharedPreferences("TAG", Context.MODE_PRIVATE)
                         .edit()
@@ -173,9 +164,70 @@ public class Model {
         modelFirebase.logicalDelete(student, listener);
     }
 
+    /***************POST MODEL*****************/
+    public enum PostsListLoadingState {
+        loading,
+        loaded
+    }
+
+    MutableLiveData<PostsListLoadingState> postsListLoadingState = new MutableLiveData<>();
+    MutableLiveData<List<Post>> postsList = new MutableLiveData<List<Post>>();
+    public interface AddPostListener{
+        void onComplete();
+    }
+    public void addPost(Post post, AddPostListener listener) {
+        modelFirebase.addPost(post, () -> {
+            refreshPostsList();
+        });
+        listener.onComplete();
+    }
+
+    public void refreshPostsList() {
+        postsListLoadingState.setValue(PostsListLoadingState.loading);
+
+        // get last local update date
+        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("PostLastUpdateDate", 0);
+
+        executor.execute(() -> {
+            List<Post> updatedList = AppLocalDb.db.postDao().getAllPosts();
+            postsList.postValue(updatedList);
+        });
+        // firebase get all updates since last local update date
+        modelFirebase.getAllPosts(lastUpdateDate, list -> {
+
+            // add all records to the local db
+            executor.execute(() -> {
+                Long localUpdateDate = new Long(0);
+                Log.d("TAG", "firebase returned " + list.size());
+                for (Post post : list) {
+                    if (!post.isDeleted())
+                        AppLocalDb.db.postDao().insertAll(post);
+                    else
+                        AppLocalDb.db.postDao().delete(post);
+                    if (localUpdateDate < post.getUpdateDate()) {
+                        localUpdateDate = post.getUpdateDate();
+                    }
+                }
+
+                // update last local update date
+                MyApplication.getContext()
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("PostLastUpdateDate", localUpdateDate)
+                        .commit();
+
+                // return all data to caller
+                List<Post> updatedList = AppLocalDb.db.postDao().getAllPosts();
+                postsList.postValue(updatedList);
+                postsListLoadingState.postValue(PostsListLoadingState.loaded);
+            });
+        });
+    }
+
+
     /********Authentication********/
     public interface SignInListener {
-        void onComplete(FirebaseUser user);
+        void onComplete(FirebaseUser user, Exception error);
     }
 
     public boolean isSignedIn() {
@@ -192,5 +244,13 @@ public class Model {
 
     public void signOut(){
         modelFirebase.signOut();
+    }
+
+    public interface RegisterListener{
+        void onComplete(FirebaseUser user, Exception error);
+    }
+
+    public void register(@NonNull String email,@NonNull String password, RegisterListener listener) {
+        modelFirebase.register(email, password, listener);
     }
 }

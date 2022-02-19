@@ -94,6 +94,7 @@ public class MainDrawerActivity extends AppCompatActivity {
         if (item.getItemId() == R.id.loginFragment) {
             Intent intent = new Intent(this, LoginActivity.class);
             startActivity(intent);
+            Model.instance.signOut();
             finish();
             return true;
         } else {

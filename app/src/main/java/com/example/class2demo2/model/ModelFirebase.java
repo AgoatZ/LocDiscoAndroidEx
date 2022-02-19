@@ -73,6 +73,21 @@ public class ModelFirebase {
                 });
     }
 
+    public void addPost(Post post, Model.AddPostListener listener) {
+        Map<String, Object> json = post.toJson();
+
+// Add a new document with a generated ID
+        db.collection(Post.COLLECTION_NAME)
+                .document(post.getId())
+                .set(json)
+                .addOnSuccessListener(unused -> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener(e -> {
+                    listener.onComplete();
+                });
+    }
+
     public interface GetStudentByIdListener{
         void onComplete(Student student);
     }
@@ -115,6 +130,30 @@ public class ModelFirebase {
                 });
     }
 
+    /***************************POST MODEL*******************************/
+    public interface GetAllPostsListener{
+        void onComplete(List<Post> list);
+    }
+    public void getAllPosts(Long lastUpdateDate, GetAllPostsListener listener) {
+        db.collection(Post.COLLECTION_NAME)
+                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate,0))
+                .get()
+                .addOnCompleteListener(task ->{
+                    List<Post> list = new LinkedList<Post>();
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot doc : task.getResult())
+                        {
+                            Post post = Post.create(doc.getData());
+                            if(post != null)
+                            {
+                                list.add(post);
+                            }
+                        }
+                    }
+                    listener.onComplete(list);
+                });
+    }
+
     /******************************STORAGE*******************************/
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
@@ -149,11 +188,11 @@ public class ModelFirebase {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d("TAG", "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            listener.onComplete(user);
+                            listener.onComplete(user, null);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithEmail:failure", task.getException());
-                            listener.onComplete(null);
+                            listener.onComplete(null, task.getException());
                         }
                 });
     }
@@ -164,5 +203,21 @@ public class ModelFirebase {
 
     public String getUId(){
         return mAuth.getUid();
+    }
+
+    public void register(String email, String password, Model.RegisterListener listener) {
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            Log.d("TAG", "createUserWithEmail:success");
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            listener.onComplete(user, null);
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w("TAG", "createUserWithEmail:failure", task.getException());
+                            listener.onComplete(null, task.getException());
+                        }
+                });
     }
 }
