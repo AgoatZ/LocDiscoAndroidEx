@@ -19,6 +19,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
+import com.example.class2demo2.model.Post;
 import com.example.class2demo2.model.Student;
 import com.squareup.picasso.Picasso;
 
@@ -45,7 +46,7 @@ public class PostListRvFragment extends Fragment {
         //setting the recycler view
         swipeRefresh = view.findViewById(R.id.postlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{
-            Model.instance.refreshStudentsList();
+            Model.instance.refreshPostsList();
         });
 
         listRv = view.findViewById(R.id.postlist_rv);
@@ -71,9 +72,9 @@ public class PostListRvFragment extends Fragment {
         });
         viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
 
-        swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue() == Model.StudentsListLoadingState.loading);
-        Model.instance.getStudentsListLoadingState().observe(getViewLifecycleOwner(), studentsListLoadingState -> {
-            swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue() == Model.StudentsListLoadingState.loading);
+        swipeRefresh.setRefreshing(Model.instance.getPostsListLoadingState().getValue() == Model.PostsListLoadingState.loading);
+        Model.instance.getPostsListLoadingState().observe(getViewLifecycleOwner(), postsListLoadingState -> {
+            swipeRefresh.setRefreshing(Model.instance.getPostsListLoadingState().getValue() == Model.PostsListLoadingState.loading);
         });
         return view;
     }
@@ -108,10 +109,10 @@ public class PostListRvFragment extends Fragment {
         }
 
         //TODO: change student to post
-        public void bind(Student student) {
-            nameTv.setText(student.getName());
-            categoryTv.setText(student.getPhone());
-            areaTv.setText(student.getAddress());
+        public void bind(Post post) {
+            nameTv.setText(post.getName());
+            categoryTv.setText(post.getCategory());
+            areaTv.setText(post.getAddress());
 
             /*
             if(Model.instance.getUid()!=student.getId()) {
@@ -120,9 +121,9 @@ public class PostListRvFragment extends Fragment {
              */
 
             image.setImageResource(R.drawable.avatarsmith);
-            if(student.getAvatar()!=null) {
+            if(post.getImage()!=null) {
                 Picasso.get()
-                        .load(student.getAvatar())
+                        .load(post.getImage())
                         .into(image);
             }
         }
@@ -154,8 +155,8 @@ public class PostListRvFragment extends Fragment {
         //TODO: change student to post
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            Student student = viewModel.getData().getValue().get(position);
-            holder.bind(student);
+            Post post = viewModel.getData().getValue().get(position);
+            holder.bind(post);
         }
 
         @Override

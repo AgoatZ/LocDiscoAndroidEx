@@ -40,6 +40,7 @@ public class MainDrawerActivity extends AppCompatActivity {
         //logout click
         navigationView.getMenu().findItem(R.id.loginFragment).setOnMenuItemClickListener(menuItem -> {
             if (menuItem.getItemId() == R.id.loginFragment) {
+                Model.instance.signOut();
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
                 finish();
@@ -49,7 +50,7 @@ public class MainDrawerActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.studentListRvFragment, R.id.addFragment)
+                R.id.studentListRvFragment, R.id.addFragment, R.id.addPostFragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main_drawer);
@@ -88,19 +89,5 @@ public class MainDrawerActivity extends AppCompatActivity {
         }
         return false;
     }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.loginFragment) {
-            Intent intent = new Intent(this, LoginActivity.class);
-            startActivity(intent);
-            Model.instance.signOut();
-            finish();
-            return true;
-        } else {
-            return super.onContextItemSelected(item);
-        }
-    }
-
 
 }

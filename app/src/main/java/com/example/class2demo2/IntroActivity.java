@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.class2demo2.feed.MainDrawerActivity;
 import com.example.class2demo2.login.LoginActivity;
@@ -25,6 +26,7 @@ public class IntroActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             if (Model.instance.isSignedIn()){
+                Log.d("LOGGEDUSER:",Model.instance.getUid());
                 Model.instance.mainThread.post(()->{
                     toFeedActivity();
                 });

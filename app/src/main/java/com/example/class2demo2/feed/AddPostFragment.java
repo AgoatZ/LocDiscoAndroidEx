@@ -116,7 +116,7 @@ public class AddPostFragment extends Fragment {
         categoryTv = view.findViewById(R.id.add_post_category_txt);
         areaTv = view.findViewById(R.id.add_post_area_txt);
         addressTv = view.findViewById(R.id.add_post_address_txt);
-        descriptionTv = view.findViewById(R.id.post_description_txt);
+        descriptionTv = view.findViewById(R.id.add_post_description_txt);
         image = view.findViewById(R.id.add_post_imgv);
         cancelBtn = view.findViewById(R.id.add_post_cancel_btn);
         saveBtn = view.findViewById(R.id.add_post_save_btn);

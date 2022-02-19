@@ -57,7 +57,12 @@
         android:id="@+id/postListRvFragment"
         android:name="com.example.class2demo2.feed.PostList.PostListRvFragment"
         android:label="fragment_post_list_rv"
-        tools:layout="@layout/fragment_post_list_rv" /><action android:id="@+id/action_global_postListRvFragment" app:destination="@id/postListRvFragment"/>
+        tools:layout="@layout/fragment_post_list_rv" />
+    <action
+        android:id="@+id/action_global_postListRvFragment"
+        app:destination="@id/postListRvFragment"
+        app:popUpTo="@id/postListRvFragment"
+        app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/postFragment"
         android:name="com.example.class2demo2.feed.Post.PostFragment"
@@ -67,4 +72,10 @@
             android:name="postId"
             app:argType="string" />
     </fragment><action android:id="@+id/action_global_postFragment" app:destination="@id/postFragment"/>
+    <fragment
+        android:id="@+id/addPostFragment"
+        android:name="com.example.class2demo2.feed.AddPostFragment"
+        android:label="fragment_add_post"
+        tools:layout="@layout/fragment_add_post" />
+    <action android:id="@+id/action_global_addPostFragment" app:destination="@id/addPostFragment" />
 </navigation>

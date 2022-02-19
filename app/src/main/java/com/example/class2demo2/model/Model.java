@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import android.os.Handler;
@@ -28,6 +29,7 @@ public class Model {
     ModelFirebase modelFirebase = new ModelFirebase();
 
     MutableLiveData<List<Student>> studentsList = new MutableLiveData<List<Student>>();
+
 
     public enum StudentsListLoadingState {
         loading,
@@ -182,6 +184,10 @@ public class Model {
         listener.onComplete();
     }
 
+    public MutableLiveData<PostsListLoadingState> getPostsListLoadingState() {
+        return postsListLoadingState;
+    }
+
     public void refreshPostsList() {
         postsListLoadingState.setValue(PostsListLoadingState.loading);
 
@@ -224,6 +230,13 @@ public class Model {
         });
     }
 
+    public LiveData<List<Post>> getAllPosts(){
+        if(postsList == null){
+            refreshPostsList();
+        }
+        return postsList;
+    }
+
 
     /********Authentication********/
     public interface SignInListener {
@@ -243,7 +256,7 @@ public class Model {
     }
 
     public void signOut(){
-        modelFirebase.signOut();
+        executor.execute(()->modelFirebase.signOut());
     }
 
     public interface RegisterListener{
