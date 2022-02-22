@@ -3,13 +3,10 @@ package com.example.class2demo2.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.example.class2demo2.login.LoginActivity;
 import com.google.firebase.Timestamp;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,22 +32,22 @@ public class ModelFirebase {
     }
 
 
-    public interface GetAllStudentsListener{
-        void onComplete(List<Student> list);
+    public interface GetAllMembersListener{
+        void onComplete(List<Member> list);
     }
-    public void getAllStudents(Long lastUpdateDate, GetAllStudentsListener listener) {
-        db.collection(Student.COLLECTION_NAME)
+    public void getAllMembers(Long lastUpdateDate, GetAllMembersListener listener) {
+        db.collection(Member.COLLECTION_NAME)
                 .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate,0))
                 .get()
                 .addOnCompleteListener(task ->{
-                    List<Student> list = new LinkedList<Student>();
+                    List<Member> list = new LinkedList<Member>();
                     if(task.isSuccessful()){
                         for(QueryDocumentSnapshot doc : task.getResult())
                         {
-                            Student student = Student.create(doc.getData());
-                            if(student != null)
+                            Member member = Member.create(doc.getData());
+                            if(member != null)
                             {
-                                list.add(student);
+                                list.add(member);
                             }
                         }
                     }
@@ -58,12 +55,12 @@ public class ModelFirebase {
                 });
     }
 
-    public void addStudent(Student student, Model.AddStudentListener listener) {
-        Map<String, Object> json = student.toJson();
+    public void addMember(Member member, Model.AddMemberListener listener) {
+        Map<String, Object> json = member.toJson();
 
 // Add a new document with a generated ID
-        db.collection(Student.COLLECTION_NAME)
-                .document(student.getId())
+        db.collection(Member.COLLECTION_NAME)
+                .document(member.getId())
                 .set(json)
                 .addOnSuccessListener(unused -> {
                         listener.onComplete();
@@ -73,41 +70,26 @@ public class ModelFirebase {
                 });
     }
 
-    public void addPost(Post post, Model.AddPostListener listener) {
-        Map<String, Object> json = post.toJson();
-
-// Add a new document with a generated ID
-        db.collection(Post.COLLECTION_NAME)
-                .document(post.getId())
-                .set(json)
-                .addOnSuccessListener(unused -> {
-                    listener.onComplete();
-                })
-                .addOnFailureListener(e -> {
-                    listener.onComplete();
-                });
+    public interface GetMemberByIdListener{
+        void onComplete(Member member);
     }
 
-    public interface GetStudentByIdListener{
-        void onComplete(Student student);
-    }
-
-    public void getStudentById(String id, Long lastUpdateDate, GetStudentByIdListener listener) {
-        db.collection(Student.COLLECTION_NAME)
+    public void getMemberById(String id, Long lastUpdateDate, GetMemberByIdListener listener) {
+        db.collection(Member.COLLECTION_NAME)
                 .document(id)
                 .get()
                 .addOnCompleteListener(task ->{
-                    Student student = null;
+                    Member member = null;
                     if(task.isSuccessful() && task.getResult() != null && (Long)task.getResult().getData().get("updateDate") >= lastUpdateDate){
-                        student = Student.create(task.getResult().getData());
-                        listener.onComplete(student);
+                        member = Member.create(task.getResult().getData());
+                        listener.onComplete(member);
                     }
                 });
     }
 
-    public void delete(Student student, Model.DeleteListener listener) {
-        db.collection(Student.COLLECTION_NAME)
-                .document(student.id)
+    public void delete(Member member, Model.DeleteListener listener) {
+        db.collection(Member.COLLECTION_NAME)
+                .document(member.id)
                 .delete()
                 .addOnCompleteListener(task ->{
                     if(task.isSuccessful() && task.getResult() != null){
@@ -116,11 +98,11 @@ public class ModelFirebase {
                 });
     }
 
-    public void logicalDelete(Student student, Model.LogicalDeleteListener listener){
-        student.setDeleted(true);
-        Map<String, Object> json = student.toJson();
-        db.collection(Student.COLLECTION_NAME)
-                .document(student.getId())
+    public void logicalDelete(Member member, Model.LogicalDeleteListener listener){
+        member.setDeleted(true);
+        Map<String, Object> json = member.toJson();
+        db.collection(Member.COLLECTION_NAME)
+                .document(member.getId())
                 .update(json)
                 .addOnSuccessListener(unused -> {
                     listener.onComplete();
@@ -154,6 +136,20 @@ public class ModelFirebase {
                 });
     }
 
+    public void addPost(Post post, Model.AddPostListener listener) {
+        Map<String, Object> json = post.toJson();
+
+// Add a new document with a generated ID
+        db.collection(Post.COLLECTION_NAME)
+                .document(post.getId())
+                .set(json)
+                .addOnSuccessListener(unused -> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener(e -> {
+                    listener.onComplete();
+                });
+    }
     /******************************STORAGE*******************************/
     FirebaseStorage storage = FirebaseStorage.getInstance();
 

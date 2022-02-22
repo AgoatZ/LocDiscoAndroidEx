@@ -28,56 +28,56 @@ public class Model {
 
     ModelFirebase modelFirebase = new ModelFirebase();
 
-    MutableLiveData<List<Student>> studentsList = new MutableLiveData<List<Student>>();
+    MutableLiveData<List<Member>> membersList = new MutableLiveData<List<Member>>();
 
 
-    public enum StudentsListLoadingState {
+    public enum MembersListLoadingState {
         loading,
         loaded
     }
 
-    MutableLiveData<StudentsListLoadingState> studentsListLoadingState = new MutableLiveData<>();
+    MutableLiveData<MembersListLoadingState> membersListLoadingState = new MutableLiveData<>();
 
     private Model() {
-        studentsListLoadingState.setValue(StudentsListLoadingState.loaded);
+        membersListLoadingState.setValue(MembersListLoadingState.loaded);
         postsListLoadingState.setValue(PostsListLoadingState.loaded);
     }
 
-    public MutableLiveData<StudentsListLoadingState> getStudentsListLoadingState() {
-        return studentsListLoadingState;
+    public MutableLiveData<MembersListLoadingState> getMembersListLoadingState() {
+        return membersListLoadingState;
     }
 
-    public LiveData<List<Student>> getAllStudents() {
-        if (studentsList.getValue() == null) {
-            refreshStudentsList();
+    public LiveData<List<Member>> getAllMembers() {
+        if (membersList.getValue() == null) {
+            refreshMembersList();
         }
-        return studentsList;
+        return membersList;
     }
 
-    public void refreshStudentsList() {
-        studentsListLoadingState.setValue(StudentsListLoadingState.loading);
+    public void refreshMembersList() {
+        membersListLoadingState.setValue(MembersListLoadingState.loading);
 
         // get last local update date
-        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("StudentLastUpdateDate", 0);
+        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("MemberLastUpdateDate", 0);
 
         executor.execute(() -> {
-            List<Student> updatedList = AppLocalDb.db.studentDao().getAllStudents();
-            studentsList.postValue(updatedList);
+            List<Member> updatedList = AppLocalDb.db.memberDao().getAllMembers();
+            membersList.postValue(updatedList);
         });
         // firebase get all updates since last local update date
-        modelFirebase.getAllStudents(lastUpdateDate, list -> {
+        modelFirebase.getAllMembers(lastUpdateDate, list -> {
 
             // add all records to the local db
             executor.execute(() -> {
                 Long localUpdateDate = new Long(0);
                 Log.d("TAG", "firebase returned " + list.size());
-                for (Student student : list) {
-                    if (!student.isDeleted())
-                        AppLocalDb.db.studentDao().insertAll(student);
+                for (Member member : list) {
+                    if (!member.isDeleted())
+                        AppLocalDb.db.memberDao().insertAll(member);
                     else
-                        AppLocalDb.db.studentDao().delete(student);
-                    if (localUpdateDate < student.getUpdateDate()) {
-                        localUpdateDate = student.getUpdateDate();
+                        AppLocalDb.db.memberDao().delete(member);
+                    if (localUpdateDate < member.getUpdateDate()) {
+                        localUpdateDate = member.getUpdateDate();
                     }
                 }
 
@@ -85,13 +85,13 @@ public class Model {
                 MyApplication.getContext()
                         .getSharedPreferences("TAG", Context.MODE_PRIVATE)
                         .edit()
-                        .putLong("StudentLastUpdateDate", localUpdateDate)
+                        .putLong("MemberLastUpdateDate", localUpdateDate)
                         .commit();
 
                 // return all data to caller
-                List<Student> updatedList = AppLocalDb.db.studentDao().getAllStudents();
-                studentsList.postValue(updatedList);
-                studentsListLoadingState.postValue(StudentsListLoadingState.loaded);
+                List<Member> updatedList = AppLocalDb.db.memberDao().getAllMembers();
+                membersList.postValue(updatedList);
+                membersListLoadingState.postValue(MembersListLoadingState.loaded);
             });
         });
     }
@@ -104,49 +104,51 @@ public class Model {
         modelFirebase.saveImage(imageBitmap, imageName, listener);
     }
 /*
-    public interface GetStudentByIdListener{
-        void onComplete(Student student);
+    public interface GetMemberByIdListener{
+        void onComplete(Member member);
     }
 
  */
 
     //TODO: PUT retval INSIDE
-    MutableLiveData<Student> retStudent = new MutableLiveData<Student>();
+    MutableLiveData<Member> retMember = new MutableLiveData<Member>();
 
-    public void refreshStudentDetails(String id) {
-        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("StudentLastUpdateDate", 0);
-        modelFirebase.getStudentById(id, lastUpdateDate, student -> {
-            retStudent.setValue(student);
+    public void refreshMemberDetails(String id) {
+        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("MemberLastUpdateDate", 0);
+        modelFirebase.getMemberById(id, lastUpdateDate, member -> {
+            retMember.setValue(member);
             executor.execute(() -> {
                 Long localUpdateDate = new Long(0);
-                if (!student.isDeleted())
-                    AppLocalDb.db.studentDao().insertAll(student);
-                Student s = AppLocalDb.db.studentDao().getStudentById(id);
-                retStudent.postValue(s);
+                if (!member.isDeleted())
+                    AppLocalDb.db.memberDao().insertAll(member);
+                Member s = AppLocalDb.db.memberDao().getMemberById(id);
+                retMember.postValue(s);
             });
         });
     }
 
-    public LiveData<Student> getStudentById(String id) {
-        if (studentsList.getValue() == null) {
-            refreshStudentsList();
+    public LiveData<Member> getMemberById(String id) {
+        if (membersList.getValue() == null) {
+            refreshMembersList();
         }
-        refreshStudentsList();
-        for (Student student : studentsList.getValue()) {
-            if (student.getId().equals(id)) {
-                retStudent.setValue(student);
+        refreshMembersList();
+        if(membersList.getValue() != null) {
+            for (Member member : membersList.getValue()) {
+                if (member.getId().equals(id)) {
+                    retMember.setValue(member);
+                }
             }
         }
-        return retStudent;
+        return retMember;
     }
 
-    public interface AddStudentListener {
+    public interface AddMemberListener {
         void onComplete();
     }
 
-    public void addStudent(Student student, AddStudentListener listener) {
-        modelFirebase.addStudent(student, () -> {
-            refreshStudentsList();
+    public void addMember(Member member, AddMemberListener listener) {
+        modelFirebase.addMember(member, () -> {
+            refreshMembersList();
             listener.onComplete();
         });
     }
@@ -155,16 +157,16 @@ public class Model {
         void onComplete();
     }
 
-    public void delete(Student student, DeleteListener listener) {
-        modelFirebase.delete(student, listener);
+    public void delete(Member member, DeleteListener listener) {
+        modelFirebase.delete(member, listener);
     }
 
     public interface LogicalDeleteListener {
         void onComplete();
     }
 
-    public void logicalDelete(Student student, LogicalDeleteListener listener) {
-        modelFirebase.logicalDelete(student, listener);
+    public void logicalDelete(Member member, LogicalDeleteListener listener) {
+        modelFirebase.logicalDelete(member, listener);
     }
 
     /***************POST MODEL*****************/

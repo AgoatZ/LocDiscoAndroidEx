@@ -26,7 +26,7 @@ import android.widget.Toast;
 
 import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
-import com.example.class2demo2.model.Student;
+import com.example.class2demo2.model.Member;
 
 import java.io.InputStream;
 
@@ -66,16 +66,16 @@ public class AddFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         saveBtn.setEnabled(false);
         cancelBtn.setEnabled(false);
-        Student student = new Student(nameTv.getText().toString(), idTv.getText().toString(), phoneTv.getText().toString(), addressTv.getText().toString(), cb.isChecked(), null);
+        Member member = new Member(nameTv.getText().toString(), idTv.getText().toString(), phoneTv.getText().toString(), addressTv.getText().toString(), cb.isChecked(), null);
         if (imageBitmap != null){
             Model.instance.saveImage(imageBitmap, idTv.getText() + ".jpg", url -> {
-                student.setAvatar(url);
-                Model.instance.addStudent(student, () -> {
+                member.setAvatar(url);
+                Model.instance.addMember(member, () -> {
                     Navigation.findNavController(nameTv).navigateUp();
                 });
             });
         }else{
-            Model.instance.addStudent(student, () -> {
+            Model.instance.addMember(member, () -> {
                 Navigation.findNavController(nameTv).navigateUp();
             });
         }
@@ -100,18 +100,18 @@ public class AddFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add, container, false);
 
-        progressBar = view.findViewById(R.id.add_progressbar);
+        progressBar = view.findViewById(R.id.edit_progressbar);
         progressBar.setVisibility(View.GONE);
         nameTv = view.findViewById(R.id.add_name_txt);
         idTv = view.findViewById(R.id.add_id_txt);
         phoneTv = view.findViewById(R.id.add_phone_txt);
         addressTv = view.findViewById(R.id.add_address_txt);
         cb = view.findViewById(R.id.add_checked_chk);
-        avatar = view.findViewById(R.id.add_student_imgv);
+        avatar = view.findViewById(R.id.add_member_imgv);
         cancelBtn = view.findViewById(R.id.add_cancel_btn);
         saveBtn = view.findViewById(R.id.add_save_btn);
-        cameraBtn = view.findViewById(R.id.add_camera_btn);
-        galleryBtn = view.findViewById(R.id.add_gallery_btn);
+        cameraBtn = view.findViewById(R.id.edit_camera_btn);
+        galleryBtn = view.findViewById(R.id.edit_gallery_btn);
 
         cancelBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigateUp();

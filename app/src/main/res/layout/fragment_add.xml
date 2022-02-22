@@ -23,7 +23,7 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/add_student_imgv"
+                android:id="@+id/add_member_imgv"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_marginBottom="15dp"
@@ -128,7 +128,7 @@
         </LinearLayout>
 
         <ProgressBar
-            android:id="@+id/add_progressbar"
+            android:id="@+id/edit_progressbar"
             style="?android:attr/progressBarStyle"
             android:layout_width="150dp"
             android:layout_height="150dp"
@@ -138,7 +138,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:id="@+id/add_camera_btn"
+            android:id="@+id/edit_camera_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="240dp"
@@ -150,14 +150,14 @@
             app:layout_constraintTop_toTopOf="@+id/linearLayout" />
 
         <ImageButton
-            android:id="@+id/add_gallery_btn"
+            android:id="@+id/edit_gallery_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="26dp"
             android:src="@android:drawable/ic_menu_gallery"
-            app:layout_constraintBottom_toTopOf="@+id/add_camera_btn"
-            app:layout_constraintEnd_toEndOf="@+id/add_camera_btn"
-            app:layout_constraintStart_toStartOf="@+id/add_camera_btn"
+            app:layout_constraintBottom_toTopOf="@+id/edit_camera_btn"
+            app:layout_constraintEnd_toEndOf="@+id/edit_camera_btn"
+            app:layout_constraintStart_toStartOf="@+id/edit_camera_btn"
             app:layout_constraintTop_toTopOf="@+id/linearLayout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

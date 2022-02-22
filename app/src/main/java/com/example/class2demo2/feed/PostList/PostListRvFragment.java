@@ -20,7 +20,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
-import com.example.class2demo2.model.Student;
+import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
 
 
@@ -108,14 +108,14 @@ public class PostListRvFragment extends Fragment {
             });
         }
 
-        //TODO: change student to post
+        //TODO: change member to post
         public void bind(Post post) {
             nameTv.setText(post.getName());
             categoryTv.setText(post.getCategory());
             areaTv.setText(post.getAddress());
 
             /*
-            if(Model.instance.getUid()!=student.getId()) {
+            if(Model.instance.getUid()!=member.getId()) {
                 editBtn.setVisibility(View.GONE);
             }
              */
@@ -152,7 +152,7 @@ public class PostListRvFragment extends Fragment {
             return holder;
         }
 
-        //TODO: change student to post
+        //TODO: change member to post
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Post post = viewModel.getData().getValue().get(position);

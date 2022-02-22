@@ -1,7 +1,9 @@
-package com.example.class2demo2.feed.StudentList;
+package com.example.class2demo2.feed.MemberList;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +15,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -20,36 +24,46 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.example.class2demo2.MyApplication;
 import com.example.class2demo2.R;
+import com.example.class2demo2.databinding.ActivityMainDrawer2Binding;
+import com.example.class2demo2.feed.MainDrawerActivity;
+import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
-import com.example.class2demo2.model.Student;
+import com.example.class2demo2.model.Member;
+import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
 
+import java.util.concurrent.Executors;
+import java.util.logging.XMLFormatter;
 
-public class StudentListRvFragment extends Fragment {
+
+public class MemberListRvFragment extends Fragment {
 
     //MEMBERS
-    StudentListRvViewModel viewModel;
+    MemberListRvViewModel viewModel;
     RecyclerView listRv;
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
+    MemberViewModel memberViewModel;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(StudentListRvViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MemberListRvViewModel.class);
+        memberViewModel = new ViewModelProvider(this).get(MemberViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_student_list,container,false);
+        View view = inflater.inflate(R.layout.fragment_member_list,container,false);
 
-        swipeRefresh = view.findViewById(R.id.studentlist_swiperefresh);
+        swipeRefresh = view.findViewById(R.id.memberlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{
-            Model.instance.refreshStudentsList();
+            Model.instance.refreshMembersList();
         });
-        listRv = view.findViewById(R.id.studentlist_rv);
+        listRv = view.findViewById(R.id.memberlist_rv);
         listRv.setHasFixedSize(true);
         listRv.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MyAdapter();
@@ -64,22 +78,42 @@ public class StudentListRvFragment extends Fragment {
             @Override
             public void onItemClick(View v, int position) {
                 String stId = viewModel.getData().getValue().get(position).getId();
-                Navigation.findNavController(v).navigate(StudentListRvFragmentDirections.actionStudentListRvFragmentToStudentDetailsFragment(stId));
+                Navigation.findNavController(v).navigate(MemberListRvFragmentDirections.actionMemberListRvFragmentToMemberDetailsFragment(stId, Model.instance.getUid()));
             }
 
 
             @Override public void onCheckboxClick(int position, boolean isChecked){
                 viewModel.getData().getValue().get(position).setFlag(isChecked);
-                Student student = viewModel.getData().getValue().get(position);
-                Model.instance.addStudent(student,()->{});
+                Member member = viewModel.getData().getValue().get(position);
+                Model.instance.addMember(member,()->{});
             }
         });
         viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
 
-        swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue() == Model.StudentsListLoadingState.loading);
-        Model.instance.getStudentsListLoadingState().observe(getViewLifecycleOwner(), studentsListLoadingState -> {
-            swipeRefresh.setRefreshing(Model.instance.getStudentsListLoadingState().getValue() == Model.StudentsListLoadingState.loading);
+        swipeRefresh.setRefreshing(Model.instance.getMembersListLoadingState().getValue() == Model.MembersListLoadingState.loading);
+        Model.instance.getMembersListLoadingState().observe(getViewLifecycleOwner(), membersListLoadingState -> {
+            swipeRefresh.setRefreshing(Model.instance.getMembersListLoadingState().getValue() == Model.MembersListLoadingState.loading);
         });
+
+        //DrawerLayout layout = (DrawerLayout) getResources().getLayout(R.layout.activity_main_drawer2);
+        //layout. getDrawerTitle(0).toString();
+        AppCompatActivity activity =(AppCompatActivity) getActivity();
+        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
+        Log.d("TITLE", "");
+//        View header = navigationView.getHeaderView(0);
+        //TextView curNameTv = (TextView) (R.id.navheader_name_tv);
+        //TextView curMailTv = (TextView) getActivity().findViewById(R.id.navheader_mail_tv);
+        //ImageView curImage = (ImageView) getActivity().findViewById(R.id.navheader_image_iv);
+        //Log.d("HEADER",curNameTv.getText().toString() + " " + curMailTv.getText().toString());
+        //if(m != null) {
+           // curNameTv.setText("m.getName()");
+            //curMailTv.setText("m.getAddress()");
+          //  if (m.getAvatar() != null) {
+            //    Picasso.get()
+              //          .load(m.getAvatar())
+                //        .into(curImage);
+            //}
+        //}
         return view;
     }
 
@@ -111,14 +145,14 @@ public class StudentListRvFragment extends Fragment {
                 listener.onCheckboxClick(pos, cb.isChecked());
             });
         }
-        public void bind(Student student) {
-            nameTv.setText(student.getName());
-            idTv.setText(student.getId());
-            cb.setChecked(student.isFlag());
+        public void bind(Member member) {
+            nameTv.setText(member.getName());
+            idTv.setText(member.getId());
+            cb.setChecked(member.isFlag());
             avatar.setImageResource(R.drawable.avatarsmith);
-            if(student.getAvatar()!=null) {
+            if(member.getAvatar()!=null) {
                 Picasso.get()
-                        .load(student.getAvatar())
+                        .load(member.getAvatar())
                         .into(avatar);
             }
         }
@@ -140,7 +174,7 @@ public class StudentListRvFragment extends Fragment {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.student_list_row,parent,false);
+            View view = getLayoutInflater().inflate(R.layout.member_list_row,parent,false);
             MyViewHolder holder = new MyViewHolder(view, listener);
 
             return holder;
@@ -148,8 +182,8 @@ public class StudentListRvFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            Student student = viewModel.getData().getValue().get(position);
-            holder.bind(student);
+            Member member = viewModel.getData().getValue().get(position);
+            holder.bind(member);
         }
 
         @Override

@@ -11,8 +11,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Entity
-public class Student {
-    final public static String COLLECTION_NAME = "students";
+public class Member {
+    final public static String COLLECTION_NAME = "members";
     @PrimaryKey
     @NonNull
     String id;
@@ -24,9 +24,10 @@ public class Student {
     Long updateDate = new Long(0);
     boolean isDeleted;
 
-    public Student(){}
+    public Member(){
+    }
 
-    public Student(Student s){
+    public Member(Member s){
         this.name = s.name;
         this.id = s.id;
         this.address = s.address;
@@ -36,7 +37,7 @@ public class Student {
         this.isDeleted = s.isDeleted;
     }
 
-    public Student(String name, String id,String phone,String address, boolean flag,String avatar) {
+    public Member(String name, String id, String phone, String address, boolean flag, String avatar) {
         this.name = name;
         this.id = id;
         this.address = address;
@@ -104,7 +105,7 @@ public class Student {
         isDeleted = deleted;
     }
 
-    public static Student create(Map<String, Object> json) {
+    public static Member create(Map<String, Object> json) {
         String id = (String) json.get("id");
         String name = (String) json.get("name");
         String phone = (String) json.get("phone");
@@ -118,10 +119,10 @@ public class Student {
         Long updateDate = ts.getSeconds();
         boolean isDeleted = (boolean) json.get("isDeleted");
 
-        Student student = new Student(name,id,phone,address,flag,avatar);
-        student.setUpdateDate(updateDate);
-        student.setDeleted(isDeleted);
-        return student;
+        Member member = new Member(name,id,phone,address,flag,avatar);
+        member.setUpdateDate(updateDate);
+        member.setDeleted(isDeleted);
+        return member;
     }
 
     public Map<String, Object> toJson() {

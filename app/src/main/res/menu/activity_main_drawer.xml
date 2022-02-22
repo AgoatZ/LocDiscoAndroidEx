@@ -5,13 +5,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/studentListRvFragment"
+            android:id="@+id/memberListRvFragment"
             android:icon="@android:drawable/ic_menu_compass"
             android:title="@string/menu_home" />
         <item
             android:id="@+id/addFragment"
             android:icon="@android:drawable/ic_menu_add"
-            android:title="Add Student" />
+            android:title="Add Member" />
         <item
             android:id="@+id/addPostFragment"
             android:icon="@android:drawable/ic_input_add"

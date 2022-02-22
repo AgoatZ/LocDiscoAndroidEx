@@ -2,13 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_global_studentListRvFragment"
+        android:id="@+id/action_global_memberListRvFragment"
         android:orderInCategory="100"
         android:title="Home"
         app:showAsAction="never" />
     <item
         android:id="@+id/action_global_addFragment"
         android:icon="@android:drawable/ic_input_add"
-        android:title="Add Student"
+        android:title="Add Member"
         app:showAsAction="never" />
 </menu>

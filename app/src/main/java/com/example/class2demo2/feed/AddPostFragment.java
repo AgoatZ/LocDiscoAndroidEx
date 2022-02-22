@@ -77,7 +77,7 @@ public class AddPostFragment extends Fragment {
 
         Post post = new Post(snameTv, UUID.randomUUID().toString(), scategoryTv, saddressTv, null, sareaTv, Model.instance.getUid(), sdescriptionTv);
         if (imageBitmap != null){
-            Model.instance.saveImage(imageBitmap, post.getId() + ".jpg", url -> {
+            Model.instance.saveImage(imageBitmap, "P" + post.getId() + "U"+ post.getUserId() + ".jpg", url -> {
                 post.setImage(url);
                 Model.instance.addPost(post, () -> {
                     Navigation.findNavController(nameTv).navigateUp();

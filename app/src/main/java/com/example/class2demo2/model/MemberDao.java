@@ -10,17 +10,17 @@ import androidx.room.Update;
 import java.util.List;
 
 @Dao
-public interface StudentDao {
+public interface MemberDao {
 
-    @Query("select * from Student")
-    List<Student> getAllStudents();
+    @Query("select * from Member")
+    List<Member> getAllMembers();
 
-    @Query("select * from Student where id =:sid")
-    Student getStudentById(String sid);
+    @Query("select * from Member where id =:sid")
+    Member getMemberById(String sid);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertAll(Student... students);
+    void insertAll(Member... members);
 
     @Delete
-    void delete(Student student);
+    void delete(Member member);
 }

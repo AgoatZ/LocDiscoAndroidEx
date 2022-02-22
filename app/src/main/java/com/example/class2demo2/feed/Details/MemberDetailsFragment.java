@@ -18,33 +18,36 @@ import androidx.navigation.Navigation;
 
 import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
-import com.example.class2demo2.model.Student;
+import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link StudentDetailsFragment#newInstance} factory method to
+ * Use the {@link MemberDetailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class StudentDetailsFragment extends Fragment {
+public class MemberDetailsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_STUDENT_ID = "ARG_STUDENT_ID";
+    private static final String ARG_MEMBER_ID = "ARG_MEMBER_ID";
+    private static final String ARG_CURR_MEMBER_ID = "ARG_CURR_MEMBER_ID";
 
     // TODO: Rename and change types of parameters
-    private String studentId;
+    private String memberId;
+    private String currMemberId;
 
 
-    public StudentDetailsFragment() {
+    public MemberDetailsFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static StudentDetailsFragment newInstance(String studentId) {
-        StudentDetailsFragment fragment = new StudentDetailsFragment();
+    public static MemberDetailsFragment newInstance(String memberId, String currMemberId) {
+        MemberDetailsFragment fragment = new MemberDetailsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_STUDENT_ID, studentId);
+        args.putString(ARG_MEMBER_ID, memberId);
+        args.putString(ARG_CURR_MEMBER_ID, currMemberId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -53,12 +56,13 @@ public class StudentDetailsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            studentId = getArguments().getString(ARG_STUDENT_ID);
+            memberId = getArguments().getString(ARG_MEMBER_ID);
+            currMemberId = getArguments().getString(ARG_CURR_MEMBER_ID);
         }
     }
 
-    StudentDetailsViewModel viewModel;
-    Student student;
+    MemberDetailsViewModel viewModel;
+    Member member;
     TextView nameTv;
     TextView idTv;
     TextView phoneTv;
@@ -70,7 +74,7 @@ public class StudentDetailsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(StudentDetailsViewModel.class);
+        viewModel = new ViewModelProvider(this).get(MemberDetailsViewModel.class);
     }
 
     @Override
@@ -78,15 +82,15 @@ public class StudentDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         // Inflate the layout for this fragment
-        Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading);
-        View view = inflater.inflate(R.layout.fragment_student_details, container, false);
+        Model.instance.getMembersListLoadingState().postValue(Model.MembersListLoadingState.loading);
+        View view = inflater.inflate(R.layout.fragment_member_details, container, false);
 
         //GET RELEVANT DATA FROM DB
-        studentId = StudentDetailsFragmentArgs.fromBundle(getArguments()).getStudentId();
-        student = viewModel.getData(studentId).getValue();
-        if(student.isDeleted()) {
+        memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
+        member = viewModel.getData(memberId).getValue();
+        if(member.isDeleted()) {
             Toast.makeText(this.getContext(),"This member does no longer exist", Toast.LENGTH_SHORT);
-            Navigation.findNavController(view).navigate(StudentDetailsFragmentDirections.actionGlobalStudentListRvFragment());
+            Navigation.findNavController(view).navigate(MemberDetailsFragmentDirections.actionGlobalMemberListRvFragment());
         }
 
         //SET VIEW COMPONENTS
@@ -96,28 +100,30 @@ public class StudentDetailsFragment extends Fragment {
         addressTv = view.findViewById(R.id.details_address_txt);
         cb = view.findViewById(R.id.details_checked_chk);
         editBtn = view.findViewById(R.id.details_to_edit_btn);
-        avatar = view.findViewById(R.id.details_student_imgv);
+        if(!MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId().equals(memberId))
+            editBtn.setVisibility(View.GONE);
+        avatar = view.findViewById(R.id.details_member_imgv);
 
         //SET DATA TO DISPLAY FROM DB
-            nameTv.setText(student.getName());
-            idTv.setText(student.getId());
-            addressTv.setText(student.getAddress());
-            phoneTv.setText(student.getPhone());
-            cb.setChecked(student.isFlag());
-            if (student.getAvatar() != null) {
+            nameTv.setText(member.getName());
+            idTv.setText(member.getId());
+            addressTv.setText(member.getAddress());
+            phoneTv.setText(member.getPhone());
+            cb.setChecked(member.isFlag());
+            if (member.getAvatar() != null) {
                 Picasso.get()
-                        .load(student.getAvatar())
+                        .load(member.getAvatar())
                         .into(avatar);
             }
             /***********************************/
             editBtn.setOnClickListener(v -> {
-                Navigation.findNavController(v).navigate(StudentDetailsFragmentDirections.actionStudentDetailsFragmentToEditFragment(studentId));
+                Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId));
             });
-            viewModel.getData(studentId).observe(getViewLifecycleOwner(), student1 -> {
-                student = student1;
-                Model.instance.getStudentsListLoadingState().postValue(Model.StudentsListLoadingState.loading == Model.instance.getStudentsListLoadingState().getValue()
-                        ? Model.StudentsListLoadingState.loading
-                        : Model.StudentsListLoadingState.loaded);
+            viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {
+                member = member1;
+                Model.instance.getMembersListLoadingState().postValue(Model.MembersListLoadingState.loading == Model.instance.getMembersListLoadingState().getValue()
+                        ? Model.MembersListLoadingState.loading
+                        : Model.MembersListLoadingState.loaded);
             });
         return view;
 

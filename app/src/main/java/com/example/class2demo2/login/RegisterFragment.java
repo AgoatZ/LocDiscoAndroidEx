@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.example.class2demo2.R;
 import com.example.class2demo2.feed.MainDrawerActivity;
+import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.Model;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -37,14 +38,20 @@ public class RegisterFragment extends Fragment {
         });
 
         registerBtn.setOnClickListener(v ->{
-            //TODO - CONNECT TO MODEL LOGIN FUNCTION
             Model.instance.register(emailTil.getEditableText().toString(),
                     passwordTil.getEditableText().toString(),
                     (user,error) -> {
                     if(user!=null)
-                        toFeedActivity();
+                        Model.instance.addMember(new Member
+                                        (user.getDisplayName(),
+                                         user.getUid(),
+                                        null,
+                                        user.getEmail(),
+                                        false,
+                                        null),
+                                () -> toFeedActivity());
                     else
-                        Toast.makeText(this.getContext(), error.getMessage().toString(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this.getContext(), error.getMessage().toString(), Toast.LENGTH_LONG).show();
             });
         });
         return view;

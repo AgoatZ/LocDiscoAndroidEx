@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
-import com.example.class2demo2.model.Student;
+import com.example.class2demo2.model.Member;
 
 import java.util.List;
 

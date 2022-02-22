@@ -17,7 +17,7 @@ public class Post {
     @PrimaryKey
     @NonNull
     String id;
-    @ForeignKey(entity = Student.class, parentColumns = {"id"}, childColumns = {"userId"})
+    @ForeignKey(entity = Member.class, parentColumns = {"id"}, childColumns = {"userId"})
     @NonNull
     String userId;        
     String name;

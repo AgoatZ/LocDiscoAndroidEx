@@ -3,31 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/studentListRvFragment">
+    app:startDestination="@id/memberListRvFragment">
 
     <fragment
-        android:id="@+id/studentListRvFragment"
-        android:name="com.example.class2demo2.feed.StudentList.StudentListRvFragment"
-        android:label="Students"
-        tools:layout="@layout/fragment_student_list">
+        android:id="@+id/memberListRvFragment"
+        android:name="com.example.class2demo2.feed.MemberList.MemberListRvFragment"
+        android:label="Members"
+        tools:layout="@layout/fragment_member_list">
         <action
-            android:id="@+id/action_studentListRvFragment_to_studentDetailsFragment"
-            app:destination="@id/studentDetailsFragment" />
+            android:id="@+id/action_memberListRvFragment_to_memberDetailsFragment"
+            app:destination="@id/memberDetailsFragment" />
         <action
             android:id="@+id/action_global_addFragment"
             app:destination="@id/addFragment" />
     </fragment>
     <fragment
-        android:id="@+id/studentDetailsFragment"
-        android:name="com.example.class2demo2.feed.Details.StudentDetailsFragment"
+        android:id="@+id/memberDetailsFragment"
+        android:name="com.example.class2demo2.feed.Details.MemberDetailsFragment"
         android:label="Details"
-        tools:layout="@layout/fragment_student_details">
+        tools:layout="@layout/fragment_member_details">
         <argument
-            android:name="studentId"
+            android:name="memberId"
             app:argType="string" />
         <action
-            android:id="@+id/action_studentDetailsFragment_to_editFragment"
+            android:id="@+id/action_memberDetailsFragment_to_editFragment"
             app:destination="@id/editFragment" />
+        <argument
+            android:name="currMemberId"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/editFragment"
@@ -35,24 +39,24 @@
         android:label="Edit"
         tools:layout="@layout/fragment_edit">
         <argument
-            android:name="studentId"
+            android:name="memberId"
             app:argType="string" />
         <action
-            android:id="@+id/action_editFragment_to_studentListRvFragment"
-            app:destination="@id/studentListRvFragment" />
+            android:id="@+id/action_editFragment_to_memberListRvFragment"
+            app:destination="@id/memberListRvFragment" />
         <action
-            android:id="@+id/action_editFragment_to_studentDetailsFragment"
-            app:destination="@id/studentDetailsFragment"
-            app:popUpTo="@id/studentDetailsFragment"
+            android:id="@+id/action_editFragment_to_memberDetailsFragment"
+            app:destination="@id/memberDetailsFragment"
+            app:popUpTo="@id/memberDetailsFragment"
             app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
         android:name="com.example.class2demo2.feed.AddFragment"
-        android:label="Add Student"
+        android:label="Add Member"
         tools:layout="@layout/fragment_add" />
     <action android:id="@+id/action_global_addFragment" app:destination="@id/addFragment"/>
-    <action android:id="@+id/action_global_studentListRvFragment" app:destination="@id/studentListRvFragment" />
+    <action android:id="@+id/action_global_memberListRvFragment" app:destination="@id/memberListRvFragment" />
     <fragment
         android:id="@+id/postListRvFragment"
         android:name="com.example.class2demo2.feed.PostList.PostListRvFragment"

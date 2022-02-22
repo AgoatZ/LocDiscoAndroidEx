@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".feed.Details.StudentDetailsFragment">
+    tools:context=".feed.Details.MemberDetailsFragment">
 
     <LinearLayout
         android:layout_width="350dp"
@@ -16,7 +16,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/details_student_imgv"
+            android:id="@+id/details_member_imgv"
             android:layout_width="150dp"
             android:layout_height="150dp"
             android:layout_marginBottom="15dp"

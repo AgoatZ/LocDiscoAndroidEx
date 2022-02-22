@@ -18,7 +18,7 @@ import androidx.navigation.Navigation;
 import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
-import com.example.class2demo2.model.Student;
+import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -92,7 +92,7 @@ public class PostFragment extends Fragment {
         categoryTv = view.findViewById(R.id.post_category_txt);
         nameTv = view.findViewById(R.id.post_name_txt);
         addressTv = view.findViewById(R.id.post_address_txt);
-        image = view.findViewById(R.id.post_student_imgv);
+        image = view.findViewById(R.id.post_member_imgv);
         editBtn = view.findViewById(R.id.post_to_edit_btn);
         descriptionTv = view.findViewById(R.id.post_description_txt);
 

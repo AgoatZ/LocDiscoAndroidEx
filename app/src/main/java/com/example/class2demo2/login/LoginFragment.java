@@ -37,8 +37,7 @@ public class LoginFragment extends Fragment {
             Navigation.findNavController(v).navigate(LoginFragmentDirections.actionGlobalRegisterFragment());
         });
 
-        loginBtn.setOnClickListener(v ->{
-            //TODO - CONNECT TO MODEL LOGIN FUNCTION
+        loginBtn.setOnClickListener(v -> {
             Model.instance.signIn(emailTil.getEditableText().toString(),
                     passwordTil.getEditableText().toString(),
                     (user,error) -> {
