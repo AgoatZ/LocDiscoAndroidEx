@@ -85,4 +85,16 @@
         android:label="fragment_add_post"
         tools:layout="@layout/fragment_add_post" />
     <action android:id="@+id/action_global_addPostFragment" app:destination="@id/addPostFragment" />
+    <fragment
+        android:id="@+id/editPostFragment"
+        android:name="com.example.class2demo2.feed.EditPost.EditPostFragment"
+        android:label="fragment_edit_post"
+        tools:layout="@layout/fragment_edit_post" >
+        <argument
+            android:name="postId"
+            app:argType="string" />
+        <argument
+            android:name="memberId"
+            app:argType="string" />
+    </fragment>
 </navigation>
