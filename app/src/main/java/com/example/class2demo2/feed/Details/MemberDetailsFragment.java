@@ -43,11 +43,11 @@ public class MemberDetailsFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static MemberDetailsFragment newInstance(String memberId, String currMemberId) {
+    public static MemberDetailsFragment newInstance(String memberId,String currMemberId) {
         MemberDetailsFragment fragment = new MemberDetailsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_MEMBER_ID, memberId);
-        args.putString(ARG_CURR_MEMBER_ID, currMemberId);
+        args.putString(ARG_CURR_MEMBER_ID,currMemberId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,6 +87,7 @@ public class MemberDetailsFragment extends Fragment {
 
         //GET RELEVANT DATA FROM DB
         memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
+        currMemberId =  MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
         member = viewModel.getData(memberId).getValue();
         if(member.isDeleted()) {
             Toast.makeText(this.getContext(),"This member does no longer exist", Toast.LENGTH_SHORT);
@@ -117,7 +118,7 @@ public class MemberDetailsFragment extends Fragment {
             }
             /***********************************/
             editBtn.setOnClickListener(v -> {
-                Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId));
+                Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId,Model.instance.getUid()));
             });
             viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {
                 member = member1;

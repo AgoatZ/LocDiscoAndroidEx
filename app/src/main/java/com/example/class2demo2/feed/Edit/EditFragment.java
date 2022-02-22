@@ -42,20 +42,26 @@ public class EditFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_STUDENT_ID = "ARG_STUDENT_ID";
+    private static final String ARG_MEMBER_ID = "ARG_MEMBER_ID";
+    private static final String ARG_CURR_MEMBER_ID = "ARG_CURR_MEMBER_ID";
+
+
 
     // TODO: Rename and change types of parameters
     private String memberId;
+    private String currMemberId;
+
 
     public EditFragment() {
         // Required empty public constructor
     }
 
     // TODO: Rename and change types and number of parameters
-    public static EditFragment newInstance(String memberId) {
+    public static EditFragment newInstance(String memberId,String currMemberId) {
         EditFragment fragment = new EditFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_STUDENT_ID, memberId);
+        args.putString(ARG_MEMBER_ID, memberId);
+        args.putString(ARG_CURR_MEMBER_ID,currMemberId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -89,7 +95,8 @@ public class EditFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            memberId = getArguments().getString(ARG_STUDENT_ID);
+            memberId = getArguments().getString(ARG_MEMBER_ID);
+            currMemberId=getArguments().getString(ARG_CURR_MEMBER_ID);
         }
     }
 
@@ -124,7 +131,10 @@ public class EditFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
         memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
+        currMemberId=MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
+
         member = viewModel.getData(memberId).getValue();
+
 
         //Model.instance.getMemberById(memberId, s -> {
             //member = s;

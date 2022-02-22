@@ -49,6 +49,9 @@
             app:destination="@id/memberDetailsFragment"
             app:popUpTo="@id/memberDetailsFragment"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="currMemberId"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/addFragment"
