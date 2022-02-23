@@ -97,7 +97,7 @@
             android:name="postId"
             app:argType="string" />
         <argument
-            android:name="memberId"
+            android:name="postUId"
             app:argType="string" />
     </fragment>
     <action

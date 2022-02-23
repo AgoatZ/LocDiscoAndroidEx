@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,11 +50,11 @@ public class EditPostFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POST_ID = "ARG_POST_ID";
-    private static final String ARG_MEMBER_ID = "ARG_MEMBER_ID";
+    private static final String ARG_POSTUID_ID = "ARG_POSTUID_ID";
 
     // TODO: Rename and change types of parameters
     private String postId;
-    private String memberId;
+    private String postUId;
 
     public EditPostFragment() {
         // Required empty public constructor
@@ -64,15 +65,15 @@ public class EditPostFragment extends Fragment {
      * this fragment using the provided parameters.
      *
      * @param postId Parameter 1.
-     * @param memberId Parameter 2.
+     * @param postUId Parameter 2.
      * @return A new instance of fragment EditPostFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static EditPostFragment newInstance(String postId, String memberId) {
+    public static EditPostFragment newInstance(String postId, String postUId) {
         EditPostFragment fragment = new EditPostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_POST_ID, postId);
-        args.putString(ARG_MEMBER_ID, memberId);
+        args.putString(ARG_POSTUID_ID, postUId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -82,7 +83,7 @@ public class EditPostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             postId = getArguments().getString(ARG_POST_ID);
-            memberId=getArguments().getString(ARG_MEMBER_ID);
+            postUId = getArguments().getString(ARG_POSTUID_ID);
         }
 
     }
@@ -99,11 +100,14 @@ public class EditPostFragment extends Fragment {
         String saddressTv = addressTv.getText().toString();
         String sdescriptionTv = descriptionTv.getText().toString();
 
-        Post post = new Post(snameTv, UUID.randomUUID().toString(), scategoryTv, saddressTv, null, sareaTv, Model.instance.getUid(), sdescriptionTv);
+        Post post = new Post(snameTv, postId, scategoryTv, saddressTv, null, sareaTv, postUId, sdescriptionTv);
+
+
         if (imageBitmap != null){
             Model.instance.saveImage(imageBitmap, "P" + post.getId() + "U"+ post.getUserId() + ".jpg", url -> {
                 post.setImage(url);
                 Model.instance.addPost(post, () -> {
+
                     Navigation.findNavController(nameTv).navigateUp();
                 });
             });
@@ -142,7 +146,7 @@ public class EditPostFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
         String postId= EditPostFragmentArgs.fromBundle(getArguments()).getPostId();
-        String memberId= EditPostFragmentArgs.fromBundle(getArguments()).getMemberId();
+        String postUId= EditPostFragmentArgs.fromBundle(getArguments()).getPostUId();
         Post post =viewModel.getData(postId.toString()).getValue();
 
 
@@ -170,8 +174,6 @@ public class EditPostFragment extends Fragment {
                     .load(post.getImage())
                     .into(image);
         }
-
-
 
         cancelBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigateUp();

@@ -2,6 +2,7 @@ package com.example.class2demo2.feed.Post;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +34,7 @@ public class PostFragment extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String postId;
-    private String postUid;
+    private String postUId;
 
 
     public PostFragment() {
@@ -41,11 +42,11 @@ public class PostFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static PostFragment newInstance(String postId, String postUid) {
+    public static PostFragment newInstance(String postId, String postUId) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_POST_ID, postId);
-        args.putString(ARG_POST_UID, postUid);
+        args.putString(ARG_POST_UID, postUId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,7 +56,7 @@ public class PostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             postId = getArguments().getString(ARG_POST_ID);
-            postUid = getArguments().getString(ARG_POST_UID);
+            postUId = getArguments().getString(ARG_POST_UID);
         }
     }
 
@@ -84,7 +85,7 @@ public class PostFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
         postId = PostFragmentArgs.fromBundle(getArguments()).getPostId();
-        postUid=PostFragmentArgs.fromBundle(getArguments()).getPostUId();
+        postUId=PostFragmentArgs.fromBundle(getArguments()).getPostUId();
         post = viewModel.getData(postId).getValue();
 
         nameTv = view.findViewById(R.id.post_name_txt);
@@ -109,11 +110,11 @@ public class PostFragment extends Fragment {
                         .into(image);
             }
         }
-        Member member = Model.instance.getMemberById(Model.instance.getUid()).getValue();
-        //if(Model.instance.getUid() != postUid ) { editBtn.setVisibility(View.GONE); }
+
+        if(!Model.instance.getUid().equals(postUId)) { editBtn.setVisibility(View.GONE); }
 
         editBtn.setOnClickListener(v->{
-            Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId,postUid));
+            Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId,postUId));
         });
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {});
 
