@@ -30,6 +30,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.class2demo2.R;
+import com.example.class2demo2.feed.Edit.EditFragmentDirections;
 import com.example.class2demo2.feed.Edit.EditViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
@@ -50,7 +51,7 @@ public class EditPostFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POST_ID = "ARG_POST_ID";
-    private static final String ARG_POSTUID_ID = "ARG_POSTUID_ID";
+    private static final String ARG_POST_UID = "ARG_POST_UID";
 
     // TODO: Rename and change types of parameters
     private String postId;
@@ -73,7 +74,7 @@ public class EditPostFragment extends Fragment {
         EditPostFragment fragment = new EditPostFragment();
         Bundle args = new Bundle();
         args.putString(ARG_POST_ID, postId);
-        args.putString(ARG_POSTUID_ID, postUId);
+        args.putString(ARG_POST_UID, postUId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,7 +84,7 @@ public class EditPostFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             postId = getArguments().getString(ARG_POST_ID);
-            postUId = getArguments().getString(ARG_POSTUID_ID);
+            postUId = getArguments().getString(ARG_POST_UID);
         }
 
     }
@@ -108,12 +109,12 @@ public class EditPostFragment extends Fragment {
                 post.setImage(url);
                 Model.instance.addPost(post, () -> {
 
-                    Navigation.findNavController(nameTv).navigateUp();
+                    Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
                 });
             });
         }else{
             Model.instance.addPost(post, () -> {
-                Navigation.findNavController(nameTv).navigateUp();
+                Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
             });
         }
     }
@@ -145,8 +146,8 @@ public class EditPostFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
-        String postId= EditPostFragmentArgs.fromBundle(getArguments()).getPostId();
-        String postUId= EditPostFragmentArgs.fromBundle(getArguments()).getPostUId();
+        postId= EditPostFragmentArgs.fromBundle(getArguments()).getPostId();
+        postUId= EditPostFragmentArgs.fromBundle(getArguments()).getPostUId();
         Post post =viewModel.getData(postId.toString()).getValue();
 
 
