@@ -79,6 +79,7 @@ public class PostListRvFragment extends Fragment {
         Model.instance.getPostsListLoadingState().observe(getViewLifecycleOwner(), postsListLoadingState -> {
             swipeRefresh.setRefreshing(Model.instance.getPostsListLoadingState().getValue() == Model.PostsListLoadingState.loading);
         });
+        Model.instance.refreshPostsList();
         return view;
     }
 

@@ -30,6 +30,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.class2demo2.R;
+import com.example.class2demo2.feed.Edit.EditFragmentDirections;
 import com.example.class2demo2.feed.Edit.EditViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
@@ -108,12 +109,12 @@ public class EditPostFragment extends Fragment {
                 post.setImage(url);
                 Model.instance.addPost(post, () -> {
 
-                    Navigation.findNavController(nameTv).navigateUp();
+                    Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
                 });
             });
         }else{
             Model.instance.addPost(post, () -> {
-                Navigation.findNavController(nameTv).navigateUp();
+                Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
             });
         }
     }
