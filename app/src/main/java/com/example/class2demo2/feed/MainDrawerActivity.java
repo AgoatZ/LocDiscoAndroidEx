@@ -26,7 +26,7 @@ import com.example.class2demo2.feed.MemberList.MemberListRvViewModel;
 import com.example.class2demo2.login.LoginActivity;
 import com.example.class2demo2.model.AppLocalDb;
 import com.example.class2demo2.model.Member;
-import com.example.class2demo2.model.MemberDao_Impl;
+//import com.example.class2demo2.model.MemberDao_Impl;
 import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.google.android.material.navigation.NavigationView;

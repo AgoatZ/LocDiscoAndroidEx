@@ -60,14 +60,16 @@ public class PostListRvFragment extends Fragment {
         {
             @Override
             public void onItemClick(View v, int position) {
-                String stId = viewModel.getData().getValue().get(position).getId();
-                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(stId));
+                String postId = viewModel.getData().getValue().get(position).getId();
+                String postUId=viewModel.getData().getValue().get(position).getUserId();
+                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
             }
 
             @Override
             public void onImageClick(View v, int position) {
-                String stId = viewModel.getData().getValue().get(position).getId();
-                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(stId));
+                String postId = viewModel.getData().getValue().get(position).getId();
+                String postUId=viewModel.getData().getValue().get(position).getUserId();
+                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
             }
         });
         viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
