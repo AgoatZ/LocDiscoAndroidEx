@@ -76,7 +76,7 @@ public class EditFragment extends Fragment {
         member.setFlag(checked.isChecked());
         member.setName(name.getText().toString());
         member.setPhone(phone.getText().toString());
-        Member member = new Member(name.getText().toString(), id.getText().toString(), phone.getText().toString(), address.getText().toString(), checked.isChecked(), null);
+        Member member = new Member(name.getText().toString(), id.getText().toString(), phone.getText().toString(), address.getText().toString(), checked.isChecked(), null,Member.UserType.USER.toString());
         if (imageBitmap != null){
             Model.instance.saveImage(imageBitmap, id.getText() + ".jpg", url -> {
                 member.setAvatar(url);

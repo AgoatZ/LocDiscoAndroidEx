@@ -32,6 +32,7 @@ import com.example.class2demo2.R;
 import com.example.class2demo2.feed.Edit.EditViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -164,7 +165,11 @@ public class EditPostFragment extends Fragment {
         areaTv.setText(post.getArea());
         addressTv.setText(post.getAddress());
         descriptionTv.setText(post.getDescription());
-        //image.setImageBitmap(post.getImage().);
+        if (post.getImage()!= null) {
+            Picasso.get()
+                    .load(post.getImage())
+                    .into(image);
+        }
 
 
 

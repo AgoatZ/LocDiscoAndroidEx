@@ -12,6 +12,10 @@ import java.util.Map;
 
 @Entity
 public class Member {
+    public enum UserType{
+        USER,
+        ADMIN;
+    }
     final public static String COLLECTION_NAME = "members";
     @PrimaryKey
     @NonNull
@@ -23,21 +27,23 @@ public class Member {
     boolean flag;
     Long updateDate = new Long(0);
     boolean isDeleted;
+    String userType;
 
     public Member(){
     }
 
-    public Member(Member s){
-        this.name = s.name;
-        this.id = s.id;
-        this.address = s.address;
-        this.phone = s.phone;
-        this.flag = s.flag;
-        this.avatar = s.avatar;
-        this.isDeleted = s.isDeleted;
+    public Member(Member m){
+        this.name = m.name;
+        this.id = m.id;
+        this.address = m.address;
+        this.phone = m.phone;
+        this.flag = m.flag;
+        this.avatar = m.avatar;
+        this.isDeleted = m.isDeleted;
+        this.userType = m.userType;
     }
 
-    public Member(String name, String id, String phone, String address, boolean flag, String avatar) {
+    public Member(String name, String id, String phone, String address, boolean flag, String avatar,String userType) {
         this.name = name;
         this.id = id;
         this.address = address;
@@ -45,7 +51,15 @@ public class Member {
         this.flag = flag;
         this.avatar = avatar;
         this.isDeleted = false;
+        this.userType = userType;
+    }
 
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 
     public String getAvatar() {
@@ -111,6 +125,7 @@ public class Member {
         String phone = (String) json.get("phone");
         String address = (String) json.get("address");
         String avatar = null;
+        String userType = (String) json.get("userType");
         if(json.get("avatar") != null) {
             avatar = json.get("avatar").toString();
         }
@@ -119,7 +134,7 @@ public class Member {
         Long updateDate = ts.getSeconds();
         boolean isDeleted = (boolean) json.get("isDeleted");
 
-        Member member = new Member(name,id,phone,address,flag,avatar);
+        Member member = new Member(name,id,phone,address,flag,avatar,userType);
         member.setUpdateDate(updateDate);
         member.setDeleted(isDeleted);
         return member;
@@ -135,6 +150,7 @@ public class Member {
         json.put("flag",flag);
         json.put("updateDate", FieldValue.serverTimestamp());
         json.put("isDeleted",isDeleted);
+        json.put("userType",userType);
         return json;
     }
 //TODO:...

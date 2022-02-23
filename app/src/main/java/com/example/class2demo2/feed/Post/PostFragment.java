@@ -84,6 +84,7 @@ public class PostFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
         postId = PostFragmentArgs.fromBundle(getArguments()).getPostId();
+        postUid=PostFragmentArgs.fromBundle(getArguments()).getPostUId();
         post = viewModel.getData(postId).getValue();
 
         nameTv = view.findViewById(R.id.post_name_txt);
@@ -94,6 +95,7 @@ public class PostFragment extends Fragment {
         addressTv = view.findViewById(R.id.post_address_txt);
         image = view.findViewById(R.id.post_member_imgv);
         editBtn = view.findViewById(R.id.post_to_edit_btn);
+        editBtn.setVisibility(View.VISIBLE);
         descriptionTv = view.findViewById(R.id.post_description_txt);
 
         if(post != null) {
@@ -107,14 +109,14 @@ public class PostFragment extends Fragment {
                         .into(image);
             }
         }
-        //TODO: MAKE EDIT POST FRAGMENT
-        if(Model.instance.getUid() != postUid) { editBtn.setVisibility(View.GONE); }
-        /*
+        Member member = Model.instance.getMemberById(Model.instance.getUid()).getValue();
+        //if(Model.instance.getUid() != postUid ) { editBtn.setVisibility(View.GONE); }
+
         editBtn.setOnClickListener(v->{
-            Navigation.findNavController(v).navigate(PostFragmentDirections.actionPostFragmentToEditFragment(postId));
+            Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId,postUid));
         });
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {});
-        */
+
         return view;
     }
 }

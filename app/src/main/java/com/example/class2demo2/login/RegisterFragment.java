@@ -19,6 +19,7 @@ import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.Model;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.firestore.auth.User;
 
 public class RegisterFragment extends Fragment {
 
@@ -48,7 +49,8 @@ public class RegisterFragment extends Fragment {
                                         null,
                                         user.getEmail(),
                                         false,
-                                        null),
+                                        null,
+                                                Member.UserType.USER.toString()),
                                 () -> toFeedActivity());
                     else
                         Toast.makeText(this.getContext(), error.getMessage().toString(), Toast.LENGTH_LONG).show();

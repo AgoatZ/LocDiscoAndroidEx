@@ -101,7 +101,7 @@ public class MemberDetailsFragment extends Fragment {
         addressTv = view.findViewById(R.id.details_address_txt);
         cb = view.findViewById(R.id.details_checked_chk);
         editBtn = view.findViewById(R.id.details_to_edit_btn);
-        if(!MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId().equals(memberId))
+        if(!MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId().equals(memberId) && Model.instance.getMemberById(Model.instance.getUid()).getValue().getUserType() !=Member.UserType.ADMIN.toString())
             editBtn.setVisibility(View.GONE);
         avatar = view.findViewById(R.id.details_member_imgv);
 
