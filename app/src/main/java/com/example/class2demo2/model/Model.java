@@ -6,8 +6,10 @@ import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.room.Database;
 
 import com.example.class2demo2.MyApplication;
@@ -29,6 +31,7 @@ public class Model {
     ModelFirebase modelFirebase = new ModelFirebase();
 
     MutableLiveData<List<Member>> membersList = new MutableLiveData<List<Member>>();
+
 
 
     public enum MembersListLoadingState {
@@ -240,6 +243,16 @@ public class Model {
         return postsList;
     }
 
+    public LiveData<List<Post>> getPostsByCategory(String category){
+        if(postsList == null){
+            refreshPostsList();
+        }
+        MutableLiveData<List<Post>> categoryWithPostsList = new MutableLiveData<List<Post>>();
+        categoryWithPostsList.postValue(AppLocalDb.db.postDao().getPostsByCategory(category));
+
+        return categoryWithPostsList;
+    }
+
     //TODO: PUT retval INSIDE
     MutableLiveData<Post> retPost = new MutableLiveData<Post>();
 
@@ -256,6 +269,69 @@ public class Model {
         return retPost;
     }
 
+    /***********Category************/
+    public void refreshCategoriesList() {
+        //postsListLoadingState.setValue(PostsListLoadingState.loading);
+
+        // get last local update date
+        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("CategoryLastUpdateDate", 0);
+
+        executor.execute(() -> {
+            List<Category> updatedList = AppLocalDb.db.categoryDao().getAllCategories();
+            categoriesList.postValue(updatedList);
+        });
+        // firebase get all updates since last local update date
+        modelFirebase.getAllCategories(lastUpdateDate, list -> {
+
+            // add all records to the local db
+            executor.execute(() -> {
+                Long localUpdateDate = new Long(0);
+                Log.d("TAG", "firebase returned " + list.size());
+                for (Category category : list) {
+                    if (!category.isDeleted())
+                        AppLocalDb.db.categoryDao().insertAll(category);
+                    else
+                        AppLocalDb.db.categoryDao().delete(category);
+                    if (localUpdateDate < category.getUpdateDate()) {
+                        localUpdateDate = category.getUpdateDate();
+                    }
+                }
+
+                // update last local update date
+                MyApplication.getContext()
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("CategoryLastUpdateDate", localUpdateDate)
+                        .commit();
+
+                // return all data to caller
+                List<Category> updatedList = AppLocalDb.db.categoryDao().getAllCategories();
+                categoriesList.postValue(updatedList);
+                //postsListLoadingState.postValue(PostsListLoadingState.loaded);
+            });
+        });
+    }
+
+    MutableLiveData<List<Category>> categoriesList = new MutableLiveData<List<Category>>();
+
+
+    public interface AddCategoryListener {
+        void onComplete();
+    }
+
+    public void addCategory(Category category, AddCategoryListener listener) {
+        modelFirebase.addCategory(category, () -> {
+            refreshCategoriesList();
+        });
+        listener.onComplete();
+    }
+
+    public LiveData<List<Category>> getAllCategories(){
+        if(categoriesList == null){
+            refreshCategoriesList();
+        }
+        return categoriesList;
+    }
 
     /********Authentication********/
     public interface SignInListener {
@@ -285,4 +361,5 @@ public class Model {
     public void register(@NonNull String email,@NonNull String password, RegisterListener listener) {
         modelFirebase.register(email, password, listener);
     }
+
 }

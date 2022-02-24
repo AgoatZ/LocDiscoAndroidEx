@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.class2demo2.R;
+import com.example.class2demo2.model.Category;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
 import com.google.android.material.textfield.TextInputEditText;
@@ -148,11 +149,11 @@ public class AddPostFragment extends Fragment {
         });
 
         List<String> items = new ArrayList<String>();
-        items.add("Option 1");
+        for (Category category: Model.instance.getAllCategories().getValue()) {
+            items.add(category.getName());
+        }
         ArrayAdapter<String> adapter = new ArrayAdapter(requireContext(), R.layout.category_list_item, items);
         categoryTv.setAdapter(adapter);
-
-
 
         return view;
     }
