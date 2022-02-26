@@ -13,10 +13,9 @@ import java.util.Map;
 @Entity
 public class Member {
     public enum UserType{
-        user,
-        admin
+        USER,
+        ADMIN;
     }
-
     final public static String COLLECTION_NAME = "members";
     @PrimaryKey
     @NonNull
@@ -28,23 +27,23 @@ public class Member {
     boolean flag;
     Long updateDate = new Long(0);
     boolean isDeleted;
-    UserType userType;
+    String userType;
 
     public Member(){
     }
 
-    public Member(Member s){
-        this.name = s.name;
-        this.id = s.id;
-        this.address = s.address;
-        this.phone = s.phone;
-        this.flag = s.flag;
-        this.avatar = s.avatar;
-        this.isDeleted = s.isDeleted;
-        this.userType =s.userType;
+    public Member(Member m){
+        this.name = m.name;
+        this.id = m.id;
+        this.address = m.address;
+        this.phone = m.phone;
+        this.flag = m.flag;
+        this.avatar = m.avatar;
+        this.isDeleted = m.isDeleted;
+        this.userType = m.userType;
     }
 
-    public Member(String name, String id, String phone, String address, boolean flag, String avatar, UserType userType) {
+    public Member(String name, String id, String phone, String address, boolean flag, String avatar,String userType) {
         this.name = name;
         this.id = id;
         this.address = address;
@@ -55,11 +54,11 @@ public class Member {
         this.userType = userType;
     }
 
-    public UserType getUserType() {
+    public String getUserType() {
         return userType;
     }
 
-    public void setUserType(UserType userType) {
+    public void setUserType(String userType) {
         this.userType = userType;
     }
 
@@ -126,10 +125,10 @@ public class Member {
         String phone = (String) json.get("phone");
         String address = (String) json.get("address");
         String avatar = null;
+        String userType = (String) json.get("userType");
         if(json.get("avatar") != null) {
             avatar = json.get("avatar").toString();
         }
-        UserType userType = (UserType) json.get("userType");
         boolean flag = (boolean) json.get("flag");
         Timestamp ts = (Timestamp)json.get("updateDate");
         Long updateDate = ts.getSeconds();

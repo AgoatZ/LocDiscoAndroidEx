@@ -94,26 +94,6 @@ public class MemberListRvFragment extends Fragment {
         Model.instance.getMembersListLoadingState().observe(getViewLifecycleOwner(), membersListLoadingState -> {
             swipeRefresh.setRefreshing(Model.instance.getMembersListLoadingState().getValue() == Model.MembersListLoadingState.loading);
         });
-
-        //DrawerLayout layout = (DrawerLayout) getResources().getLayout(R.layout.activity_main_drawer2);
-        //layout. getDrawerTitle(0).toString();
-        AppCompatActivity activity =(AppCompatActivity) getActivity();
-        NavigationView navigationView = (NavigationView) activity.findViewById(R.id.nav_view);
-        Log.d("TITLE", "");
-//        View header = navigationView.getHeaderView(0);
-        //TextView curNameTv = (TextView) (R.id.navheader_name_tv);
-        //TextView curMailTv = (TextView) getActivity().findViewById(R.id.navheader_mail_tv);
-        //ImageView curImage = (ImageView) getActivity().findViewById(R.id.navheader_image_iv);
-        //Log.d("HEADER",curNameTv.getText().toString() + " " + curMailTv.getText().toString());
-        //if(m != null) {
-           // curNameTv.setText("m.getName()");
-            //curMailTv.setText("m.getAddress()");
-          //  if (m.getAvatar() != null) {
-            //    Picasso.get()
-              //          .load(m.getAvatar())
-                //        .into(curImage);
-            //}
-        //}
         return view;
     }
 

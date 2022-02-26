@@ -66,7 +66,7 @@ public class AddFragment extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         saveBtn.setEnabled(false);
         cancelBtn.setEnabled(false);
-        Member member = new Member(nameTv.getText().toString(), idTv.getText().toString(), phoneTv.getText().toString(), addressTv.getText().toString(), cb.isChecked(), null);
+        Member member = new Member(nameTv.getText().toString(), idTv.getText().toString(), phoneTv.getText().toString(), addressTv.getText().toString(), cb.isChecked(), null,Member.UserType.USER.toString());
         if (imageBitmap != null){
             Model.instance.saveImage(imageBitmap, idTv.getText() + ".jpg", url -> {
                 member.setAvatar(url);

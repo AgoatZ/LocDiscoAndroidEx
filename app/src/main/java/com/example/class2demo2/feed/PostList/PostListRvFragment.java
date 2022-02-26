@@ -2,6 +2,7 @@ package com.example.class2demo2.feed.PostList;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,14 +61,16 @@ public class PostListRvFragment extends Fragment {
         {
             @Override
             public void onItemClick(View v, int position) {
-                String stId = viewModel.getData().getValue().get(position).getId();
-                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(stId));
+                String postId = viewModel.getData().getValue().get(position).getId();
+                String postUId=viewModel.getData().getValue().get(position).getUserId();
+                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
             }
 
             @Override
             public void onImageClick(View v, int position) {
-                String stId = viewModel.getData().getValue().get(position).getId();
-                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(stId));
+                String postId = viewModel.getData().getValue().get(position).getId();
+                String postUId=viewModel.getData().getValue().get(position).getUserId();
+                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
             }
         });
         viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
@@ -76,6 +79,7 @@ public class PostListRvFragment extends Fragment {
         Model.instance.getPostsListLoadingState().observe(getViewLifecycleOwner(), postsListLoadingState -> {
             swipeRefresh.setRefreshing(Model.instance.getPostsListLoadingState().getValue() == Model.PostsListLoadingState.loading);
         });
+        Model.instance.refreshPostsList();
         return view;
     }
 

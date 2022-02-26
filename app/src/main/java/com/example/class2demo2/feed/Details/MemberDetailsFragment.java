@@ -43,11 +43,11 @@ public class MemberDetailsFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static MemberDetailsFragment newInstance(String memberId, String currMemberId) {
+    public static MemberDetailsFragment newInstance(String memberId,String currMemberId) {
         MemberDetailsFragment fragment = new MemberDetailsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_MEMBER_ID, memberId);
-        args.putString(ARG_CURR_MEMBER_ID, currMemberId);
+        args.putString(ARG_CURR_MEMBER_ID,currMemberId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -85,14 +85,10 @@ public class MemberDetailsFragment extends Fragment {
         Model.instance.getMembersListLoadingState().postValue(Model.MembersListLoadingState.loading);
         View view = inflater.inflate(R.layout.fragment_member_details, container, false);
 
-        if(memberId == null)
-            memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
-        if(currMemberId == null)
-            currMemberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
-
         //GET RELEVANT DATA FROM DB
+        memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
+        currMemberId =  MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
         member = viewModel.getData(memberId).getValue();
-        Member curMember = viewModel.getData(currMemberId).getValue();
         if(member.isDeleted()) {
             Toast.makeText(this.getContext(),"This member does no longer exist", Toast.LENGTH_SHORT);
             Navigation.findNavController(view).navigate(MemberDetailsFragmentDirections.actionGlobalMemberListRvFragment());
@@ -105,7 +101,7 @@ public class MemberDetailsFragment extends Fragment {
         addressTv = view.findViewById(R.id.details_address_txt);
         cb = view.findViewById(R.id.details_checked_chk);
         editBtn = view.findViewById(R.id.details_to_edit_btn);
-        if(!currMemberId.equals(memberId) && curMember.getUserType() != Member.UserType.admin)
+        if(!MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId().equals(memberId) && Model.instance.getMemberById(Model.instance.getUid()).getValue().getUserType() !=Member.UserType.ADMIN.toString())
             editBtn.setVisibility(View.GONE);
         avatar = view.findViewById(R.id.details_member_imgv);
 
@@ -122,7 +118,7 @@ public class MemberDetailsFragment extends Fragment {
             }
             /***********************************/
             editBtn.setOnClickListener(v -> {
-                Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId));
+                Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId,Model.instance.getUid()));
             });
             viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {
                 member = member1;

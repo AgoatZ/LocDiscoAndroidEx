@@ -1,15 +1,18 @@
-package com.example.class2demo2.feed;
+package com.example.class2demo2.feed.EditPost;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
@@ -17,55 +20,61 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.class2demo2.R;
-import com.example.class2demo2.model.Category;
+import com.example.class2demo2.feed.Edit.EditFragmentDirections;
+import com.example.class2demo2.feed.Edit.EditViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
+import com.squareup.picasso.Picasso;
 
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link AddPostFragment#newInstance} factory method to
+ * Use the {@link EditPostFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddPostFragment extends Fragment {
+public class EditPostFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
+    private static final String ARG_POST_ID = "ARG_POST_ID";
+    private static final String ARG_POST_UID = "ARG_POST_UID";
 
     // TODO: Rename and change types of parameters
+    private String postId;
+    private String postUId;
 
-
-    public AddPostFragment() {
+    public EditPostFragment() {
         // Required empty public constructor
     }
 
-
+    /**
+     * Use this factory method to create a new instance of
+     * this fragment using the provided parameters.
+     *
+     * @param postId Parameter 1.
+     * @param postUId Parameter 2.
+     * @return A new instance of fragment EditPostFragment.
+     */
     // TODO: Rename and change types and number of parameters
-    public static AddPostFragment newInstance() {
-        AddPostFragment fragment = new AddPostFragment();
+    public static EditPostFragment newInstance(String postId, String postUId) {
+        EditPostFragment fragment = new EditPostFragment();
         Bundle args = new Bundle();
+        args.putString(ARG_POST_ID, postId);
+        args.putString(ARG_POST_UID, postUId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,6 +82,11 @@ public class AddPostFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            postId = getArguments().getString(ARG_POST_ID);
+            postUId = getArguments().getString(ARG_POST_UID);
+        }
+
     }
 
     public void save() {
@@ -87,17 +101,20 @@ public class AddPostFragment extends Fragment {
         String saddressTv = addressTv.getText().toString();
         String sdescriptionTv = descriptionTv.getText().toString();
 
-        Post post = new Post(snameTv, UUID.randomUUID().toString(), scategoryTv, saddressTv, null, sareaTv, Model.instance.getUid(), sdescriptionTv);
+        Post post = new Post(snameTv, postId, scategoryTv, saddressTv, null, sareaTv, postUId, sdescriptionTv);
+
+
         if (imageBitmap != null){
             Model.instance.saveImage(imageBitmap, "P" + post.getId() + "U"+ post.getUserId() + ".jpg", url -> {
                 post.setImage(url);
                 Model.instance.addPost(post, () -> {
-                    Navigation.findNavController(nameTv).navigateUp();
+
+                    Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
                 });
             });
         }else{
             Model.instance.addPost(post, () -> {
-                Navigation.findNavController(nameTv).navigateUp();
+                Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
             });
         }
     }
@@ -116,24 +133,48 @@ public class AddPostFragment extends Fragment {
     ImageButton cameraBtn;
     ImageButton galleryBtn;
     ProgressBar progressBar;
+    EditPostViewModel viewModel;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(EditPostViewModel.class);
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_post, container, false);
 
-        progressBar = view.findViewById(R.id.add_post_progressbar);
+        // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
+        postId= EditPostFragmentArgs.fromBundle(getArguments()).getPostId();
+        postUId= EditPostFragmentArgs.fromBundle(getArguments()).getPostUId();
+        Post post =viewModel.getData(postId.toString()).getValue();
+
+
+        progressBar = view.findViewById(R.id.edit_post_progressbar);
         progressBar.setVisibility(View.GONE);
-        nameTv = view.findViewById(R.id.add_post_name_txt);
-        categoryTv = view.findViewById(R.id.add_post_category_txt);
-        areaTv = view.findViewById(R.id.add_post_area_txt);
-        addressTv = view.findViewById(R.id.add_post_address_txt);
-        descriptionTv = view.findViewById(R.id.add_post_description_txt);
-        image = view.findViewById(R.id.add_post_imgv);
-        cancelBtn = view.findViewById(R.id.add_post_cancel_btn);
-        saveBtn = view.findViewById(R.id.add_post_save_btn);
-        cameraBtn = view.findViewById(R.id.add_post_camera_btn);
-        galleryBtn = view.findViewById(R.id.add_post_gallery_btn);
+        nameTv = view.findViewById(R.id.edit_post_name_txt);
+        categoryTv = view.findViewById(R.id.edit_post_category_txt);
+        areaTv = view.findViewById(R.id.edit_post_area_txt);
+        addressTv = view.findViewById(R.id.edit_post_address_txt);
+        descriptionTv = view.findViewById(R.id.edit_post_description_txt);
+        image = view.findViewById(R.id.edit_post_imgv);
+        cancelBtn = view.findViewById(R.id.edit_post_cancel_btn);
+        saveBtn = view.findViewById(R.id.edit_post_save_btn);
+        cameraBtn = view.findViewById(R.id.edit_post_camera_btn);
+        galleryBtn = view.findViewById(R.id.edit_post_gallery_btn);
+
+
+        nameTv.setText(post.getName());
+        categoryTv.setText(post.getCategory());
+        areaTv.setText(post.getArea());
+        addressTv.setText(post.getAddress());
+        descriptionTv.setText(post.getDescription());
+        if (post.getImage()!= null) {
+            Picasso.get()
+                    .load(post.getImage())
+                    .into(image);
+        }
 
         cancelBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigateUp();
@@ -149,11 +190,11 @@ public class AddPostFragment extends Fragment {
         });
 
         List<String> items = new ArrayList<String>();
-        for (Category category: Model.instance.getAllCategories().getValue()) {
-            items.add(category.getName());
-        }
+        items.add("Option 1");
         ArrayAdapter<String> adapter = new ArrayAdapter(requireContext(), R.layout.category_list_item, items);
         categoryTv.setAdapter(adapter);
+
+
 
         return view;
     }

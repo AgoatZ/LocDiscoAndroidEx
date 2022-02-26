@@ -33,21 +33,35 @@ import com.example.class2demo2.model.Member;
 
 import java.io.InputStream;
 
+/**
+ * A simple {@link Fragment} subclass.
+ * Use the {@link EditFragment#newInstance} factory method to
+ * create an instance of this fragment.
+ */
 public class EditFragment extends Fragment {
 
+    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_STUDENT_ID = "ARG_STUDENT_ID";
+    private static final String ARG_MEMBER_ID = "ARG_MEMBER_ID";
+    private static final String ARG_CURR_MEMBER_ID = "ARG_CURR_MEMBER_ID";
 
+
+
+    // TODO: Rename and change types of parameters
     private String memberId;
+    private String currMemberId;
+
 
     public EditFragment() {
         // Required empty public constructor
     }
 
-    public static EditFragment newInstance(String memberId) {
+    // TODO: Rename and change types and number of parameters
+    public static EditFragment newInstance(String memberId,String currMemberId) {
         EditFragment fragment = new EditFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_STUDENT_ID, memberId);
+        args.putString(ARG_MEMBER_ID, memberId);
+        args.putString(ARG_CURR_MEMBER_ID,currMemberId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -62,7 +76,7 @@ public class EditFragment extends Fragment {
         member.setFlag(checked.isChecked());
         member.setName(name.getText().toString());
         member.setPhone(phone.getText().toString());
-        Member member = new Member(name.getText().toString(), id.getText().toString(), phone.getText().toString(), address.getText().toString(), checked.isChecked(), null);
+        Member member = new Member(name.getText().toString(), id.getText().toString(), phone.getText().toString(), address.getText().toString(), checked.isChecked(), null,Member.UserType.USER.toString());
         if (imageBitmap != null){
             Model.instance.saveImage(imageBitmap, id.getText() + ".jpg", url -> {
                 member.setAvatar(url);
@@ -81,7 +95,8 @@ public class EditFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            memberId = getArguments().getString(ARG_STUDENT_ID);
+            memberId = getArguments().getString(ARG_MEMBER_ID);
+            currMemberId=getArguments().getString(ARG_CURR_MEMBER_ID);
         }
     }
 
@@ -116,29 +131,35 @@ public class EditFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
         memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
+        currMemberId=MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
+
         member = viewModel.getData(memberId).getValue();
 
-        //assign view components
-        name = view.findViewById(R.id.edit_name_txt);
-        id = view.findViewById(R.id.edit_id_txt);
-        phone = view.findViewById(R.id.edit_phone_txt);
-        address = view.findViewById(R.id.edit_address_txt);
-        checked = view.findViewById(R.id.edit_checked_chk);
-        avatar = view.findViewById(R.id.edit_member_imgv);
-        saveBtn = view.findViewById(R.id.edit_save_btn);
-        cancelBtn = view.findViewById(R.id.edit_cancel_btn);
-        deleteBtn = view.findViewById(R.id.edit_delete_btn);
-        progressBar = view.findViewById(R.id.edit_progressbar);
-        progressBar.setVisibility(View.GONE);
-        galleryBtn = view.findViewById(R.id.edit_gallery_btn);
-        cameraBtn = view.findViewById(R.id.edit_camera_btn);
-        name.setText(member.getName());
-        id.setText(member.getId());
-        phone.setText(member.getPhone());
-        address.setText(member.getAddress());
-        checked.setChecked(member.isFlag());
 
-        //set listeners
+        //Model.instance.getMemberById(memberId, s -> {
+            //member = s;
+
+            name = view.findViewById(R.id.edit_name_txt);
+            id = view.findViewById(R.id.edit_id_txt);
+            phone = view.findViewById(R.id.edit_phone_txt);
+            address = view.findViewById(R.id.edit_address_txt);
+            checked = view.findViewById(R.id.edit_checked_chk);
+            avatar = view.findViewById(R.id.edit_member_imgv);
+            saveBtn = view.findViewById(R.id.edit_save_btn);
+            cancelBtn = view.findViewById(R.id.edit_cancel_btn);
+            deleteBtn = view.findViewById(R.id.edit_delete_btn);
+            progressBar = view.findViewById(R.id.edit_progressbar);
+            progressBar.setVisibility(View.GONE);
+            galleryBtn = view.findViewById(R.id.edit_gallery_btn);
+            cameraBtn = view.findViewById(R.id.edit_camera_btn);
+
+            name.setText(member.getName());
+            id.setText(member.getId());
+            phone.setText(member.getPhone());
+            address.setText(member.getAddress());
+            checked.setChecked(member.isFlag());
+
+
         saveBtn.setOnClickListener(v -> {
             save();
         });
@@ -155,6 +176,13 @@ public class EditFragment extends Fragment {
             });
         });
 
+        cameraBtn = view.findViewById(R.id.edit_camera_btn);
+        galleryBtn = view.findViewById(R.id.edit_gallery_btn);
+
+        cancelBtn.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigateUp();
+        });
+
         cameraBtn.setOnClickListener(v -> {
             openCamera();
         });
@@ -162,7 +190,7 @@ public class EditFragment extends Fragment {
             openGallery();
         });
 
-        viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> member=member1);
+        viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {});
 
         return view;
     }

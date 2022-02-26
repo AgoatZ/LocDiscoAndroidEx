@@ -150,6 +150,46 @@ public class ModelFirebase {
                     listener.onComplete();
                 });
     }
+
+    /***************************CATEGORY MODEL*******************************/
+    public interface GetAllCategoriesListener{
+        void onComplete(List<Category> list);
+    }
+    public void getAllCategories(Long lastUpdateDate, GetAllCategoriesListener listener) {
+        db.collection(Category.COLLECTION_NAME)
+                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate,0))
+                .get()
+                .addOnCompleteListener(task ->{
+                    List<Category> list = new LinkedList<Category>();
+                    if(task.isSuccessful()){
+                        for(QueryDocumentSnapshot doc : task.getResult())
+                        {
+                            Category category = Category.create(doc.getData());
+                            if(category != null)
+                            {
+                                list.add(category);
+                            }
+                        }
+                    }
+                    listener.onComplete(list);
+                });
+    }
+
+    public void addCategory(Category category, Model.AddCategoryListener listener) {
+        Map<String, Object> json = category.toJson();
+
+        // Add a new document with a generated ID
+        db.collection(Post.COLLECTION_NAME)
+                .document(category.getName())
+                .set(json)
+                .addOnSuccessListener(unused -> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener(e -> {
+                    listener.onComplete();
+                });
+    }
+
     /******************************STORAGE*******************************/
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
