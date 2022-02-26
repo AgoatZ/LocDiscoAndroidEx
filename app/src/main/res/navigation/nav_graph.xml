@@ -108,5 +108,15 @@
         android:id="@+id/addCategoryFragment"
         android:name="com.example.class2demo2.feed.AddCategoryFragment"
         android:label="fragment_add_category"
-        tools:layout="@layout/fragment_add_category" /><action android:id="@+id/action_global_addCategoryFragment" app:destination="@id/addCategoryFragment"/>
+        tools:layout="@layout/fragment_add_category" />
+    <action android:id="@+id/action_global_addCategoryFragment" app:destination="@id/addCategoryFragment" />
+    <fragment
+        android:id="@+id/categoryListRvFragment"
+        android:name="com.example.class2demo2.feed.CategoryList.CategoryListRvFragment"
+        android:label="fragment_category_list_rv"
+        tools:layout="@layout/fragment_category_list_rv" />
+    <action
+        android:id="@+id/action_global_categoryListRvFragment"
+        app:destination="@id/categoryListRvFragment"
+        app:popUpToInclusive="true" />
 </navigation>

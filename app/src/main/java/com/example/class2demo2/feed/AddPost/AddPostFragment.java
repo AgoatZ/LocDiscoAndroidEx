@@ -160,12 +160,6 @@ public class AddPostFragment extends Fragment {
         List<Category> cat = new ArrayList<Category>();
         cat = viewModel.getData().getValue();
 
-        /*
-        try {
-            categories.wait();
-        }catch (Exception e){}
-         */
-
         if(cat != null) {
             for (Category category : cat) {
                 categories.add(category.getName());
