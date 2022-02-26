@@ -17,6 +17,9 @@
             android:icon="@android:drawable/ic_input_add"
             android:title="Make new post" />
         <item
+            android:id="@+id/addCategoryFragment"
+            android:title="Add new category" />
+        <item
             android:id="@+id/loginFragment"
             android:icon="@android:drawable/ic_menu_revert"
             android:title="Sign Out" />

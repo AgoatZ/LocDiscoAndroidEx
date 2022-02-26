@@ -42,7 +42,6 @@ public class MainDrawerActivity extends AppCompatActivity {
     TextView curNameTv;
     TextView curMailTv;
     ImageView curImage;
-    Member m;
     MemberViewModel viewModel;
 
     @Override
@@ -73,13 +72,14 @@ public class MainDrawerActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.memberListRvFragment, R.id.addFragment, R.id.addPostFragment)
+                R.id.memberListRvFragment, R.id.addFragment, R.id.addPostFragment, R.id.addCategoryFragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main_drawer);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        //set appbar header with current user details
         viewModel.getData().observe(this, members -> {
             View header = navigationView.getHeaderView(0);
             curNameTv = (TextView) header.findViewById(R.id.navheader_name_tv);

@@ -9,13 +9,15 @@
     tools:context=".feed.Post.PostFragment">
 
     <ScrollView
+        android:id="@+id/scrollView2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clickable="true"
         tools:layout_editor_absoluteX="31dp"
         tools:layout_editor_absoluteY="577dp">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/linearLayout4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
@@ -25,61 +27,94 @@
                 android:id="@+id/post_member_imgv"
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:layout_marginBottom="15dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toTopOf="@id/post_user_info_tv"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/avatarsmith" />
+
+            <TextView
+                android:id="@+id/post_user_info_tv"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="user info"
+                android:textColor="#FFFFFF"
+                android:textColorHighlight="#FFFFFF"
+                android:textColorHint="#FFFFFF"
+                android:textSize="24sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/post_user_image_iv"
+                app:layout_constraintTop_toBottomOf="@id/post_member_imgv" />
+
+            <ImageView
+                android:id="@+id/post_user_image_iv"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/morpheus_avatar"
+                app:layout_constraintBottom_toTopOf="@+id/post_category_txt"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/post_member_imgv" />
 
             <TextView
                 android:id="@+id/post_category_txt"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="category"
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@id/post_user_info_tv" />
 
             <TextView
                 android:id="@+id/post_name_txt"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="name"
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@id/post_category_txt" />
 
             <TextView
                 android:id="@+id/post_area_txt"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="area"
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@id/post_name_txt" />
 
             <TextView
                 android:id="@+id/post_address_txt"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="address"
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@id/post_area_txt" />
 
             <TextView
                 android:id="@+id/post_description_txt"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:hint="description"
                 android:text="Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before..."
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                app:layout_constraintTop_toBottomOf="@id/post_address_txt" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 
     <LinearLayout

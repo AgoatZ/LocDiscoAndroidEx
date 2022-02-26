@@ -179,7 +179,7 @@ public class ModelFirebase {
         Map<String, Object> json = category.toJson();
 
         // Add a new document with a generated ID
-        db.collection(Post.COLLECTION_NAME)
+        db.collection(Category.COLLECTION_NAME)
                 .document(category.getName())
                 .set(json)
                 .addOnSuccessListener(unused -> {
