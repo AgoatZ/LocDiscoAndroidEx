@@ -84,7 +84,7 @@
     </fragment><action android:id="@+id/action_global_postFragment" app:destination="@id/postFragment"/>
     <fragment
         android:id="@+id/addPostFragment"
-        android:name="com.example.class2demo2.feed.AddPostFragment"
+        android:name="com.example.class2demo2.feed.AddPost.AddPostFragment"
         android:label="fragment_add_post"
         tools:layout="@layout/fragment_add_post" />
     <action android:id="@+id/action_global_addPostFragment" app:destination="@id/addPostFragment" />
@@ -104,4 +104,9 @@
         android:id="@+id/action_global_editPostFragment"
         app:destination="@id/editPostFragment"
         app:popUpToInclusive="true" />
+    <fragment
+        android:id="@+id/addCategoryFragment"
+        android:name="com.example.class2demo2.feed.AddCategoryFragment"
+        android:label="fragment_add_category"
+        tools:layout="@layout/fragment_add_category" /><action android:id="@+id/action_global_addCategoryFragment" app:destination="@id/addCategoryFragment"/>
 </navigation>

@@ -327,9 +327,7 @@ public class Model {
     }
 
     public LiveData<List<Category>> getAllCategories(){
-        if(categoriesList == null){
-            refreshCategoriesList();
-        }
+        refreshCategoriesList();
         return categoriesList;
     }
 

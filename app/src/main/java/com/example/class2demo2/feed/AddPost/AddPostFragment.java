@@ -1,44 +1,43 @@
-package com.example.class2demo2.feed;
+package com.example.class2demo2.feed.AddPost;
 
 import static android.app.Activity.RESULT_OK;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.class2demo2.R;
+import com.example.class2demo2.feed.MemberList.MemberListRvViewModel;
 import com.example.class2demo2.model.Category;
+import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.io.InputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -68,6 +67,12 @@ public class AddPostFragment extends Fragment {
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        viewModel = new ViewModelProvider(this).get(AddPostViewModel.class);
     }
 
     @Override
@@ -101,7 +106,9 @@ public class AddPostFragment extends Fragment {
             });
         }
     }
-    //TODO I'VE STOPPED HERE
+    ArrayAdapter<String> adapter;
+    AddPostViewModel viewModel;
+    List<String> categories;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_GALLERY_OPEN = 2;
     Bitmap imageBitmap;
@@ -148,12 +155,35 @@ public class AddPostFragment extends Fragment {
             openGallery();
         });
 
-        List<String> items = new ArrayList<String>();
-        for (Category category: Model.instance.getAllCategories().getValue()) {
-            items.add(category.getName());
+
+        categories = new ArrayList<>();
+        List<Category> cat = new ArrayList<Category>();
+        cat = viewModel.getData().getValue();
+
+        /*
+        try {
+            categories.wait();
+        }catch (Exception e){}
+         */
+
+        if(cat != null) {
+            for (Category category : cat) {
+                categories.add(category.getName());
+            }
         }
-        ArrayAdapter<String> adapter = new ArrayAdapter(requireContext(), R.layout.category_list_item, items);
+
+        adapter = new ArrayAdapter<String>(requireContext(), R.layout.category_list_item, categories);
         categoryTv.setAdapter(adapter);
+
+
+        viewModel.getData().observe(getViewLifecycleOwner(), categoryList -> {
+            categories.removeAll(categories);
+            for (Category category: categoryList) {
+                categories.add(category.getName());
+            }
+            adapter = new ArrayAdapter<String>(requireContext(), R.layout.category_list_item, categories);
+            adapter.notifyDataSetChanged();
+        });
 
         return view;
     }
