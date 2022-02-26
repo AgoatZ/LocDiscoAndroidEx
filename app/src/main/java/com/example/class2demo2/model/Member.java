@@ -12,6 +12,11 @@ import java.util.Map;
 
 @Entity
 public class Member {
+    public enum UserType{
+        user,
+        admin
+    }
+
     final public static String COLLECTION_NAME = "members";
     @PrimaryKey
     @NonNull
@@ -23,6 +28,7 @@ public class Member {
     boolean flag;
     Long updateDate = new Long(0);
     boolean isDeleted;
+    UserType userType;
 
     public Member(){
     }
@@ -35,9 +41,10 @@ public class Member {
         this.flag = s.flag;
         this.avatar = s.avatar;
         this.isDeleted = s.isDeleted;
+        this.userType =s.userType;
     }
 
-    public Member(String name, String id, String phone, String address, boolean flag, String avatar) {
+    public Member(String name, String id, String phone, String address, boolean flag, String avatar, UserType userType) {
         this.name = name;
         this.id = id;
         this.address = address;
@@ -45,7 +52,15 @@ public class Member {
         this.flag = flag;
         this.avatar = avatar;
         this.isDeleted = false;
+        this.userType = userType;
+    }
 
+    public UserType getUserType() {
+        return userType;
+    }
+
+    public void setUserType(UserType userType) {
+        this.userType = userType;
     }
 
     public String getAvatar() {
@@ -114,12 +129,13 @@ public class Member {
         if(json.get("avatar") != null) {
             avatar = json.get("avatar").toString();
         }
+        UserType userType = (UserType) json.get("userType");
         boolean flag = (boolean) json.get("flag");
         Timestamp ts = (Timestamp)json.get("updateDate");
         Long updateDate = ts.getSeconds();
         boolean isDeleted = (boolean) json.get("isDeleted");
 
-        Member member = new Member(name,id,phone,address,flag,avatar);
+        Member member = new Member(name,id,phone,address,flag,avatar,userType);
         member.setUpdateDate(updateDate);
         member.setDeleted(isDeleted);
         return member;
@@ -135,6 +151,7 @@ public class Member {
         json.put("flag",flag);
         json.put("updateDate", FieldValue.serverTimestamp());
         json.put("isDeleted",isDeleted);
+        json.put("userType",userType);
         return json;
     }
 //TODO:...

@@ -41,7 +41,6 @@ public class MainDrawerActivity extends AppCompatActivity {
     TextView curNameTv;
     TextView curMailTv;
     ImageView curImage;
-    Member m;
     MemberViewModel viewModel;
 
     @Override
@@ -79,6 +78,7 @@ public class MainDrawerActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        //set appbar header with current user details
         viewModel.getData().observe(this, members -> {
             View header = navigationView.getHeaderView(0);
             curNameTv = (TextView) header.findViewById(R.id.navheader_name_tv);

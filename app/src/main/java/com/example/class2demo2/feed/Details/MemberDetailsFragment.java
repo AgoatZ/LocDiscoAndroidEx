@@ -85,9 +85,14 @@ public class MemberDetailsFragment extends Fragment {
         Model.instance.getMembersListLoadingState().postValue(Model.MembersListLoadingState.loading);
         View view = inflater.inflate(R.layout.fragment_member_details, container, false);
 
+        if(memberId == null)
+            memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
+        if(currMemberId == null)
+            currMemberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
+
         //GET RELEVANT DATA FROM DB
-        memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
         member = viewModel.getData(memberId).getValue();
+        Member curMember = viewModel.getData(currMemberId).getValue();
         if(member.isDeleted()) {
             Toast.makeText(this.getContext(),"This member does no longer exist", Toast.LENGTH_SHORT);
             Navigation.findNavController(view).navigate(MemberDetailsFragmentDirections.actionGlobalMemberListRvFragment());
@@ -100,7 +105,7 @@ public class MemberDetailsFragment extends Fragment {
         addressTv = view.findViewById(R.id.details_address_txt);
         cb = view.findViewById(R.id.details_checked_chk);
         editBtn = view.findViewById(R.id.details_to_edit_btn);
-        if(!MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId().equals(memberId))
+        if(!currMemberId.equals(memberId) && curMember.getUserType() != Member.UserType.admin)
             editBtn.setVisibility(View.GONE);
         avatar = view.findViewById(R.id.details_member_imgv);
 

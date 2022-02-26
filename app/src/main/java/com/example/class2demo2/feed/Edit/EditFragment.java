@@ -33,25 +33,17 @@ import com.example.class2demo2.model.Member;
 
 import java.io.InputStream;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link EditFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class EditFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_STUDENT_ID = "ARG_STUDENT_ID";
 
-    // TODO: Rename and change types of parameters
     private String memberId;
 
     public EditFragment() {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static EditFragment newInstance(String memberId) {
         EditFragment fragment = new EditFragment();
         Bundle args = new Bundle();
@@ -126,30 +118,27 @@ public class EditFragment extends Fragment {
         memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
         member = viewModel.getData(memberId).getValue();
 
-        //Model.instance.getMemberById(memberId, s -> {
-            //member = s;
+        //assign view components
+        name = view.findViewById(R.id.edit_name_txt);
+        id = view.findViewById(R.id.edit_id_txt);
+        phone = view.findViewById(R.id.edit_phone_txt);
+        address = view.findViewById(R.id.edit_address_txt);
+        checked = view.findViewById(R.id.edit_checked_chk);
+        avatar = view.findViewById(R.id.edit_member_imgv);
+        saveBtn = view.findViewById(R.id.edit_save_btn);
+        cancelBtn = view.findViewById(R.id.edit_cancel_btn);
+        deleteBtn = view.findViewById(R.id.edit_delete_btn);
+        progressBar = view.findViewById(R.id.edit_progressbar);
+        progressBar.setVisibility(View.GONE);
+        galleryBtn = view.findViewById(R.id.edit_gallery_btn);
+        cameraBtn = view.findViewById(R.id.edit_camera_btn);
+        name.setText(member.getName());
+        id.setText(member.getId());
+        phone.setText(member.getPhone());
+        address.setText(member.getAddress());
+        checked.setChecked(member.isFlag());
 
-            name = view.findViewById(R.id.edit_name_txt);
-            id = view.findViewById(R.id.edit_id_txt);
-            phone = view.findViewById(R.id.edit_phone_txt);
-            address = view.findViewById(R.id.edit_address_txt);
-            checked = view.findViewById(R.id.edit_checked_chk);
-            avatar = view.findViewById(R.id.edit_member_imgv);
-            saveBtn = view.findViewById(R.id.edit_save_btn);
-            cancelBtn = view.findViewById(R.id.edit_cancel_btn);
-            deleteBtn = view.findViewById(R.id.edit_delete_btn);
-            progressBar = view.findViewById(R.id.edit_progressbar);
-            progressBar.setVisibility(View.GONE);
-            galleryBtn = view.findViewById(R.id.edit_gallery_btn);
-            cameraBtn = view.findViewById(R.id.edit_camera_btn);
-
-            name.setText(member.getName());
-            id.setText(member.getId());
-            phone.setText(member.getPhone());
-            address.setText(member.getAddress());
-            checked.setChecked(member.isFlag());
-
-
+        //set listeners
         saveBtn.setOnClickListener(v -> {
             save();
         });
@@ -166,13 +155,6 @@ public class EditFragment extends Fragment {
             });
         });
 
-        cameraBtn = view.findViewById(R.id.edit_camera_btn);
-        galleryBtn = view.findViewById(R.id.edit_gallery_btn);
-
-        cancelBtn.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigateUp();
-        });
-
         cameraBtn.setOnClickListener(v -> {
             openCamera();
         });
@@ -180,7 +162,7 @@ public class EditFragment extends Fragment {
             openGallery();
         });
 
-        viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {});
+        viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> member=member1);
 
         return view;
     }

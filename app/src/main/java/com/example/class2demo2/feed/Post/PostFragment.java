@@ -21,17 +21,11 @@ import com.example.class2demo2.model.Post;
 import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link PostFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class PostFragment extends Fragment {
 
     private static final String ARG_POST_ID = "ARG_POST_ID";
     private static final String ARG_POST_UID = "ARG_POST_UID";
 
-    // TODO: Rename and change types of parameters
     private String postId;
     private String postUid;
 
@@ -40,7 +34,6 @@ public class PostFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static PostFragment newInstance(String postId, String postUid) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
