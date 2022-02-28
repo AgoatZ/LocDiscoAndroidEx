@@ -9,6 +9,9 @@
             android:icon="@android:drawable/ic_menu_compass"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/categoryListRvFragment"
+            android:title="Categories" />
+        <item
             android:id="@+id/addFragment"
             android:icon="@android:drawable/ic_menu_add"
             android:title="Add Member" />

@@ -112,7 +112,6 @@ public class PostListRvFragment extends Fragment {
             });
         }
 
-        //TODO: change member to post
         public void bind(Post post) {
             nameTv.setText(post.getName());
             categoryTv.setText(post.getCategory());
