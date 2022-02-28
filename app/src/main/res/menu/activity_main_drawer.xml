@@ -9,7 +9,12 @@
             android:icon="@android:drawable/ic_menu_compass"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/postListRvFragment"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="My Posts" />
+        <item
             android:id="@+id/categoryListRvFragment"
+            android:icon="@android:drawable/ic_dialog_dialer"
             android:title="Categories" />
         <item
             android:id="@+id/addFragment"
@@ -21,6 +26,7 @@
             android:title="Make new post" />
         <item
             android:id="@+id/addCategoryFragment"
+            android:icon="@android:drawable/ic_input_add"
             android:title="Add new category" />
         <item
             android:id="@+id/loginFragment"

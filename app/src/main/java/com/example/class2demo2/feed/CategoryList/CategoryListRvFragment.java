@@ -62,7 +62,7 @@ public class CategoryListRvFragment extends Fragment {
         adapter.SetOnItemClickListener((v, position) ->{
             String categoryName = viewModel.getData().getValue().get(position).getName();
             Log.d("CATNAME: ", categoryName);
-            Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName));
+            Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
         });
 
         viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());

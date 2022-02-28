@@ -25,24 +25,28 @@ import com.example.class2demo2.model.Post;
 import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 public class PostListRvFragment extends Fragment {
 
     private static final String ARG_CATEGORY_NAME = "ARG_CATEGORY_NAME";
+    private static final String ARG_USER_ID = "ARG_USER_ID";
 
     private String categoryName;
+    private String userId;
 
 
     public PostListRvFragment() {
         // Required empty public constructor
     }
 
-    public static PostListRvFragment newInstance(String categoryName) {
+    public static PostListRvFragment newInstance(String categoryName, String userId) {
         PostListRvFragment fragment = new PostListRvFragment();
         Bundle args = new Bundle();
         args.putString(ARG_CATEGORY_NAME, categoryName);
+        args.putString(ARG_USER_ID, userId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -65,6 +69,7 @@ public class PostListRvFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_list_rv,container,false);
 
         categoryName = PostListRvFragmentArgs.fromBundle(getArguments()).getCategoryName();
+        userId = PostListRvFragmentArgs.fromBundle(getArguments()).getUserId();
         Log.d("POSTLISTCATNAME: ", categoryName);
         //setting the recycler view
         swipeRefresh = view.findViewById(R.id.postlist_swiperefresh);
@@ -181,29 +186,42 @@ public class PostListRvFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            if(categoryName.equals("")) {
+            List<Post> postList = null;
+            if(categoryName.equals("") && userId.equals("")) {
                 Post post = viewModel.getData().getValue().get(position);
                 holder.bind(post);
-            } else {
-                List<Post> postList = viewModel.getData().getValue();
+                return;
+            } else  if (userId.equals("")){
+                postList = viewModel.getData().getValue();
+                List<Post> tempList= new ArrayList<Post>();
                 for(Post p: postList) {
-                    if(p.getCategory().equals(categoryName))
-                        postList.add(p);
+                    if (p.getCategory().equals(categoryName))
+                        tempList.add(p);
+                    }
+                postList.removeAll(postList);
+                postList.addAll(tempList);
+                } else {
+                    postList = viewModel.getData().getValue();
+                    List<Post> tempList= new ArrayList<Post>();
+                    for (Post p : postList) {
+                        if (p.getUserId().equals(userId))
+                            tempList.add(p);
+                    }
+                postList.removeAll(postList);
+                postList.addAll(tempList);
                 }
                 Post post = postList.get(position);
                 holder.bind(post);
             }
-
-        }
 
         @Override
         public int getItemCount() {
             if (viewModel.getData().getValue() == null) {
                 return 0;
             }
-            if (categoryName.equals("")) {
+            if (categoryName.equals("") && userId.equals("")) {
                 return viewModel.getData().getValue().size();
-            } else {
+            } else if (userId.equals("")){
                 int count = 0;
                 List<Post> postList = viewModel.getData().getValue();
                 for(Post p: postList) {
@@ -211,7 +229,16 @@ public class PostListRvFragment extends Fragment {
                         count++;
                 }
                 return count;
+            } else {
+                int count = 0;
+                List<Post> postList = viewModel.getData().getValue();
+                for(Post p: postList) {
+                    if(p.getUserId().equals(userId))
+                        count++;
+                }
+                return count;
             }
+
         }
     }
 }

@@ -69,6 +69,10 @@
             android:name="categoryName"
             app:argType="string"
             app:nullable="true" />
+        <argument
+            android:name="userId"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <action
         android:id="@+id/action_global_postListRvFragment"

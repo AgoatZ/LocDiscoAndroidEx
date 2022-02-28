@@ -2,6 +2,7 @@ package com.example.class2demo2.feed;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,10 +19,12 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
 import com.example.class2demo2.databinding.ActivityMainDrawer2Binding;
 import com.example.class2demo2.databinding.NavHeaderMainDrawerBinding;
 import com.example.class2demo2.feed.MemberList.MemberListRvFragment;
+import com.example.class2demo2.feed.MemberList.MemberListRvFragmentDirections;
 import com.example.class2demo2.feed.MemberList.MemberListRvViewModel;
 import com.example.class2demo2.login.LoginActivity;
 import com.example.class2demo2.model.AppLocalDb;
@@ -97,6 +100,15 @@ public class MainDrawerActivity extends AppCompatActivity {
                     }
                 }
             }
+        });
+
+        //My Posts click
+        navigationView.getMenu().findItem(R.id.postListRvFragment).setOnMenuItemClickListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.postListRvFragment) {
+                Navigation.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment().getView()).navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
+                drawer.closeDrawers();
+            }
+            return true;
         });
 
 
