@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.class2demo2.R;
+import com.example.class2demo2.feed.Edit.EditFragment;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
 import com.example.class2demo2.model.Member;
@@ -26,6 +27,23 @@ import com.squareup.picasso.Picasso;
 
 
 public class PostListRvFragment extends Fragment {
+
+    private static final String ARG_CATEGORY_NAME = "ARG_CATEGORY_NAME";
+
+    private String categoryName;
+
+
+    public PostListRvFragment() {
+        // Required empty public constructor
+    }
+
+    public static PostListRvFragment newInstance(String categoryName) {
+        PostListRvFragment fragment = new PostListRvFragment();
+        Bundle args = new Bundle();
+        args.putString(ARG_CATEGORY_NAME, categoryName);
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     //MEMBERS
     PostListViewModel viewModel;
@@ -44,6 +62,7 @@ public class PostListRvFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_list_rv,container,false);
 
+        categoryName = PostListRvFragmentArgs.fromBundle(getArguments()).getCategoryName();
         //setting the recycler view
         swipeRefresh = view.findViewById(R.id.postlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{
@@ -69,7 +88,7 @@ public class PostListRvFragment extends Fragment {
             @Override
             public void onImageClick(View v, int position) {
                 String postId = viewModel.getData().getValue().get(position).getId();
-                String postUId=viewModel.getData().getValue().get(position).getUserId();
+                String postUId = viewModel.getData().getValue().get(position).getUserId();
                 Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
             }
         });
@@ -113,9 +132,10 @@ public class PostListRvFragment extends Fragment {
         }
 
         public void bind(Post post) {
-            nameTv.setText(post.getName());
-            categoryTv.setText(post.getCategory());
-            areaTv.setText(post.getAddress());
+            if (post != null) {
+                nameTv.setText(post.getName());
+                categoryTv.setText(post.getCategory());
+                areaTv.setText(post.getAddress());
 
             /*
             if(Model.instance.getUid()!=member.getId()) {
@@ -123,11 +143,12 @@ public class PostListRvFragment extends Fragment {
             }
              */
 
-            image.setImageResource(R.drawable.avatarsmith);
-            if(post.getImage()!=null) {
-                Picasso.get()
-                        .load(post.getImage())
-                        .into(image);
+                image.setImageResource(R.drawable.avatarsmith);
+                if (post.getImage() != null) {
+                    Picasso.get()
+                            .load(post.getImage())
+                            .into(image);
+                }
             }
         }
     }
@@ -149,13 +170,12 @@ public class PostListRvFragment extends Fragment {
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.post_list_row,parent,false);
+            View view = getLayoutInflater().inflate(R.layout.post_list_row, parent,false);
             MyViewHolder holder = new MyViewHolder(view, listener);
 
             return holder;
         }
 
-        //TODO: change member to post
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             Post post = viewModel.getData().getValue().get(position);

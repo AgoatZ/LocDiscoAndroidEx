@@ -32,6 +32,7 @@ import android.widget.Toast;
 import com.example.class2demo2.R;
 import com.example.class2demo2.feed.Edit.EditFragmentDirections;
 import com.example.class2demo2.feed.Edit.EditViewModel;
+import com.example.class2demo2.model.Category;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
 import com.squareup.picasso.Picasso;
@@ -134,6 +135,9 @@ public class EditPostFragment extends Fragment {
     ImageButton galleryBtn;
     ProgressBar progressBar;
     EditPostViewModel viewModel;
+    List<String> categories;
+    ArrayAdapter<String> adapter;
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
@@ -189,12 +193,28 @@ public class EditPostFragment extends Fragment {
             openGallery();
         });
 
-        List<String> items = new ArrayList<String>();
-        items.add("Option 1");
-        ArrayAdapter<String> adapter = new ArrayAdapter(requireContext(), R.layout.category_list_item, items);
+        categories = new ArrayList<>();
+        List<Category> cat = new ArrayList<Category>();
+        cat = viewModel.getCategories().getValue();
+
+        if(cat != null) {
+            for (Category category : cat) {
+                categories.add(category.getName());
+            }
+        }
+
+        adapter = new ArrayAdapter<String>(requireContext(), R.layout.category_list_item, categories);
         categoryTv.setAdapter(adapter);
 
 
+        viewModel.getCategories().observe(getViewLifecycleOwner(), categoryList -> {
+            categories.removeAll(categories);
+            for (Category category: categoryList) {
+                categories.add(category.getName());
+            }
+            adapter = new ArrayAdapter<String>(requireContext(), R.layout.category_list_item, categories);
+            adapter.notifyDataSetChanged();
+        });
 
         return view;
     }

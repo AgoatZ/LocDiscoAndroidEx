@@ -16,6 +16,7 @@ import com.example.class2demo2.MyApplication;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.auth.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
@@ -244,13 +245,40 @@ public class Model {
     }
 
     public LiveData<List<Post>> getPostsByCategory(String category){
-        if(postsList == null){
-            refreshPostsList();
-        }
-        MutableLiveData<List<Post>> categoryWithPostsList = new MutableLiveData<List<Post>>();
-        categoryWithPostsList.postValue(AppLocalDb.db.postDao().getPostsByCategory(category));
+        postsListLoadingState.postValue(PostsListLoadingState.loading);
 
-        return categoryWithPostsList;
+        MutableLiveData<List<Post>> retList = new MutableLiveData<List<Post>>();
+        ArrayList<Post> arr = new ArrayList<Post>();
+
+        // get last local update date
+        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("PostLastUpdateDate", 0);
+
+        executor.execute(() -> {
+            List<Post> updatedList = AppLocalDb.db.postDao().getAllPosts();
+            postsList.postValue(updatedList);
+        });
+        // firebase get all updates since last local update date
+        modelFirebase.getAllPosts(lastUpdateDate, list -> {
+
+            // add all records to the local db
+            executor.execute(() -> {
+                Long localUpdateDate = new Long(0);
+                Log.d("TAG", "firebase returned " + list.size());
+                for (Post post : list) {
+                    if (!post.isDeleted() && post.getCategory().equals(category))
+                        arr.add(post);
+                    if (localUpdateDate < post.getUpdateDate()) {
+                        localUpdateDate = post.getUpdateDate();
+                    }
+                }
+
+                // return all data to caller
+                retList.postValue(arr);
+                postsListLoadingState.postValue(PostsListLoadingState.loaded);
+            });
+        });
+
+        return retList;
     }
 
     //TODO: PUT retval INSIDE
@@ -270,8 +298,16 @@ public class Model {
     }
 
     /***********Category************/
+    public enum CategoriesListLoadingState {
+        loading,
+        loaded
+    }
+
+    MutableLiveData<List<Category>> categoriesList = new MutableLiveData<List<Category>>();
+    MutableLiveData<CategoriesListLoadingState> categoriesListLoadingState = new MutableLiveData<CategoriesListLoadingState>();
+
     public void refreshCategoriesList() {
-        //postsListLoadingState.setValue(PostsListLoadingState.loading);
+        categoriesListLoadingState.setValue(CategoriesListLoadingState.loading);
 
         // get last local update date
         Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("CategoryLastUpdateDate", 0);
@@ -307,12 +343,10 @@ public class Model {
                 // return all data to caller
                 List<Category> updatedList = AppLocalDb.db.categoryDao().getAllCategories();
                 categoriesList.postValue(updatedList);
-                //postsListLoadingState.postValue(PostsListLoadingState.loaded);
+                categoriesListLoadingState.postValue(CategoriesListLoadingState.loaded);
             });
         });
     }
-
-    MutableLiveData<List<Category>> categoriesList = new MutableLiveData<List<Category>>();
 
 
     public interface AddCategoryListener {
@@ -330,6 +364,8 @@ public class Model {
         refreshCategoriesList();
         return categoriesList;
     }
+
+    public MutableLiveData<CategoriesListLoadingState> getCategoriesListLoadingState(){ return categoriesListLoadingState; }
 
     /********Authentication********/
     public interface SignInListener {
