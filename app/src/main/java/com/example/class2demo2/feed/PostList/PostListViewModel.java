@@ -1,6 +1,7 @@
 package com.example.class2demo2.feed.PostList;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.class2demo2.model.Model;
@@ -16,7 +17,5 @@ public class PostListViewModel extends ViewModel {
         data = Model.instance.getAllPosts();
     }
 
-    public LiveData<List<Post>> getData() {
-        return data;
-    }
+    public LiveData<List<Post>> getData() { return data; }
 }

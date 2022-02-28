@@ -1,8 +1,10 @@
 package com.example.class2demo2.feed.CategoryList;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -13,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +61,15 @@ public class CategoryListRvFragment extends Fragment {
 
         adapter.SetOnItemClickListener((v, position) ->{
             String categoryName = viewModel.getData().getValue().get(position).getName();
-            //Navigation.findNavController(v).navigate(CategoryListFragmentDirections.globapostlistwithparameters.....)
+            Log.d("CATNAME: ", categoryName);
+            Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
+        });
+
+        viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());
+
+        swipeRefresh.setRefreshing(Model.instance.getCategoriesListLoadingState().getValue() == Model.CategoriesListLoadingState.loading);
+        Model.instance.getCategoriesListLoadingState().observe(getViewLifecycleOwner(), categoriesListLoadingState -> {
+            swipeRefresh.setRefreshing(Model.instance.getCategoriesListLoadingState().getValue() == Model.CategoriesListLoadingState.loading);
         });
 
         return view;

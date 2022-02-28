@@ -52,7 +52,7 @@ public class AddCategoryFragment extends Fragment {
         String snameTv = nameTv.getText().toString();
 
         Category category = new Category(snameTv);
-        Model.instance.addCategory(category, ()->Navigation.findNavController(nameTv).navigate(AddCategoryFragmentDirections.actionGlobalPostListRvFragment()));
+        Model.instance.addCategory(category, ()->Navigation.findNavController(nameTv).navigate(AddCategoryFragmentDirections.actionGlobalPostListRvFragment("","")));
     }
 
     EditText nameTv;

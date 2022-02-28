@@ -64,7 +64,16 @@
         android:id="@+id/postListRvFragment"
         android:name="com.example.class2demo2.feed.PostList.PostListRvFragment"
         android:label="fragment_post_list_rv"
-        tools:layout="@layout/fragment_post_list_rv" />
+        tools:layout="@layout/fragment_post_list_rv" >
+        <argument
+            android:name="categoryName"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="userId"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
     <action
         android:id="@+id/action_global_postListRvFragment"
         app:destination="@id/postListRvFragment"
