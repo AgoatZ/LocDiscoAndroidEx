@@ -25,6 +25,8 @@ import com.example.class2demo2.model.Post;
 import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
 
+import java.util.List;
+
 
 public class PostListRvFragment extends Fragment {
 
@@ -63,6 +65,7 @@ public class PostListRvFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_list_rv,container,false);
 
         categoryName = PostListRvFragmentArgs.fromBundle(getArguments()).getCategoryName();
+        Log.d("POSTLISTCATNAME: ", categoryName);
         //setting the recycler view
         swipeRefresh = view.findViewById(R.id.postlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{
@@ -159,18 +162,18 @@ public class PostListRvFragment extends Fragment {
     }
 
     //ADAPTER CLASS
-    class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
+    class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         OnItemClickListener listener;
 
-        public void setOnItemClickListener(OnItemClickListener listener){
+        public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
 
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.post_list_row, parent,false);
+            View view = getLayoutInflater().inflate(R.layout.post_list_row, parent, false);
             MyViewHolder holder = new MyViewHolder(view, listener);
 
             return holder;
@@ -178,16 +181,37 @@ public class PostListRvFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            Post post = viewModel.getData().getValue().get(position);
-            holder.bind(post);
+            if(categoryName.equals("")) {
+                Post post = viewModel.getData().getValue().get(position);
+                holder.bind(post);
+            } else {
+                List<Post> postList = viewModel.getData().getValue();
+                for(Post p: postList) {
+                    if(p.getCategory().equals(categoryName))
+                        postList.add(p);
+                }
+                Post post = postList.get(position);
+                holder.bind(post);
+            }
+
         }
 
         @Override
         public int getItemCount() {
-            if(viewModel.getData().getValue() == null){
+            if (viewModel.getData().getValue() == null) {
                 return 0;
             }
-            return viewModel.getData().getValue().size(); }
-
+            if (categoryName.equals("")) {
+                return viewModel.getData().getValue().size();
+            } else {
+                int count = 0;
+                List<Post> postList = viewModel.getData().getValue();
+                for(Post p: postList) {
+                    if(p.getCategory().equals(categoryName))
+                        count++;
+                }
+                return count;
+            }
+        }
     }
 }

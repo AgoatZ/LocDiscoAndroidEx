@@ -70,15 +70,18 @@ public class MemberListRvFragment extends Fragment {
         listRv.setAdapter(adapter);
 
         ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
-        add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.postListRvFragment));
+        //TODO ADD PARAMS TO POSTLIST NAVIGATION
+        add.setOnClickListener(c->Navigation.findNavController(c).navigate(MemberListRvFragmentDirections.actionGlobalPostListRvFragment("")));
+
+        //add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.postListRvFragment));
 
         adapter.setOnItemClickListener(new OnItemClickListener()
         {
 
             @Override
             public void onItemClick(View v, int position) {
-                String stId = viewModel.getData().getValue().get(position).getId();
-                Navigation.findNavController(v).navigate(MemberListRvFragmentDirections.actionMemberListRvFragmentToMemberDetailsFragment(stId, Model.instance.getUid()));
+                String memberId = viewModel.getData().getValue().get(position).getId();
+                Navigation.findNavController(v).navigate(MemberListRvFragmentDirections.actionMemberListRvFragmentToMemberDetailsFragment(memberId, Model.instance.getUid()));
             }
 
 
