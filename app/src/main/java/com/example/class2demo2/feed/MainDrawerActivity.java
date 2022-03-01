@@ -105,13 +105,12 @@ public class MainDrawerActivity extends AppCompatActivity {
         //My Posts click
         navigationView.getMenu().findItem(R.id.postListRvFragment).setOnMenuItemClickListener(menuItem -> {
             if (menuItem.getItemId() == R.id.postListRvFragment) {
-                Navigation.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment().getView()).navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
+                navController.navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
+                //Navigation.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment().getView()).navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
                 drawer.closeDrawers();
             }
             return true;
         });
-
-
     }
 
     @Override
@@ -145,5 +144,6 @@ public class MainDrawerActivity extends AppCompatActivity {
         }
         return false;
     }
+
 
 }
