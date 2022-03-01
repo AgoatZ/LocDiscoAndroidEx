@@ -47,7 +47,7 @@
         <action
             android:id="@+id/action_editFragment_to_memberDetailsFragment"
             app:destination="@id/memberDetailsFragment"
-            app:popUpTo="@id/memberDetailsFragment"
+            app:popUpTo="@id/editFragment"
             app:popUpToInclusive="true" />
         <argument
             android:name="currMemberId"
@@ -63,7 +63,7 @@
     <fragment
         android:id="@+id/postListRvFragment"
         android:name="com.example.class2demo2.feed.PostList.PostListRvFragment"
-        android:label="fragment_post_list_rv"
+        android:label="Posts"
         tools:layout="@layout/fragment_post_list_rv" >
         <argument
             android:name="categoryName"
@@ -82,7 +82,7 @@
     <fragment
         android:id="@+id/postFragment"
         android:name="com.example.class2demo2.feed.Post.PostFragment"
-        android:label="fragment_post"
+        android:label=""
         tools:layout="@layout/fragment_post" >
         <argument
             android:name="postId"
@@ -94,13 +94,13 @@
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.example.class2demo2.feed.AddPost.AddPostFragment"
-        android:label="fragment_add_post"
+        android:label="Add a post"
         tools:layout="@layout/fragment_add_post" />
     <action android:id="@+id/action_global_addPostFragment" app:destination="@id/addPostFragment" />
     <fragment
         android:id="@+id/editPostFragment"
         android:name="com.example.class2demo2.feed.EditPost.EditPostFragment"
-        android:label="fragment_edit_post"
+        android:label="Edit"
         tools:layout="@layout/fragment_edit_post" >
         <argument
             android:name="postId"
@@ -116,13 +116,13 @@
     <fragment
         android:id="@+id/addCategoryFragment"
         android:name="com.example.class2demo2.feed.AddCategoryFragment"
-        android:label="fragment_add_category"
+        android:label="Add"
         tools:layout="@layout/fragment_add_category" />
     <action android:id="@+id/action_global_addCategoryFragment" app:destination="@id/addCategoryFragment" />
     <fragment
         android:id="@+id/categoryListRvFragment"
         android:name="com.example.class2demo2.feed.CategoryList.CategoryListRvFragment"
-        android:label="fragment_category_list_rv"
+        android:label="Categories"
         tools:layout="@layout/fragment_category_list_rv" />
     <action
         android:id="@+id/action_global_categoryListRvFragment"

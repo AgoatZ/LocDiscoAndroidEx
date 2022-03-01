@@ -25,4 +25,6 @@
     <string name="area">area</string>
     <string name="description">description</string>
     <string name="register">Register</string>
+    <string name="firstname">First Name</string>
+    <string name="lastname">Last Name</string>
 </resources>
