@@ -32,6 +32,8 @@ public class RegisterFragment extends Fragment {
         Button registerBtn = view.findViewById(R.id.register_register_btn);
         TextInputEditText emailTil = view.findViewById(R.id.register_email_et);
         TextInputEditText passwordTil = view.findViewById(R.id.register_password_et);
+        TextInputEditText firstNameTil = view.findViewById(R.id.register_firstname_et);
+        TextInputEditText lastNameTil = view.findViewById(R.id.register_lastname_et);
         TextView loginTv = view.findViewById(R.id.register_login_tv);
 
         loginTv.setOnClickListener(v ->{
@@ -44,7 +46,7 @@ public class RegisterFragment extends Fragment {
                     (user,error) -> {
                     if(user!=null)
                         Model.instance.addMember(new Member
-                                        (user.getDisplayName(),
+                                        (firstNameTil.getEditableText().toString()+ " " + lastNameTil.getEditableText().toString(),
                                          user.getUid(),
                                         null,
                                         user.getEmail(),

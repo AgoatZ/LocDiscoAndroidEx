@@ -67,8 +67,10 @@ public class PostFragment extends Fragment {
     TextView categoryTv;
     TextView addressTv;
     TextView descriptionTv;
+    TextView postOwnerNameTv;
     Button editBtn;
     ImageView image;
+    ImageView postOwnerImage;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -98,6 +100,8 @@ public class PostFragment extends Fragment {
         editBtn = view.findViewById(R.id.post_to_edit_btn);
         editBtn.setVisibility(View.VISIBLE);
         descriptionTv = view.findViewById(R.id.post_description_txt);
+        postOwnerImage = view.findViewById(R.id.post_user_image_iv);
+        postOwnerNameTv = view.findViewById(R.id.post_user_info_tv);
 
         if(post != null) {
             nameTv.setText(post.getName());
@@ -109,6 +113,15 @@ public class PostFragment extends Fragment {
                         .load(post.getImage())
                         .into(image);
             }
+            //TODO CHANGE MODEL TO VIEWMODEL
+            Picasso.get()
+                    .load(Model.instance
+                            .getMemberById(postUId)
+                            .getValue()
+                            .getAvatar())
+                    .into(postOwnerImage);
+
+            postOwnerNameTv.setText(Model.instance.getMemberById(postUId).getValue().getName());
         }
 
         if(!Model.instance.getUid().equals(postUId)) { editBtn.setVisibility(View.GONE); }
@@ -116,6 +129,11 @@ public class PostFragment extends Fragment {
         editBtn.setOnClickListener(v->{
             Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId,postUId));
         });
+
+        postOwnerNameTv.setOnClickListener(v->{
+            Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalPostListRvFragment("", postUId));
+        });
+
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {});
 
         return view;
