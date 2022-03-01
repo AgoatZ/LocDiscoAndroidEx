@@ -77,7 +77,7 @@
     <action
         android:id="@+id/action_global_postListRvFragment"
         app:destination="@id/postListRvFragment"
-        app:popUpTo="@id/postListRvFragment"
+        app:popUpTo="@id/nav_graph"
         app:popUpToInclusive="true" />
     <fragment
         android:id="@+id/postFragment"
@@ -117,7 +117,12 @@
         android:id="@+id/addCategoryFragment"
         android:name="com.example.class2demo2.feed.AddCategoryFragment"
         android:label="Add"
-        tools:layout="@layout/fragment_add_category" />
+        tools:layout="@layout/fragment_add_category" >
+        <action
+            android:id="@+id/action_addCategoryFragment_pop"
+            app:popUpTo="@id/addCategoryFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
     <action android:id="@+id/action_global_addCategoryFragment" app:destination="@id/addCategoryFragment" />
     <fragment
         android:id="@+id/categoryListRvFragment"

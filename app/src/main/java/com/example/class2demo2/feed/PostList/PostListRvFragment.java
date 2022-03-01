@@ -67,10 +67,8 @@ public class PostListRvFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_post_list_rv,container,false);
-
         categoryName = PostListRvFragmentArgs.fromBundle(getArguments()).getCategoryName();
         userId = PostListRvFragmentArgs.fromBundle(getArguments()).getUserId();
-        Log.d("POSTLISTCATNAME: ", categoryName);
         //setting the recycler view
         swipeRefresh = view.findViewById(R.id.postlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{
