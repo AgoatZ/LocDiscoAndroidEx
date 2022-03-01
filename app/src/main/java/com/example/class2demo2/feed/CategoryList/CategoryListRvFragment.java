@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.class2demo2.R;
@@ -59,13 +60,25 @@ public class CategoryListRvFragment extends Fragment {
         adapter = new MyAdapter();
         listRv.setAdapter(adapter);
 
-        adapter.SetOnItemClickListener((v, position) ->{
-            String categoryName = viewModel.getData().getValue().get(position).getName();
-            Log.d("CATNAME: ", categoryName);
-            Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
+        adapter.SetOnItemClickListener(new OnItemClickListener() {
+
+                                           @Override
+                                           public void onItemClick(View v, int position) {
+                                               String categoryName = viewModel.getData().getValue().get(position).getName();
+                                               Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
+                                           }
+
+                                           @Override
+                                           public void onDeleteClick(View v, int position) {
+
+                                               Model.instance.deleteCategory(viewModel.getData().getValue().get(position),() ->{
+                                                   adapter.notifyDataSetChanged();
+                                               });
+                                           }
         });
 
-        viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());
+
+                viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());
 
         swipeRefresh.setRefreshing(Model.instance.getCategoriesListLoadingState().getValue() == Model.CategoriesListLoadingState.loading);
         Model.instance.getCategoriesListLoadingState().observe(getViewLifecycleOwner(), categoriesListLoadingState -> {
@@ -78,14 +91,20 @@ public class CategoryListRvFragment extends Fragment {
     //HOLDER CLASS
     class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nameTv;
+        Button delete_btn;
 
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
+
             super(itemView);
             nameTv = itemView.findViewById(R.id.categorylist_recyclerview_item_name_tv);
-
+            delete_btn=itemView.findViewById(R.id.categorylist_recyclerview_item_delete_btn);
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(itemView, pos);
+            });
+            delete_btn.setOnClickListener(v -> {
+                int pos = getAdapterPosition();
+                listener.onDeleteClick(itemView, pos);
             });
         }
 
@@ -96,6 +115,7 @@ public class CategoryListRvFragment extends Fragment {
 
     interface OnItemClickListener{
         public void onItemClick(View v, int position);
+        public void onDeleteClick(View v,int position);
     }
 
     //ADAPTER CLASS
