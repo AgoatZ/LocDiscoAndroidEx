@@ -13,9 +13,6 @@
         <action
             android:id="@+id/action_memberListRvFragment_to_memberDetailsFragment"
             app:destination="@id/memberDetailsFragment" />
-        <action
-            android:id="@+id/action_global_addFragment"
-            app:destination="@id/addFragment" />
     </fragment>
     <fragment
         android:id="@+id/memberDetailsFragment"
@@ -53,12 +50,6 @@
             android:name="currMemberId"
             app:argType="string" />
     </fragment>
-    <fragment
-        android:id="@+id/addFragment"
-        android:name="com.example.class2demo2.feed.AddFragment"
-        android:label="Add Member"
-        tools:layout="@layout/fragment_add" />
-    <action android:id="@+id/action_global_addFragment" app:destination="@id/addFragment"/>
     <action android:id="@+id/action_global_memberListRvFragment" app:destination="@id/memberListRvFragment" />
     <fragment
         android:id="@+id/postListRvFragment"
