@@ -59,10 +59,16 @@ public class CategoryListRvFragment extends Fragment {
         adapter = new MyAdapter();
         listRv.setAdapter(adapter);
 
-        adapter.SetOnItemClickListener((v, position) ->{
-            String categoryName = viewModel.getData().getValue().get(position).getName();
-            Log.d("CATNAME: ", categoryName);
-            Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
+        adapter.SetOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(View v, int position) {
+
+            }
+
+            @Override
+            public void onDeleteClick(View v, int position) {
+
+            }
         });
 
         viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());
@@ -96,6 +102,7 @@ public class CategoryListRvFragment extends Fragment {
 
     interface OnItemClickListener{
         public void onItemClick(View v, int position);
+        public void onDeleteClick(View v, int position);
     }
 
     //ADAPTER CLASS
