@@ -35,6 +35,7 @@ public class Model {
 
 
 
+
     public enum MembersListLoadingState {
         loading,
         loaded
@@ -363,6 +364,14 @@ public class Model {
     public LiveData<List<Category>> getAllCategories(){
         refreshCategoriesList();
         return categoriesList;
+    }
+
+    public interface DeleteCategoryListener{
+        void onComplete();
+    }
+
+    public void deleteCategory(Category category,DeleteCategoryListener listener) {
+        modelFirebase.deleteCategory(category,listener);
     }
 
     public MutableLiveData<CategoriesListLoadingState> getCategoriesListLoadingState(){ return categoriesListLoadingState; }
