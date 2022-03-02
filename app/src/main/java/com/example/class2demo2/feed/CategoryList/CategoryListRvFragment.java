@@ -21,24 +21,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.class2demo2.R;
+import com.example.class2demo2.feed.PostList.PostListRvFragment;
+import com.example.class2demo2.feed.PostList.PostListViewModel;
 import com.example.class2demo2.model.Category;
 import com.example.class2demo2.model.Model;
+import com.example.class2demo2.model.Post;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class CategoryListRvFragment extends Fragment {
 
     //MEMBERS
     CategoryListViewModel viewModel;
+    PostListViewModel postViewModel;
     MyAdapter adapter;
     RecyclerView listRv;
     SwipeRefreshLayout swipeRefresh;
+    List<Post> postList;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider(this).get(CategoryListViewModel.class);
+        postViewModel = new ViewModelProvider(this).get(PostListViewModel.class);
     }
 
     @Nullable
@@ -70,12 +80,33 @@ public class CategoryListRvFragment extends Fragment {
 
             @Override
             public void onDeleteClick(View v, int position) {
+                /*
+
+                viewModel.getData().observe(getViewLifecycleOwner(),list ->
+                        Model.instance.refreshPostsList());
+
+                postViewModel.getData().observe(getViewLifecycleOwner(), list -> {
+                    Model.instance.refreshCategoriesList();
+                    postList = list;
+                    for (Post p : postList) {
+                        if (p.getCategory().equals(viewModel.getData().getValue().get(position).getName())) {
+                            Toast.makeText(getContext(), "cant Delete", Toast.LENGTH_LONG).show();
+                            return;
+                        }
+                    }
+                    Model.instance.deleteCategory(viewModel.getData().getValue().get(position), () -> {
+                        Model.instance.refreshCategoriesList();
+                    });
+                    Model.instance.refreshCategoriesList();
+                });
+            }
+
+                 */
                 Model.instance.deleteCategory(viewModel.getData().getValue().get(position), () -> {
                     Model.instance.refreshCategoriesList();
                 });
             }
         });
-
 
         viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());
 

@@ -17,10 +17,6 @@
             android:icon="@android:drawable/ic_dialog_dialer"
             android:title="Categories" />
         <item
-            android:id="@+id/addFragment"
-            android:icon="@android:drawable/ic_menu_add"
-            android:title="Add Member" />
-        <item
             android:id="@+id/addPostFragment"
             android:icon="@android:drawable/ic_input_add"
             android:title="Make new post" />
