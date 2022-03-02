@@ -50,7 +50,7 @@ public class CategoryListRvFragment extends Fragment {
 
         //SETTING THE RECYCLER VIEW
         swipeRefresh = view.findViewById(R.id.categorylist_swiperefresh);
-        swipeRefresh.setOnRefreshListener(()->{
+        swipeRefresh.setOnRefreshListener(() -> {
             Model.instance.refreshCategoriesList();
         });
 
@@ -62,23 +62,22 @@ public class CategoryListRvFragment extends Fragment {
 
         adapter.SetOnItemClickListener(new OnItemClickListener() {
 
-                                           @Override
-                                           public void onItemClick(View v, int position) {
-                                               String categoryName = viewModel.getData().getValue().get(position).getName();
-                                               Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
-                                           }
+            @Override
+            public void onItemClick(View v, int position) {
+                String categoryName = viewModel.getData().getValue().get(position).getName();
+                Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
+            }
 
-                                           @Override
-                                           public void onDeleteClick(View v, int position) {
-
-                                               Model.instance.deleteCategory(viewModel.getData().getValue().get(position),() ->{
-                                                   adapter.notifyDataSetChanged();
-                                               });
-                                           }
+            @Override
+            public void onDeleteClick(View v, int position) {
+                Model.instance.deleteCategory(viewModel.getData().getValue().get(position), () -> {
+                    Model.instance.refreshCategoriesList();
+                });
+            }
         });
 
 
-                viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());
+        viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());
 
         swipeRefresh.setRefreshing(Model.instance.getCategoriesListLoadingState().getValue() == Model.CategoriesListLoadingState.loading);
         Model.instance.getCategoriesListLoadingState().observe(getViewLifecycleOwner(), categoriesListLoadingState -> {
@@ -86,6 +85,12 @@ public class CategoryListRvFragment extends Fragment {
         });
 
         return view;
+    }
+
+    interface OnItemClickListener {
+        public void onItemClick(View v, int position);
+
+        public void onDeleteClick(View v, int position);
     }
 
     //HOLDER CLASS
@@ -97,7 +102,7 @@ public class CategoryListRvFragment extends Fragment {
 
             super(itemView);
             nameTv = itemView.findViewById(R.id.categorylist_recyclerview_item_name_tv);
-            delete_btn=itemView.findViewById(R.id.categorylist_recyclerview_item_delete_btn);
+            delete_btn = itemView.findViewById(R.id.categorylist_recyclerview_item_delete_btn);
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(itemView, pos);
@@ -113,17 +118,12 @@ public class CategoryListRvFragment extends Fragment {
         }
     }
 
-    interface OnItemClickListener{
-        public void onItemClick(View v, int position);
-        public void onDeleteClick(View v,int position);
-    }
-
     //ADAPTER CLASS
-    class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
+    class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         OnItemClickListener listener;
 
-        public void SetOnItemClickListener(OnItemClickListener listener){
+        public void SetOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
 
@@ -144,9 +144,10 @@ public class CategoryListRvFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(viewModel.getData().getValue() == null){
+            if (viewModel.getData().getValue() == null) {
                 return 0;
             }
-            return viewModel.getData().getValue().size(); }
+            return viewModel.getData().getValue().size();
         }
     }
+}
