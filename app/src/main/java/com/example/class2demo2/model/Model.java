@@ -367,7 +367,7 @@ public class Model {
     }
 
     public interface DeleteCategoryListener{
-        void onComplete();
+        void onComplete(Exception error);
     }
 
     public void deleteCategory(Category category,DeleteCategoryListener listener) {

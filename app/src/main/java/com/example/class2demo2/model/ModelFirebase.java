@@ -3,6 +3,7 @@ package com.example.class2demo2.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -24,7 +25,7 @@ import java.util.Map;
 public class ModelFirebase {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
 
-    public ModelFirebase(){
+    public ModelFirebase() {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(false)
                 .build();
@@ -32,21 +33,20 @@ public class ModelFirebase {
     }
 
 
-    public interface GetAllMembersListener{
+    public interface GetAllMembersListener {
         void onComplete(List<Member> list);
     }
+
     public void getAllMembers(Long lastUpdateDate, GetAllMembersListener listener) {
         db.collection(Member.COLLECTION_NAME)
-                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate,0))
+                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate, 0))
                 .get()
-                .addOnCompleteListener(task ->{
+                .addOnCompleteListener(task -> {
                     List<Member> list = new LinkedList<Member>();
-                    if(task.isSuccessful()){
-                        for(QueryDocumentSnapshot doc : task.getResult())
-                        {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
                             Member member = Member.create(doc.getData());
-                            if(member != null)
-                            {
+                            if (member != null) {
                                 list.add(member);
                             }
                         }
@@ -63,14 +63,14 @@ public class ModelFirebase {
                 .document(member.getId())
                 .set(json)
                 .addOnSuccessListener(unused -> {
-                        listener.onComplete();
+                    listener.onComplete();
                 })
                 .addOnFailureListener(e -> {
-                        listener.onComplete();
+                    listener.onComplete();
                 });
     }
 
-    public interface GetMemberByIdListener{
+    public interface GetMemberByIdListener {
         void onComplete(Member member);
     }
 
@@ -78,9 +78,9 @@ public class ModelFirebase {
         db.collection(Member.COLLECTION_NAME)
                 .document(id)
                 .get()
-                .addOnCompleteListener(task ->{
+                .addOnCompleteListener(task -> {
                     Member member = null;
-                    if(task.isSuccessful() && task.getResult() != null && (Long)task.getResult().getData().get("updateDate") >= lastUpdateDate){
+                    if (task.isSuccessful() && task.getResult() != null && (Long) task.getResult().getData().get("updateDate") >= lastUpdateDate) {
                         member = Member.create(task.getResult().getData());
                         listener.onComplete(member);
                     }
@@ -91,14 +91,14 @@ public class ModelFirebase {
         db.collection(Member.COLLECTION_NAME)
                 .document(member.id)
                 .delete()
-                .addOnCompleteListener(task ->{
-                    if(task.isSuccessful() && task.getResult() != null){
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult() != null) {
                         listener.onComplete();
                     }
                 });
     }
 
-    public void logicalDelete(Member member, Model.LogicalDeleteListener listener){
+    public void logicalDelete(Member member, Model.LogicalDeleteListener listener) {
         member.setDeleted(true);
         Map<String, Object> json = member.toJson();
         db.collection(Member.COLLECTION_NAME)
@@ -111,36 +111,47 @@ public class ModelFirebase {
                     listener.onComplete();
                 });
     }
-    public void deleteCategory(Category category,Model.DeleteCategoryListener listener) {
-        category.setDeleted(true);
-        Map<String, Object> json = category.toJson();
-        db.collection(Category.COLLECTION_NAME)
-                .document(category.getName())
-                .update(json)
-                .addOnSuccessListener(unused -> {
-                    listener.onComplete();
-                })
-                .addOnFailureListener(e -> {
-                    listener.onComplete();
+
+    public void deleteCategory(Category category, Model.DeleteCategoryListener listener) {
+        db.collection(Post.COLLECTION_NAME)
+                .whereEqualTo("category", category.getName())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().isEmpty()) {
+                            category.setDeleted(true);
+                            Map<String, Object> json = category.toJson();
+                            db.collection(Category.COLLECTION_NAME)
+                                    .document(category.getName())
+                                    .update(json)
+                                    .addOnSuccessListener(unused -> {
+                                        listener.onComplete(new Exception("Deleted"));
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        listener.onComplete(e);
+                                    });
+                        } else {
+                            listener.onComplete(new Exception("Category is not empty!"));
+                        }
+                    }
                 });
     }
 
     /***************************POST MODEL*******************************/
-    public interface GetAllPostsListener{
+    public interface GetAllPostsListener {
         void onComplete(List<Post> list);
     }
+
     public void getAllPosts(Long lastUpdateDate, GetAllPostsListener listener) {
         db.collection(Post.COLLECTION_NAME)
-                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate,0))
+                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate, 0))
                 .get()
-                .addOnCompleteListener(task ->{
+                .addOnCompleteListener(task -> {
                     List<Post> list = new LinkedList<Post>();
-                    if(task.isSuccessful()){
-                        for(QueryDocumentSnapshot doc : task.getResult())
-                        {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
                             Post post = Post.create(doc.getData());
-                            if(post != null)
-                            {
+                            if (post != null) {
                                 list.add(post);
                             }
                         }
@@ -165,21 +176,20 @@ public class ModelFirebase {
     }
 
     /***************************CATEGORY MODEL*******************************/
-    public interface GetAllCategoriesListener{
+    public interface GetAllCategoriesListener {
         void onComplete(List<Category> list);
     }
+
     public void getAllCategories(Long lastUpdateDate, GetAllCategoriesListener listener) {
         db.collection(Category.COLLECTION_NAME)
-                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate,0))
+                .whereGreaterThanOrEqualTo("updateDate", new Timestamp(lastUpdateDate, 0))
                 .get()
-                .addOnCompleteListener(task ->{
+                .addOnCompleteListener(task -> {
                     List<Category> list = new LinkedList<Category>();
-                    if(task.isSuccessful()){
-                        for(QueryDocumentSnapshot doc : task.getResult())
-                        {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot doc : task.getResult()) {
                             Category category = Category.create(doc.getData());
-                            if(category != null)
-                            {
+                            if (category != null) {
                                 list.add(category);
                             }
                         }
@@ -226,47 +236,47 @@ public class ModelFirebase {
     /*********************Authentication*********************************/
     private FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
-    public boolean isSignedIn(){
+    public boolean isSignedIn() {
         FirebaseUser currentUser = mAuth.getCurrentUser();
         return (currentUser != null);
     }
 
-    public void signIn(@NonNull String email, @NonNull String password, Model.SignInListener listener){
+    public void signIn(@NonNull String email, @NonNull String password, Model.SignInListener listener) {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            listener.onComplete(user, null);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "signInWithEmail:failure", task.getException());
-                            listener.onComplete(null, task.getException());
-                        }
-                });
+            if (task.isSuccessful()) {
+                // Sign in success, update UI with the signed-in user's information
+                Log.d("TAG", "signInWithEmail:success");
+                FirebaseUser user = mAuth.getCurrentUser();
+                listener.onComplete(user, null);
+            } else {
+                // If sign in fails, display a message to the user.
+                Log.w("TAG", "signInWithEmail:failure", task.getException());
+                listener.onComplete(null, task.getException());
+            }
+        });
     }
 
-    public void signOut(){
+    public void signOut() {
         mAuth.signOut();
     }
 
-    public String getUId(){
+    public String getUId() {
         return mAuth.getUid();
     }
 
     public void register(String email, String password, Model.RegisterListener listener) {
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d("TAG", "createUserWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            listener.onComplete(user, null);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w("TAG", "createUserWithEmail:failure", task.getException());
-                            listener.onComplete(null, task.getException());
-                        }
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d("TAG", "createUserWithEmail:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        listener.onComplete(user, null);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w("TAG", "createUserWithEmail:failure", task.getException());
+                        listener.onComplete(null, task.getException());
+                    }
                 });
     }
 }

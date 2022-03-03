@@ -48,7 +48,7 @@ public class CategoryListRvFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider(this).get(CategoryListViewModel.class);
-        postViewModel = new ViewModelProvider(this).get(PostListViewModel.class);
+        postViewModel = new ViewModelProvider(requireActivity()).get(PostListViewModel.class);
     }
 
     @Nullable
@@ -80,30 +80,9 @@ public class CategoryListRvFragment extends Fragment {
 
             @Override
             public void onDeleteClick(View v, int position) {
-                /*
-
-                viewModel.getData().observe(getViewLifecycleOwner(),list ->
-                        Model.instance.refreshPostsList());
-
-                postViewModel.getData().observe(getViewLifecycleOwner(), list -> {
+                Model.instance.deleteCategory(viewModel.getData().getValue().get(position), error -> {
                     Model.instance.refreshCategoriesList();
-                    postList = list;
-                    for (Post p : postList) {
-                        if (p.getCategory().equals(viewModel.getData().getValue().get(position).getName())) {
-                            Toast.makeText(getContext(), "cant Delete", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-                    }
-                    Model.instance.deleteCategory(viewModel.getData().getValue().get(position), () -> {
-                        Model.instance.refreshCategoriesList();
-                    });
-                    Model.instance.refreshCategoriesList();
-                });
-            }
-
-                 */
-                Model.instance.deleteCategory(viewModel.getData().getValue().get(position), () -> {
-                    Model.instance.refreshCategoriesList();
+                    Toast.makeText(getContext(), error.getMessage(), Toast.LENGTH_SHORT).show();
                 });
             }
         });
