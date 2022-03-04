@@ -75,7 +75,7 @@ public class MainDrawerActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.memberListRvFragment, R.id.addPostFragment, R.id.addCategoryFragment, R.id.categoryListRvFragment)
+                R.id.postListRvFragment, R.id.memberListRvFragment, R.id.addPostFragment, R.id.addCategoryFragment, R.id.categoryListRvFragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main_drawer);
@@ -106,7 +106,6 @@ public class MainDrawerActivity extends AppCompatActivity {
         navigationView.getMenu().findItem(R.id.postListRvFragment).setOnMenuItemClickListener(menuItem -> {
             if (menuItem.getItemId() == R.id.postListRvFragment) {
                 navController.navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
-                //Navigation.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment().getView()).navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
                 drawer.closeDrawers();
             }
             return true;
