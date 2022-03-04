@@ -99,13 +99,16 @@ public class MainDrawerActivity extends AppCompatActivity {
                                 .load(m.getAvatar())
                                 .into(curImage);
                     }
+                    //hide add category from user
+                    if(m.getUserType().equals(Member.UserType.USER.toString()))
+                        navigationView.getMenu().findItem(R.id.addCategoryFragment).setVisible(false);
                 }
             }
         });
 
         //My Posts click
-        navigationView.getMenu().findItem(R.id.postListRvFragment).setOnMenuItemClickListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.postListRvFragment) {
+        navigationView.getMenu().findItem(R.id.myPostsList).setOnMenuItemClickListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.myPostsList) {
                 //navController.navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
                 NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
                 action.setUserId(Model.instance.getUid());

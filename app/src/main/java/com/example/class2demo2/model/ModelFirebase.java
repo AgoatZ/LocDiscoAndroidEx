@@ -32,7 +32,6 @@ public class ModelFirebase {
         db.setFirestoreSettings(settings);
     }
 
-
     public interface GetAllMembersListener {
         void onComplete(List<Member> list);
     }
