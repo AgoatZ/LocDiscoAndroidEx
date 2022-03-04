@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -105,7 +106,11 @@ public class MainDrawerActivity extends AppCompatActivity {
         //My Posts click
         navigationView.getMenu().findItem(R.id.postListRvFragment).setOnMenuItemClickListener(menuItem -> {
             if (menuItem.getItemId() == R.id.postListRvFragment) {
-                navController.navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
+                //navController.navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
+                NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
+                action.setUserId(Model.instance.getUid());
+                action.setCategoryName("");
+                navController.navigate(action);
                 drawer.closeDrawers();
             }
             return true;

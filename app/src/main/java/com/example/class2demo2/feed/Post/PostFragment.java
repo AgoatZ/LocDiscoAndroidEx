@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
@@ -131,7 +132,11 @@ public class PostFragment extends Fragment {
         });
 
         postOwnerNameTv.setOnClickListener(v->{
-            Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalPostListRvFragment("", postUId));
+            //Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalPostListRvFragment("", postUId));
+            NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
+            action.setCategoryName("");
+            action.setUserId(postUId);
+            Navigation.findNavController(v).navigate(action);
         });
 
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {});

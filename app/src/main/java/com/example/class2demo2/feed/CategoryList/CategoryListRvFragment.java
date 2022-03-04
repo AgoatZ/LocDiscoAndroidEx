@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
 import com.example.class2demo2.feed.PostList.PostListRvFragment;
 import com.example.class2demo2.feed.PostList.PostListViewModel;
@@ -75,7 +76,11 @@ public class CategoryListRvFragment extends Fragment {
             @Override
             public void onItemClick(View v, int position) {
                 String categoryName = viewModel.getData().getValue().get(position).getName();
-                Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
+                //Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
+                NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
+                action.setCategoryName(categoryName);
+                action.setUserId("");
+                Navigation.findNavController(v).navigate(action);
             }
 
             @Override
