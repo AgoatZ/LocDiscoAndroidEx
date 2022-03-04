@@ -28,6 +28,8 @@ import com.example.class2demo2.R;
 import com.example.class2demo2.feed.PostList.PostListRvFragment;
 import com.example.class2demo2.feed.PostList.PostListViewModel;
 import com.example.class2demo2.model.Category;
+import com.example.class2demo2.model.Member;
+import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
 
@@ -39,17 +41,19 @@ public class CategoryListRvFragment extends Fragment {
 
     //MEMBERS
     CategoryListViewModel viewModel;
-    PostListViewModel postViewModel;
+    String userType;
+    //PostListViewModel postViewModel;
+    MemberViewModel memberViewModel;
     MyAdapter adapter;
     RecyclerView listRv;
     SwipeRefreshLayout swipeRefresh;
-    List<Post> postList;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider(this).get(CategoryListViewModel.class);
-        postViewModel = new ViewModelProvider(requireActivity()).get(PostListViewModel.class);
+        //postViewModel = new ViewModelProvider(requireActivity()).get(PostListViewModel.class);
+        memberViewModel = new ViewModelProvider(requireActivity()).get(MemberViewModel.class);
     }
 
     @Nullable
@@ -93,6 +97,12 @@ public class CategoryListRvFragment extends Fragment {
         });
 
         viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());
+        memberViewModel.getData().observe(getViewLifecycleOwner(), list-> {
+            for(Member member: list){
+                if(Model.instance.getUid().equals(member.getId()))
+                    userType = member.getUserType();
+            }
+        });
 
         swipeRefresh.setRefreshing(Model.instance.getCategoriesListLoadingState().getValue() == Model.CategoriesListLoadingState.loading);
         Model.instance.getCategoriesListLoadingState().observe(getViewLifecycleOwner(), categoriesListLoadingState -> {
@@ -122,10 +132,14 @@ public class CategoryListRvFragment extends Fragment {
                 int pos = getAdapterPosition();
                 listener.onItemClick(itemView, pos);
             });
-            delete_btn.setOnClickListener(v -> {
-                int pos = getAdapterPosition();
-                listener.onDeleteClick(itemView, pos);
-            });
+            if(userType.equals(Member.UserType.ADMIN.toString())) {
+                delete_btn.setOnClickListener(v -> {
+                    int pos = getAdapterPosition();
+                    listener.onDeleteClick(itemView, pos);
+                });
+            } else {
+                delete_btn.setVisibility(View.GONE);
+            }
         }
 
         public void bind(Category category) {
