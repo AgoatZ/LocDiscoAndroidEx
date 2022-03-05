@@ -71,9 +71,7 @@ public class MemberListRvFragment extends Fragment {
 
         ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
         //TODO ADD PARAMS TO POSTLIST NAVIGATION
-        add.setOnClickListener(c->Navigation.findNavController(c).navigate(MemberListRvFragmentDirections.actionGlobalPostListRvFragment("","")));
-
-        //add.setOnClickListener(Navigation.createNavigateOnClickListener(R.id.postListRvFragment));
+        add.setOnClickListener(c->Navigation.findNavController(c).navigate(MemberListRvFragmentDirections.actionGlobalPostListRvFragment()));
 
         adapter.setOnItemClickListener(new OnItemClickListener()
         {

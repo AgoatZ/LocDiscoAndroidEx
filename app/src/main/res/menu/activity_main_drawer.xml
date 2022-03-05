@@ -5,11 +5,11 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/memberListRvFragment"
-            android:icon="@android:drawable/ic_menu_compass"
-            android:title="@string/menu_home" />
-        <item
             android:id="@+id/postListRvFragment"
+            android:icon="@android:drawable/btn_star_big_on"
+            android:title="Home" />
+        <item
+            android:id="@+id/myPostsList"
             android:icon="@android:drawable/ic_menu_sort_by_size"
             android:title="My Posts" />
         <item
@@ -24,6 +24,10 @@
             android:id="@+id/addCategoryFragment"
             android:icon="@android:drawable/ic_input_add"
             android:title="Add new category" />
+        <item
+            android:id="@+id/memberListRvFragment"
+            android:icon="@android:drawable/ic_menu_sort_by_size"
+            android:title="@string/menu_users" />
         <item
             android:id="@+id/loginFragment"
             android:icon="@android:drawable/ic_menu_revert"

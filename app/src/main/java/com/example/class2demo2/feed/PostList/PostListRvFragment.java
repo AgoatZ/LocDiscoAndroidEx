@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -69,6 +70,14 @@ public class PostListRvFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post_list_rv,container,false);
         categoryName = PostListRvFragmentArgs.fromBundle(getArguments()).getCategoryName();
         userId = PostListRvFragmentArgs.fromBundle(getArguments()).getUserId();
+
+        if(!userId.equals("")) {
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(Model.instance.getMemberById(userId).getValue().getName());
+        }
+        if(!categoryName.equals("")) {
+            Log.d("CatTitle: ", categoryName);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(categoryName);
+        }
         //setting the recycler view
         swipeRefresh = view.findViewById(R.id.postlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{

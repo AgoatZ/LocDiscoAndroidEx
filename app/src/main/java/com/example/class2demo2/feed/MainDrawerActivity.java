@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
@@ -75,7 +76,7 @@ public class MainDrawerActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.memberListRvFragment, R.id.addPostFragment, R.id.addCategoryFragment, R.id.categoryListRvFragment)
+                R.id.postListRvFragment, R.id.memberListRvFragment, R.id.addPostFragment, R.id.addCategoryFragment, R.id.categoryListRvFragment)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main_drawer);
@@ -98,15 +99,21 @@ public class MainDrawerActivity extends AppCompatActivity {
                                 .load(m.getAvatar())
                                 .into(curImage);
                     }
+                    //hide add category from user
+                    if(m.getUserType().equals(Member.UserType.USER.toString()))
+                        navigationView.getMenu().findItem(R.id.addCategoryFragment).setVisible(false);
                 }
             }
         });
 
         //My Posts click
-        navigationView.getMenu().findItem(R.id.postListRvFragment).setOnMenuItemClickListener(menuItem -> {
-            if (menuItem.getItemId() == R.id.postListRvFragment) {
-                navController.navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
-                //Navigation.findNavController(getSupportFragmentManager().getPrimaryNavigationFragment().getView()).navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
+        navigationView.getMenu().findItem(R.id.myPostsList).setOnMenuItemClickListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.myPostsList) {
+                //navController.navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
+                NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
+                action.setUserId(Model.instance.getUid());
+                action.setCategoryName("");
+                navController.navigate(action);
                 drawer.closeDrawers();
             }
             return true;
