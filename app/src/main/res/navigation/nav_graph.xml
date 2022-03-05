@@ -71,7 +71,9 @@
     <action
         android:id="@+id/action_global_postListRvFragment"
         app:destination="@id/postListRvFragment"
-        app:popUpTo="@id/postFragment" />
+        app:launchSingleTop="true"
+        app:popUpTo="@id/postListRvFragment"
+        app:popUpToInclusive="false" />
     <fragment
         android:id="@+id/postFragment"
         android:name="com.example.class2demo2.feed.Post.PostFragment"
@@ -83,7 +85,15 @@
         <argument
             android:name="postUId"
             app:argType="string" />
-    </fragment><action android:id="@+id/action_global_postFragment" app:destination="@id/postFragment"/>
+        <action
+            android:id="@+id/action_postFragment_to_postListRvFragment"
+            app:destination="@id/postListRvFragment" />
+    </fragment>
+    <action
+        android:id="@+id/action_global_postFragment"
+        app:destination="@id/postFragment"
+        app:popUpTo="@id/postListRvFragment"
+        app:popUpToInclusive="false" />
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.example.class2demo2.feed.AddPost.AddPostFragment"
@@ -121,7 +131,11 @@
         android:id="@+id/categoryListRvFragment"
         android:name="com.example.class2demo2.feed.CategoryList.CategoryListRvFragment"
         android:label="Categories"
-        tools:layout="@layout/fragment_category_list_rv" />
+        tools:layout="@layout/fragment_category_list_rv" >
+        <action
+            android:id="@+id/action_categoryListRvFragment_to_postListRvFragment"
+            app:destination="@id/postListRvFragment" />
+    </fragment>
     <action
         android:id="@+id/action_global_categoryListRvFragment"
         app:destination="@id/categoryListRvFragment"

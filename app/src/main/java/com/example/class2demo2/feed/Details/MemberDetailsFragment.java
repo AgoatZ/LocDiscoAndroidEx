@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Member;
@@ -70,6 +71,7 @@ public class MemberDetailsFragment extends Fragment {
     TextView addressTv;
     CheckBox cb;
     Button editBtn;
+    Button postsBtn;
     ImageView avatar;
 
     @Override
@@ -102,6 +104,7 @@ public class MemberDetailsFragment extends Fragment {
         addressTv = view.findViewById(R.id.details_address_txt);
         cb = view.findViewById(R.id.details_checked_chk);
         editBtn = view.findViewById(R.id.details_to_edit_btn);
+        postsBtn = view.findViewById(R.id.details_user_post_list_btn);
         if ((!MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId().equals(memberId))
                 && !(Model
                 .instance
@@ -132,6 +135,13 @@ public class MemberDetailsFragment extends Fragment {
         /***********************************/
         editBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId, Model.instance.getUid()));
+        });
+
+        postsBtn.setOnClickListener(v -> {
+            NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
+            action.setCategoryName("");
+            action.setUserId(memberId);
+            Navigation.findNavController(v).navigate(action);
         });
         viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {
             member = member1;
