@@ -69,9 +69,6 @@ public class MemberListRvFragment extends Fragment {
         adapter = new MyAdapter();
         listRv.setAdapter(adapter);
 
-        ImageButton add = view.findViewById(R.id.listfrag_plus_imgbtn);
-        //TODO ADD PARAMS TO POSTLIST NAVIGATION
-        add.setOnClickListener(c->Navigation.findNavController(c).navigate(MemberListRvFragmentDirections.actionGlobalPostListRvFragment()));
 
         adapter.setOnItemClickListener(new OnItemClickListener()
         {
@@ -109,14 +106,12 @@ public class MemberListRvFragment extends Fragment {
         TextView idTv;
         CheckBox cb;
         ImageView avatar;
-        Button addBtn;
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             nameTv = itemView.findViewById(R.id.listrow_name_tv);
             idTv = itemView.findViewById(R.id.listrow_id_tv);
             cb = itemView.findViewById(R.id.listrow_cb);
             avatar = itemView.findViewById(R.id.listrow_avatar_imv);
-            addBtn = listRv.findViewById(R.id.listfrag_plus_imgbtn);
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(itemView, pos);
@@ -173,6 +168,5 @@ public class MemberListRvFragment extends Fragment {
                 return 0;
             }
             return viewModel.getData().getValue().size(); }
-
     }
 }

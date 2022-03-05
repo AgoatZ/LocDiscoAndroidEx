@@ -71,8 +71,7 @@
     <action
         android:id="@+id/action_global_postListRvFragment"
         app:destination="@id/postListRvFragment"
-        app:popUpTo="@id/nav_graph"
-        app:popUpToInclusive="true" />
+        app:popUpTo="@id/postFragment" />
     <fragment
         android:id="@+id/postFragment"
         android:name="com.example.class2demo2.feed.Post.PostFragment"

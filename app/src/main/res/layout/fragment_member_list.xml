@@ -21,14 +21,4 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 
-    <ImageButton
-        android:id="@+id/listfrag_plus_imgbtn"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="26dp"
-        android:layout_marginBottom="26dp"
-        android:src="@android:drawable/ic_input_add"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
