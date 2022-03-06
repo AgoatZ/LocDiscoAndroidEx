@@ -30,7 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class PostListRvFragment extends Fragment {
+public class UserPostListRvFragment extends Fragment {
 
     private static final String ARG_CATEGORY_NAME = "ARG_CATEGORY_NAME";
     private static final String ARG_USER_ID = "ARG_USER_ID";
@@ -39,12 +39,12 @@ public class PostListRvFragment extends Fragment {
     private String userId;
 
 
-    public PostListRvFragment() {
+    public UserPostListRvFragment() {
         // Required empty public constructor
     }
 
-    public static PostListRvFragment newInstance(String categoryName, String userId) {
-        PostListRvFragment fragment = new PostListRvFragment();
+    public static UserPostListRvFragment newInstance(String categoryName, String userId) {
+        UserPostListRvFragment fragment = new UserPostListRvFragment();
         Bundle args = new Bundle();
         args.putString(ARG_CATEGORY_NAME, categoryName);
         args.putString(ARG_USER_ID, userId);
@@ -67,7 +67,7 @@ public class PostListRvFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_post_list_rv,container,false);
+        View view = inflater.inflate(R.layout.fragment_user_post_list_rv,container,false);
         categoryName = PostListRvFragmentArgs.fromBundle(getArguments()).getCategoryName();
         userId = PostListRvFragmentArgs.fromBundle(getArguments()).getUserId();
 
@@ -79,12 +79,12 @@ public class PostListRvFragment extends Fragment {
             ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(categoryName);
         }
         //setting the recycler view
-        swipeRefresh = view.findViewById(R.id.postlist_swiperefresh);
+        swipeRefresh = view.findViewById(R.id.userPostlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{
             Model.instance.refreshPostsList();
         });
 
-        listRv = view.findViewById(R.id.postlist_rv);
+        listRv = view.findViewById(R.id.userPostlist_rv);
         listRv.setHasFixedSize(true);
         listRv.setLayoutManager(new LinearLayoutManager(getContext()));
         adapter = new MyAdapter();
@@ -97,14 +97,14 @@ public class PostListRvFragment extends Fragment {
             public void onItemClick(View v, int position) {
                 String postId = viewModel.getData().getValue().get(position).getId();
                 String postUId=viewModel.getData().getValue().get(position).getUserId();
-                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
+                Navigation.findNavController(v).navigate(UserPostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
             }
 
             @Override
             public void onImageClick(View v, int position) {
                 String postId = viewModel.getData().getValue().get(position).getId();
                 String postUId = viewModel.getData().getValue().get(position).getUserId();
-                Navigation.findNavController(v).navigate(PostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
+                Navigation.findNavController(v).navigate(UserPostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
             }
         });
         viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
@@ -197,22 +197,22 @@ public class PostListRvFragment extends Fragment {
                 for(Post p: postList) {
                     if (p.getCategory().equals(categoryName))
                         tempList.add(p);
-                    }
-                postList.removeAll(postList);
-                postList.addAll(tempList);
-                } else {
-                    postList = viewModel.getData().getValue();
-                    List<Post> tempList= new ArrayList<Post>();
-                    for (Post p : postList) {
-                        if (p.getUserId().equals(userId))
-                            tempList.add(p);
-                    }
-                postList.removeAll(postList);
-                postList.addAll(tempList);
                 }
-                Post post = postList.get(position);
-                holder.bind(post);
+                postList.removeAll(postList);
+                postList.addAll(tempList);
+            } else {
+                postList = viewModel.getData().getValue();
+                List<Post> tempList= new ArrayList<Post>();
+                for (Post p : postList) {
+                    if (p.getUserId().equals(userId))
+                        tempList.add(p);
+                }
+                postList.removeAll(postList);
+                postList.addAll(tempList);
             }
+            Post post = postList.get(position);
+            holder.bind(post);
+        }
 
         @Override
         public int getItemCount() {

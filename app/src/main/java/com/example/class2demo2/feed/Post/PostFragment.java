@@ -134,9 +134,9 @@ public class PostFragment extends Fragment {
 
         postOwnerNameTv.setOnClickListener(v->{
             //Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalPostListRvFragment("", postUId));
-            NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
-            action.setCategoryName("");
-            action.setUserId(postUId);
+            NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(postUId);
+            //action.setCategoryName("");
+            //action.setUserId(postUId);
             Navigation.findNavController(v).navigate(action);
         });
 

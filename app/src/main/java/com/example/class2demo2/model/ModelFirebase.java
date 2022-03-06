@@ -92,6 +92,7 @@ public class ModelFirebase {
                 .delete()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful() && task.getResult() != null) {
+                        mAuth.getCurrentUser().delete();
                         listener.onComplete();
                     }
                 });
@@ -108,31 +109,6 @@ public class ModelFirebase {
                 })
                 .addOnFailureListener(e -> {
                     listener.onComplete();
-                });
-    }
-
-    public void deleteCategory(Category category, Model.DeleteCategoryListener listener) {
-        db.collection(Post.COLLECTION_NAME)
-                .whereEqualTo("category", category.getName())
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        if (task.getResult().isEmpty()) {
-                            category.setDeleted(true);
-                            Map<String, Object> json = category.toJson();
-                            db.collection(Category.COLLECTION_NAME)
-                                    .document(category.getName())
-                                    .update(json)
-                                    .addOnSuccessListener(unused -> {
-                                        listener.onComplete(new Exception("Deleted"));
-                                    })
-                                    .addOnFailureListener(e -> {
-                                        listener.onComplete(e);
-                                    });
-                        } else {
-                            listener.onComplete(new Exception("Category is not empty!"));
-                        }
-                    }
                 });
     }
 
@@ -209,6 +185,31 @@ public class ModelFirebase {
                 })
                 .addOnFailureListener(e -> {
                     listener.onComplete();
+                });
+    }
+
+    public void deleteCategory(Category category, Model.DeleteCategoryListener listener) {
+        db.collection(Post.COLLECTION_NAME)
+                .whereEqualTo("category", category.getName())
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().isEmpty()) {
+                            category.setDeleted(true);
+                            Map<String, Object> json = category.toJson();
+                            db.collection(Category.COLLECTION_NAME)
+                                    .document(category.getName())
+                                    .update(json)
+                                    .addOnSuccessListener(unused -> {
+                                        listener.onComplete(new Exception("Deleted"));
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        listener.onComplete(e);
+                                    });
+                        } else {
+                            listener.onComplete(new Exception("Category is not empty!"));
+                        }
+                    }
                 });
     }
 
