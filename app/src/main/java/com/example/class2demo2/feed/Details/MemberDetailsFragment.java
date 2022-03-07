@@ -138,9 +138,7 @@ public class MemberDetailsFragment extends Fragment {
         });
 
         postsBtn.setOnClickListener(v -> {
-            NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
-            action.setCategoryName("");
-            action.setUserId(memberId);
+            NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(memberId);
             Navigation.findNavController(v).navigate(action);
         });
         viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {

@@ -111,10 +111,7 @@ public class MainDrawerActivity extends AppCompatActivity {
         //My Posts click
         navigationView.getMenu().findItem(R.id.myPostsList).setOnMenuItemClickListener(menuItem -> {
             if (menuItem.getItemId() == R.id.myPostsList) {
-                //navController.navigate(NavGraphDirections.actionGlobalPostListRvFragment("", Model.instance.getUid()));
-                NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
-                action.setUserId(Model.instance.getUid());
-                action.setCategoryName("");
+                NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(Model.instance.getUid());
                 navController.navigate(action);
                 drawer.closeDrawers();
             }

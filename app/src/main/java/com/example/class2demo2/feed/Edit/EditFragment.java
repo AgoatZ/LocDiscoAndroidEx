@@ -73,10 +73,9 @@ public class EditFragment extends Fragment {
         member.setAddress(address.getText().toString());
         member.setId(id.getText().toString());
         member.setAvatar(member.getAvatar());
-        member.setFlag(checked.isChecked());
         member.setName(name.getText().toString());
         member.setPhone(phone.getText().toString());
-        Member member = new Member(name.getText().toString(), id.getText().toString(), phone.getText().toString(), address.getText().toString(), checked.isChecked(), null,Member.UserType.USER.toString());
+        Member member = new Member(name.getText().toString(), id.getText().toString(), phone.getText().toString(), address.getText().toString(), false, null,Member.UserType.USER.toString());
         if (imageBitmap != null){
             Model.instance.saveImage(imageBitmap, id.getText() + ".jpg", url -> {
                 member.setAvatar(url);
@@ -143,7 +142,6 @@ public class EditFragment extends Fragment {
             id = view.findViewById(R.id.edit_id_txt);
             phone = view.findViewById(R.id.edit_phone_txt);
             address = view.findViewById(R.id.edit_address_txt);
-            checked = view.findViewById(R.id.edit_checked_chk);
             avatar = view.findViewById(R.id.edit_member_imgv);
             saveBtn = view.findViewById(R.id.edit_save_btn);
             cancelBtn = view.findViewById(R.id.edit_cancel_btn);
@@ -157,7 +155,6 @@ public class EditFragment extends Fragment {
             id.setText(member.getId());
             phone.setText(member.getPhone());
             address.setText(member.getAddress());
-            checked.setChecked(member.isFlag());
 
 
         saveBtn.setOnClickListener(v -> {

@@ -27,6 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="name"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="24sp" />
 
         <TextView
@@ -34,6 +36,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="id"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="24sp" />
 
         <TextView
@@ -41,6 +45,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="phone"
+            android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="24sp" />
 
         <TextView
@@ -48,6 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:hint="address"
+            android:textColor="@color/white"
             android:textSize="24sp" />
 
         <CheckBox
@@ -56,6 +63,7 @@
             android:layout_height="match_parent"
             android:enabled="false"
             android:hint="Checked"
+            android:textColorHint="@color/white"
             android:textSize="16sp" />
     </LinearLayout>
 

@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
+            android:backgroundTint="#FF9800"
             android:text="Cancel" />
 
         <Button
@@ -26,6 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
+            android:backgroundTint="#FF9800"
             android:text="Delete" />
 
         <Button
@@ -33,6 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
+            android:backgroundTint="#FF9800"
             android:text="Save" />
     </LinearLayout>
 
@@ -53,30 +56,83 @@
             android:layout_marginBottom="15dp"
             app:srcCompat="@drawable/avatarsmith" />
 
-        <EditText
-            android:id="@+id/edit_name_txt"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
 
-        <EditText
-            android:id="@+id/edit_id_txt"
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/name"
+            android:paddingTop="16dp"
+            app:boxStrokeColor="#FF9800"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <EditText
-            android:id="@+id/edit_phone_txt"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_name_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#252525"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white"
+                android:textColorHighlight="#FF9800" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/id"
+            android:paddingTop="16dp"
+            app:boxStrokeColor="#FF9800"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <EditText
-            android:id="@+id/edit_address_txt"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_id_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#252525"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/phone"
+            android:paddingTop="16dp"
+            app:boxStrokeColor="#FF9800"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-        <CheckBox
-            android:id="@+id/edit_checked_chk"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_phone_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#252525"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="4dp"
+            android:hint="@string/address"
+            android:paddingTop="16dp"
+            app:boxStrokeColor="#FF9800"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edit_address_txt"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#252525"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/white" />
+        </com.google.android.material.textfield.TextInputLayout>
+
     </LinearLayout>
     <ProgressBar
         android:id="@+id/edit_progressbar"
