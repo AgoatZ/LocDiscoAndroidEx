@@ -88,9 +88,7 @@
     </fragment>
     <action
         android:id="@+id/action_global_postFragment"
-        app:destination="@id/postFragment"
-        app:popUpTo="@id/postListRvFragment"
-        app:popUpToInclusive="false" />
+        app:destination="@id/postFragment" />
     <fragment
         android:id="@+id/addPostFragment"
         android:name="com.example.class2demo2.feed.AddPost.AddPostFragment"
@@ -142,5 +140,22 @@
             android:name="userId"
             app:argType="string" />
     </fragment>
-    <action android:id="@+id/action_global_userPostListRvFragment" app:destination="@id/userPostListRvFragment" />
+    <action
+        android:id="@+id/action_global_userPostListRvFragment"
+        app:destination="@id/userPostListRvFragment"
+        app:popUpTo="@id/memberDetailsFragment" />
+    <fragment
+        android:id="@+id/categoryPostListRvFragment"
+        android:name="com.example.class2demo2.feed.PostList.CategoryPostListRvFragment"
+        android:label="fragment_category_post_list_rv"
+        tools:layout="@layout/fragment_category_post_list_rv" >
+        <argument
+            android:name="categoryName"
+            app:argType="string"
+            android:defaultValue=""/>
+    </fragment>
+    <action
+        android:id="@+id/action_global_categoryPostListRvFragment"
+        app:destination="@id/categoryPostListRvFragment"
+        app:popUpTo="@id/categoryListRvFragment" />
 </navigation>

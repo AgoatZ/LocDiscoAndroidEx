@@ -30,20 +30,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class UserPostListRvFragment extends Fragment {
+public class CategoryPostListRvFragment extends Fragment {
 
-    private static final String ARG_USER_ID = "ARG_USER_ID";
+    private static final String ARG_CATEGORY_NAME = "ARG_CATEGORY_NAME";
 
-    private String userId;
+    private String categoryName;
 
-    public UserPostListRvFragment() {
+
+    public CategoryPostListRvFragment() {
         // Required empty public constructor
     }
 
-    public static UserPostListRvFragment newInstance(String userId) {
-        UserPostListRvFragment fragment = new UserPostListRvFragment();
+    public static CategoryPostListRvFragment newInstance(String categoryName) {
+        CategoryPostListRvFragment fragment = new CategoryPostListRvFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_USER_ID, userId);
+        args.putString(ARG_CATEGORY_NAME, categoryName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -64,12 +65,12 @@ public class UserPostListRvFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_post_list_rv,container,false);
-        userId = PostListRvFragmentArgs.fromBundle(getArguments()).getUserId();
+        categoryName = PostListRvFragmentArgs.fromBundle(getArguments()).getCategoryName();
 
-        if(!userId.equals("")) {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(Model.instance.getMemberById(userId).getValue().getName());
+        if(!categoryName.equals("")) {
+            Log.d("CatTitle: ", categoryName);
+            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(categoryName);
         }
-
         //setting the recycler view
         swipeRefresh = view.findViewById(R.id.user_postlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() ->{
@@ -89,14 +90,14 @@ public class UserPostListRvFragment extends Fragment {
             public void onItemClick(View v, int position) {
                 String postId = viewModel.getData().getValue().get(position).getId();
                 String postUId=viewModel.getData().getValue().get(position).getUserId();
-                Navigation.findNavController(v).navigate(UserPostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
+                Navigation.findNavController(v).navigate(CategoryPostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
             }
 
             @Override
             public void onImageClick(View v, int position) {
                 String postId = viewModel.getData().getValue().get(position).getId();
                 String postUId = viewModel.getData().getValue().get(position).getUserId();
-                Navigation.findNavController(v).navigate(UserPostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
+                Navigation.findNavController(v).navigate(CategoryPostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
             }
         });
         viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
@@ -179,15 +180,15 @@ public class UserPostListRvFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
             List<Post> postList = null;
-            if(userId.equals("")) {
+            if(categoryName.equals("")) {
                 Post post = viewModel.getData().getValue().get(position);
                 holder.bind(post);
                 return;
             } else {
                 postList = viewModel.getData().getValue();
                 List<Post> tempList= new ArrayList<Post>();
-                for (Post p : postList) {
-                    if (p.getUserId().equals(userId))
+                for(Post p: postList) {
+                    if (p.getCategory().equals(categoryName))
                         tempList.add(p);
                 }
                 postList.removeAll(postList);
@@ -202,13 +203,13 @@ public class UserPostListRvFragment extends Fragment {
             if (viewModel.getData().getValue() == null) {
                 return 0;
             }
-            if (userId.equals("")) {
+            if (categoryName.equals("")) {
                 return viewModel.getData().getValue().size();
             } else {
                 int count = 0;
                 List<Post> postList = viewModel.getData().getValue();
                 for(Post p: postList) {
-                    if(p.getUserId().equals(userId))
+                    if(p.getCategory().equals(categoryName))
                         count++;
                 }
                 return count;

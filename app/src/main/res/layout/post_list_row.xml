@@ -7,7 +7,7 @@
     android:layout_margin="4dp"
     android:background="?android:attr/selectableItemBackground"
     android:clickable="true"
-    app:cardBackgroundColor="@android:color/white"
+    app:cardBackgroundColor="#252525"
     app:cardElevation="8dp"
     app:cardPreventCornerOverlap="true">
 
@@ -36,6 +36,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:text="Name:"
+            android:textColor="@color/white"
             android:textSize="34sp"
             app:layout_constraintBottom_toTopOf="@+id/postrow_category_tv"
             app:layout_constraintEnd_toEndOf="parent"
@@ -49,6 +50,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:text="Area:"
+            android:textColor="@color/white"
             android:textSize="24sp"
             app:layout_constraintBottom_toTopOf="@+id/postrow_category_tv"
             app:layout_constraintEnd_toEndOf="parent"
@@ -62,6 +64,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="16dp"
             android:text="Category:"
+            android:textColor="@color/white"
             android:textSize="28sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

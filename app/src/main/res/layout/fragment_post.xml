@@ -17,7 +17,7 @@
         tools:layout_editor_absoluteY="577dp">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout4"
+            android:id="@+id/ScrollConstraintLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="30dp"
@@ -107,7 +107,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="description"
-                android:text="Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before...Many words have been said before..."
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"
                 android:textColorHint="#FFFFFF"

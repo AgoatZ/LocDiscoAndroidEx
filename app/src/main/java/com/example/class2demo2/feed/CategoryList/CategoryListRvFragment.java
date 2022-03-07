@@ -80,10 +80,8 @@ public class CategoryListRvFragment extends Fragment {
             @Override
             public void onItemClick(View v, int position) {
                 String categoryName = viewModel.getData().getValue().get(position).getName();
-                //Navigation.findNavController(v).navigate(CategoryListRvFragmentDirections.actionGlobalPostListRvFragment(categoryName, ""));
-                NavGraphDirections.ActionGlobalPostListRvFragment action = NavGraphDirections.actionGlobalPostListRvFragment();
+                NavGraphDirections.ActionGlobalCategoryPostListRvFragment action = NavGraphDirections.actionGlobalCategoryPostListRvFragment();
                 action.setCategoryName(categoryName);
-                action.setUserId("");
                 Navigation.findNavController(v).navigate(action);
             }
 
