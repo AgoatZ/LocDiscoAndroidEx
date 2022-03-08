@@ -126,7 +126,20 @@ public class PostFragment extends Fragment {
             postOwnerNameTv.setText(Model.instance.getMemberById(postUId).getValue().getName());
         }
 
-        if(!Model.instance.getUid().equals(postUId)) { editBtn.setVisibility(View.GONE); }
+        if(!Model.instance.getUid().equals(postUId)
+                && !Model
+                .instance
+                .getMemberById(Model
+                .instance
+                .getUid())
+                .getValue()
+                .getUserType()
+                .equals(Member
+                        .UserType
+                        .ADMIN
+                        .toString())) {
+            editBtn.setVisibility(View.GONE);
+        }
 
         editBtn.setOnClickListener(v->{
             Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId,postUId));
