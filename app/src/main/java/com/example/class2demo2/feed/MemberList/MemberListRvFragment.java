@@ -70,21 +70,9 @@ public class MemberListRvFragment extends Fragment {
         listRv.setAdapter(adapter);
 
 
-        adapter.setOnItemClickListener(new OnItemClickListener()
-        {
-
-            @Override
-            public void onItemClick(View v, int position) {
+        adapter.setOnItemClickListener((v,position) -> {
                 String memberId = viewModel.getData().getValue().get(position).getId();
                 Navigation.findNavController(v).navigate(MemberListRvFragmentDirections.actionMemberListRvFragmentToMemberDetailsFragment(memberId, Model.instance.getUid()));
-            }
-
-
-            @Override public void onCheckboxClick(int position, boolean isChecked){
-                viewModel.getData().getValue().get(position).setFlag(isChecked);
-                Member member = viewModel.getData().getValue().get(position);
-                Model.instance.addMember(member,()->{});
-            }
         });
         viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
 
@@ -104,27 +92,20 @@ public class MemberListRvFragment extends Fragment {
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView nameTv;
         TextView idTv;
-        CheckBox cb;
         ImageView avatar;
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             nameTv = itemView.findViewById(R.id.listrow_name_tv);
             idTv = itemView.findViewById(R.id.listrow_id_tv);
-            cb = itemView.findViewById(R.id.listrow_cb);
             avatar = itemView.findViewById(R.id.listrow_avatar_imv);
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(itemView, pos);
             });
-            cb.setOnClickListener(v -> {
-                int pos = getAdapterPosition();
-                listener.onCheckboxClick(pos, cb.isChecked());
-            });
         }
         public void bind(Member member) {
             nameTv.setText(member.getName());
             idTv.setText(member.getId());
-            cb.setChecked(member.isFlag());
             avatar.setImageResource(R.drawable.avatarsmith);
             if(member.getAvatar()!=null) {
                 Picasso.get()
@@ -136,7 +117,6 @@ public class MemberListRvFragment extends Fragment {
 
     interface OnItemClickListener{
         void onItemClick(View v, int position);
-        void onCheckboxClick(int position, boolean isChecked);
     }
     //ADAPTER CLASS
     class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{

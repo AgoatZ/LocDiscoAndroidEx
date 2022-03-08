@@ -69,7 +69,6 @@ public class MemberDetailsFragment extends Fragment {
     TextView idTv;
     TextView phoneTv;
     TextView addressTv;
-    CheckBox cb;
     Button editBtn;
     Button postsBtn;
     ImageView avatar;
@@ -102,7 +101,6 @@ public class MemberDetailsFragment extends Fragment {
         idTv = view.findViewById(R.id.details_id_txt);
         phoneTv = view.findViewById(R.id.details_phone_txt);
         addressTv = view.findViewById(R.id.details_address_txt);
-        cb = view.findViewById(R.id.details_checked_chk);
         editBtn = view.findViewById(R.id.details_to_edit_btn);
         postsBtn = view.findViewById(R.id.details_user_post_list_btn);
         if ((!MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId().equals(memberId))
@@ -126,7 +124,6 @@ public class MemberDetailsFragment extends Fragment {
         idTv.setText(member.getId());
         addressTv.setText(member.getAddress());
         phoneTv.setText(member.getPhone());
-        cb.setChecked(member.isFlag());
         if (member.getAvatar() != null) {
             Picasso.get()
                     .load(member.getAvatar())

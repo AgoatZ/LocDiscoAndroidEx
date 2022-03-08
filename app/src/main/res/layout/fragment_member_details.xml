@@ -55,16 +55,9 @@
             android:layout_height="match_parent"
             android:hint="address"
             android:textColor="@color/white"
+            android:textColorHint="@color/white"
             android:textSize="24sp" />
 
-        <CheckBox
-            android:id="@+id/details_checked_chk"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:enabled="false"
-            android:hint="Checked"
-            android:textColorHint="@color/white"
-            android:textSize="16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -78,17 +71,19 @@
 
         <Button
             android:id="@+id/details_user_post_list_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
             android:backgroundTint="#FF9800"
             android:text="Posts" />
 
         <Button
             android:id="@+id/details_to_edit_btn"
-            android:layout_width="wrap_content"
+            android:layout_width="10dp"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
+            android:layout_margin="8dp"
+            android:layout_weight="1"
             android:backgroundTint="#FF9800"
             android:text="Edit" />
     </LinearLayout>
