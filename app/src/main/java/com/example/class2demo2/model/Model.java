@@ -133,6 +133,7 @@ public class Model {
     }
 
     public LiveData<Member> getMemberById(String id) {
+        retMember.postValue(null);
         if (membersList.getValue() == null) {
             refreshMembersList();
         }
@@ -140,7 +141,7 @@ public class Model {
         if(membersList.getValue() != null) {
             for (Member member : membersList.getValue()) {
                 if (member.getId().equals(id)) {
-                    retMember.setValue(member);
+                    retMember.postValue(member);
                 }
             }
         }

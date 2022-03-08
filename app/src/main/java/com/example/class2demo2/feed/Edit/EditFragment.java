@@ -26,8 +26,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
 import com.example.class2demo2.feed.Details.MemberDetailsFragmentArgs;
+import com.example.class2demo2.feed.Details.MemberDetailsFragmentDirections;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Member;
 
@@ -134,10 +136,6 @@ public class EditFragment extends Fragment {
 
         member = viewModel.getData(memberId).getValue();
 
-
-        //Model.instance.getMemberById(memberId, s -> {
-            //member = s;
-
             name = view.findViewById(R.id.edit_name_txt);
             id = view.findViewById(R.id.edit_id_txt);
             phone = view.findViewById(R.id.edit_phone_txt);
@@ -151,11 +149,15 @@ public class EditFragment extends Fragment {
             galleryBtn = view.findViewById(R.id.edit_gallery_btn);
             cameraBtn = view.findViewById(R.id.edit_camera_btn);
 
+        if(member == null){
+            Toast.makeText(this.getContext(), "This member does no longer exist", Toast.LENGTH_SHORT).show();
+            Navigation.findNavController(container).navigate(NavGraphDirections.actionGlobalMemberListRvFragment());
+        } else {
             name.setText(member.getName());
             id.setText(member.getId());
             phone.setText(member.getPhone());
             address.setText(member.getAddress());
-
+        }
 
         saveBtn.setOnClickListener(v -> {
             save();
