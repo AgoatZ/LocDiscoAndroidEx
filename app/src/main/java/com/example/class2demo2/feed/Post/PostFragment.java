@@ -19,6 +19,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
+import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
 import com.example.class2demo2.model.Member;
@@ -63,6 +64,7 @@ public class PostFragment extends Fragment {
     }
 
     PostViewModel viewModel;
+    MemberViewModel memberViewModel;
     Post post;
     TextView nameTv;
     TextView areaTv;
@@ -73,11 +75,14 @@ public class PostFragment extends Fragment {
     Button editBtn;
     ImageView image;
     ImageView postOwnerImage;
+    Member currMember;
+    Member postOwner;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider(this).get(PostViewModel.class);
+        memberViewModel = new ViewModelProvider(requireActivity()).get(MemberViewModel.class);
     }
 
     @Override
@@ -115,44 +120,46 @@ public class PostFragment extends Fragment {
                         .load(post.getImage())
                         .into(image);
             }
+            Model.instance.refreshMembersList();
             //TODO CHANGE MODEL TO VIEWMODEL
-            Picasso.get()
-                    .load(Model.instance
-                            .getMemberById(postUId)
-                            .getValue()
-                            .getAvatar())
-                    .into(postOwnerImage);
+            memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
+                        for (Member m : members) {
+                            if (m.getId().equals(postUId)) {
+                                postOwner = m;
+                            }
+                            if (m.getId().equals(Model.instance.getUid())) {
+                                currMember = m;
+                            }
+                        }
+                        if (postOwner != null) {
+                            Picasso.get().load(postOwner.getAvatar()).into(postOwnerImage);
+                            postOwnerNameTv.setText(postOwner.getName());
+                        } else {
+                            postOwnerNameTv.setText("Deleted Member");
+                        }
 
-            postOwnerNameTv.setText(Model.instance.getMemberById(postUId).getValue().getName());
+                        if (!Model.instance.getUid().equals(postUId)
+                                && !currMember
+                                .getUserType()
+                                .equals(Member
+                                        .UserType
+                                        .ADMIN
+                                        .toString())) {
+                            editBtn.setVisibility(View.GONE);
+                        }
+                    });
+            editBtn.setOnClickListener(v -> {
+                Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId, postUId));
+            });
+
+            postOwnerNameTv.setOnClickListener(v -> {
+                //Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalPostListRvFragment("", postUId));
+                NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(postUId);
+                //action.setCategoryName("");
+                //action.setUserId(postUId);
+                Navigation.findNavController(v).navigate(action);
+            });
         }
-
-        if(!Model.instance.getUid().equals(postUId)
-                && !Model
-                .instance
-                .getMemberById(Model
-                .instance
-                .getUid())
-                .getValue()
-                .getUserType()
-                .equals(Member
-                        .UserType
-                        .ADMIN
-                        .toString())) {
-            editBtn.setVisibility(View.GONE);
-        }
-
-        editBtn.setOnClickListener(v->{
-            Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId,postUId));
-        });
-
-        postOwnerNameTv.setOnClickListener(v->{
-            //Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalPostListRvFragment("", postUId));
-            NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(postUId);
-            //action.setCategoryName("");
-            //action.setUserId(postUId);
-            Navigation.findNavController(v).navigate(action);
-        });
-
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {});
 
         return view;

@@ -66,8 +66,13 @@ public class UserPostListRvFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_user_post_list_rv,container,false);
         userId = PostListRvFragmentArgs.fromBundle(getArguments()).getUserId();
 
+        Member postsOwner = Model.instance.getMemberById(userId).getValue();
         if(!userId.equals("")) {
-            ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(Model.instance.getMemberById(userId).getValue().getName());
+            if(postsOwner != null) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(postsOwner.getName());
+            } else {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Deleted Member");
+            }
         }
 
         //setting the recycler view
