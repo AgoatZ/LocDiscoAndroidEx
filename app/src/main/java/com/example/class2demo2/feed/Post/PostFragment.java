@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -153,12 +154,12 @@ public class PostFragment extends Fragment {
             });
 
             postOwnerNameTv.setOnClickListener(v -> {
-                //Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalPostListRvFragment("", postUId));
                 NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(postUId);
-                //action.setCategoryName("");
-                //action.setUserId(postUId);
                 Navigation.findNavController(v).navigate(action);
             });
+        } else {
+          Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
+          Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
         }
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {});
 

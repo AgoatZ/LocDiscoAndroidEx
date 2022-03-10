@@ -87,14 +87,17 @@ public class ModelFirebase {
     }
 
     public void delete(Member member, Model.DeleteListener listener) {
+        member.setDeleted(true);
+        Map<String, Object> json = member.toJson();
         db.collection(Member.COLLECTION_NAME)
-                .document(member.id)
-                .delete()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful() && task.getResult() != null) {
-                        mAuth.getCurrentUser().delete();
-                        listener.onComplete();
-                    }
+                .document(member.getId())
+                .update(json)
+                .addOnSuccessListener(unused -> {
+                    mAuth.getCurrentUser().delete();
+                    listener.onComplete();
+                })
+                .addOnFailureListener(e -> {
+                    listener.onComplete();
                 });
     }
 

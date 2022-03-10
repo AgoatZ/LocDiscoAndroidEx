@@ -39,10 +39,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:hint="user info"
-                android:textColor="#FFFFFF"
-                android:textColorHighlight="#FFFFFF"
-                android:textColorHint="#FFFFFF"
+                android:textColor="#FF9800"
+                android:textColorHighlight="#FF9800"
+                android:textColorHint="#FF9800"
                 android:textSize="24sp"
+                android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/post_user_image_iv"
                 app:layout_constraintTop_toBottomOf="@id/post_member_imgv" />
@@ -52,9 +53,8 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginBottom="8dp"
                 android:src="@drawable/morpheus_avatar"
-                app:layout_constraintBottom_toTopOf="@+id/post_category_txt"
+                app:layout_constraintBottom_toBottomOf="@+id/post_user_info_tv"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/post_member_imgv" />
 
@@ -62,6 +62,7 @@
                 android:id="@+id/post_category_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
                 android:hint="category"
                 android:textColor="#FFFFFF"
                 android:textColorHighlight="#FFFFFF"

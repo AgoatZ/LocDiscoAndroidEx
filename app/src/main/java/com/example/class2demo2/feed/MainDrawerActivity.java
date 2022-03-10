@@ -2,6 +2,7 @@ package com.example.class2demo2.feed;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
