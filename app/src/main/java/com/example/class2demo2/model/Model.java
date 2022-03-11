@@ -53,9 +53,7 @@ public class Model {
     }
 
     public LiveData<List<Member>> getAllMembers() {
-        if (membersList.getValue() == null) {
-            refreshMembersList();
-        }
+        refreshMembersList();
         return membersList;
     }
 
