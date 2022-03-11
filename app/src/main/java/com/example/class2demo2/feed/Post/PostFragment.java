@@ -116,6 +116,7 @@ public class PostFragment extends Fragment {
             areaTv.setText(post.getArea());
             addressTv.setText(post.getAddress());
             categoryTv.setText(post.getCategory());
+            descriptionTv.setText(post.getDescription());
             if (post.getImage() != null) {
                 Picasso.get()
                         .load(post.getImage())

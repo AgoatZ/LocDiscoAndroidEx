@@ -50,7 +50,6 @@ public class RegisterFragment extends Fragment {
                                          user.getUid(),
                                         null,
                                         user.getEmail(),
-                                        false,
                                         null,
                                                 Member.UserType.USER.toString()),
                                 () -> toFeedActivity());

@@ -24,7 +24,6 @@ public class Member {
     String phone;
     String address;
     String avatar;
-    boolean flag;
     Long updateDate = new Long(0);
     boolean isDeleted;
     String userType;
@@ -37,18 +36,16 @@ public class Member {
         this.id = m.id;
         this.address = m.address;
         this.phone = m.phone;
-        this.flag = m.flag;
         this.avatar = m.avatar;
         this.isDeleted = m.isDeleted;
         this.userType = m.userType;
     }
 
-    public Member(String name, String id, String phone, String address, boolean flag, String avatar,String userType) {
+    public Member(String name, String id, String phone, String address, String avatar,String userType) {
         this.name = name;
         this.id = id;
         this.address = address;
         this.phone = phone;
-        this.flag = flag;
         this.avatar = avatar;
         this.isDeleted = false;
         this.userType = userType;
@@ -103,14 +100,6 @@ public class Member {
         this.id = id;
     }
 
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
-
     public boolean isDeleted() {
         return isDeleted;
     }
@@ -129,12 +118,11 @@ public class Member {
         if(json.get("avatar") != null) {
             avatar = json.get("avatar").toString();
         }
-        boolean flag = (boolean) json.get("flag");
         Timestamp ts = (Timestamp)json.get("updateDate");
         Long updateDate = ts.getSeconds();
         boolean isDeleted = (boolean) json.get("isDeleted");
 
-        Member member = new Member(name,id,phone,address,flag,avatar,userType);
+        Member member = new Member(name,id,phone,address,avatar,userType);
         member.setUpdateDate(updateDate);
         member.setDeleted(isDeleted);
         return member;
@@ -147,7 +135,6 @@ public class Member {
         json.put("phone",phone);
         json.put("address",address);
         json.put("avatar",avatar);
-        json.put("flag",flag);
         json.put("updateDate", FieldValue.serverTimestamp());
         json.put("isDeleted",isDeleted);
         json.put("userType",userType);
