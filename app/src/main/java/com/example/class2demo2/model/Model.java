@@ -190,6 +190,13 @@ public class Model {
         });
         listener.onComplete();
     }
+    public interface PostDeleteListener {
+        void onComplete();
+    }
+
+    public void postDelete(Post post, PostDeleteListener listener) {
+        modelFirebase.postDelete(post, listener);
+    }
 
     public MutableLiveData<PostsListLoadingState> getPostsListLoadingState() {
         return postsListLoadingState;

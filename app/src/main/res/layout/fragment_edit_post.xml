@@ -117,7 +117,6 @@
             android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="96dp"
             android:layout_marginTop="8dp"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -132,6 +131,15 @@
                 android:layout_height="match_parent"
                 android:layout_margin="10dp"
                 android:text="Cancel" />
+
+            <Button
+                android:id="@+id/edit_post_delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#C10D0D"
+                android:text="DELETE" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/edit_post_save_btn"

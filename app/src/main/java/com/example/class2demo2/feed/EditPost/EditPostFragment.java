@@ -29,10 +29,13 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
+import com.example.class2demo2.feed.Details.MemberDetailsFragmentArgs;
 import com.example.class2demo2.feed.Edit.EditFragmentDirections;
 import com.example.class2demo2.feed.Edit.EditViewModel;
 import com.example.class2demo2.model.Category;
+import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
 import com.squareup.picasso.Picasso;
@@ -89,7 +92,10 @@ public class EditPostFragment extends Fragment {
         }
 
     }
+    private void delete(Post post) {
+        Model.instance.postDelete(post,()-> Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostListRvFragment()));
 
+    }
     public void save() {
         progressBar.setVisibility(View.VISIBLE);
         saveBtn.setEnabled(false);
@@ -102,19 +108,19 @@ public class EditPostFragment extends Fragment {
         String saddressTv = addressTv.getText().toString();
         String sdescriptionTv = descriptionTv.getText().toString();
 
-        Post post = new Post(snameTv, postId, scategoryTv, saddressTv, null, sareaTv, postUId, sdescriptionTv);
+        Post newPost = new Post(snameTv, postId, scategoryTv, saddressTv, null, sareaTv, postUId, sdescriptionTv);
 
 
         if (imageBitmap != null){
-            Model.instance.saveImage(imageBitmap, "P" + post.getId() + "U"+ post.getUserId() + ".jpg", url -> {
-                post.setImage(url);
-                Model.instance.addPost(post, () -> {
+            Model.instance.saveImage(imageBitmap, "P" + newPost.getId() + "U"+ newPost.getUserId() + ".jpg", url -> {
+                newPost.setImage(url);
+                Model.instance.addPost(newPost, () -> {
 
                     Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
                 });
             });
         }else{
-            Model.instance.addPost(post, () -> {
+            Model.instance.addPost(newPost, () -> {
                 Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
             });
         }
@@ -130,6 +136,7 @@ public class EditPostFragment extends Fragment {
     EditText descriptionTv;
     Button cancelBtn;
     Button saveBtn;
+    Button deleteBtn;
     ImageView image;
     ImageButton cameraBtn;
     ImageButton galleryBtn;
@@ -167,6 +174,8 @@ public class EditPostFragment extends Fragment {
         saveBtn = view.findViewById(R.id.edit_post_save_btn);
         cameraBtn = view.findViewById(R.id.edit_post_camera_btn);
         galleryBtn = view.findViewById(R.id.edit_post_gallery_btn);
+        deleteBtn = view.findViewById(R.id.edit_post_delete_btn);
+
 
 
         nameTv.setText(post.getName());
@@ -185,6 +194,9 @@ public class EditPostFragment extends Fragment {
         });
         saveBtn.setOnClickListener(v -> {
             save();
+        });
+        deleteBtn.setOnClickListener(v -> {
+            delete(post);
         });
         cameraBtn.setOnClickListener(v -> {
             openCamera();
@@ -218,6 +230,7 @@ public class EditPostFragment extends Fragment {
 
         return view;
     }
+
 
     private void openGallery() {
         Intent openGalleryIntent = new Intent(Intent.ACTION_PICK);

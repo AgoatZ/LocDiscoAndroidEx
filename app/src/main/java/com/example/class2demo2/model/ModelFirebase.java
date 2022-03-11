@@ -153,6 +153,19 @@ public class ModelFirebase {
                 });
     }
 
+    public void postDelete(Post post, Model.PostDeleteListener listener) {
+        post.setDeleted(true);
+        Map<String, Object> json = post.toJson();
+        db.collection(Post.COLLECTION_NAME)
+                .document(post.getId())
+                .update(json)
+                .addOnSuccessListener(unused -> {
+                    listener.onComplete();
+                })
+                .addOnFailureListener(e -> {
+                    listener.onComplete();
+                });
+    }
     /***************************CATEGORY MODEL*******************************/
     public interface GetAllCategoriesListener {
         void onComplete(List<Category> list);
