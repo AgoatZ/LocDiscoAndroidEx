@@ -157,8 +157,7 @@ public class PostFragment extends Fragment {
             });
 
             postOwnerNameTv.setOnClickListener(v -> {
-                NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(postUId);
-                Navigation.findNavController(v).navigate(action);
+                Navigation.findNavController(v).navigate(PostFragmentDirections.actionPostFragmentToMemberDetailsFragment(postUId,Model.instance.getUid()));
             });
         } else {
           Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
