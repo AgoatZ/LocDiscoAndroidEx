@@ -19,6 +19,7 @@ import androidx.navigation.Navigation;
 
 import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
+import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
@@ -64,7 +65,9 @@ public class MemberDetailsFragment extends Fragment {
     }
 
     MemberDetailsViewModel viewModel;
+    MemberViewModel memberViewModel;
     Member member;
+    Member currMember;
     TextView nameTv;
     TextView idTv;
     TextView phoneTv;
@@ -77,6 +80,7 @@ public class MemberDetailsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider(this).get(MemberDetailsViewModel.class);
+        memberViewModel = new ViewModelProvider(requireActivity()).get(MemberViewModel.class);
     }
 
     @Override
@@ -86,11 +90,11 @@ public class MemberDetailsFragment extends Fragment {
         // Inflate the layout for this fragment
         Model.instance.getMembersListLoadingState().postValue(Model.MembersListLoadingState.loading);
         View view = inflater.inflate(R.layout.fragment_member_details, container, false);
+        Model.instance.refreshMembersList();
 
         //GET RELEVANT DATA FROM DB
         memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
         currMemberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
-        member = viewModel.getData(memberId).getValue();
 
         //SET VIEW COMPONENTS
         nameTv = view.findViewById(R.id.details_name_txt);
@@ -100,56 +104,52 @@ public class MemberDetailsFragment extends Fragment {
         editBtn = view.findViewById(R.id.details_to_edit_btn);
         postsBtn = view.findViewById(R.id.details_user_post_list_btn);
 
-        if (member == null) {
-            Toast.makeText(this.getContext(), "This member does no longer exist", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(container).navigate(NavGraphDirections.actionGlobalMemberListRvFragment());
-        } else {
-            if ((!MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId().equals(memberId))
-                    && !(Model
-                    .instance
-                    .getMemberById(Model
-                            .instance
-                            .getUid())
-                    .getValue()
-                    .getUserType()
-                    .equals(Member
-                            .UserType
-                            .ADMIN
-                            .toString()))) {
-                editBtn.setVisibility(View.GONE);
+        memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
+            for(Member m :members) {
+                if(m.getId().equals(currMemberId)) {
+                    currMember = m;
+                }
+                if(m.getId().equals(memberId)) {
+                    member = m;
+                }
             }
-            avatar = view.findViewById(R.id.details_member_imgv);
-            //SET DATA TO DISPLAY FROM DB
-            nameTv.setText(member.getName());
-            idTv.setText(member.getId());
-            addressTv.setText(member.getAddress());
-            phoneTv.setText(member.getPhone());
-            if (member.getAvatar() != null) {
-                Picasso.get()
-                        .load(member.getAvatar())
-                        .into(avatar);
-            }
-            /***********************************/
-            editBtn.setOnClickListener(v -> {
-                Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId, Model.instance.getUid()));
-            });
-
-            postsBtn.setOnClickListener(v -> {
-                NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(memberId);
-                Navigation.findNavController(v).navigate(action);
-            });
-        }
-        viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {
-            member = member1;
-            Model.instance.getMembersListLoadingState().postValue(Model.MembersListLoadingState.loading == Model.instance.getMembersListLoadingState().getValue()
-                    ? Model.MembersListLoadingState.loading
-                    : Model.MembersListLoadingState.loaded);
             if (member == null) {
-                Toast.makeText(this.getContext(), "This member does no longer exist", Toast.LENGTH_SHORT);
-                Navigation.findNavController(view).navigate(MemberDetailsFragmentDirections.actionGlobalMemberListRvFragment());
+                Toast.makeText(this.getContext(), "This member does no longer exist", Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(container).navigate(NavGraphDirections.actionGlobalMemberListRvFragment());
+            } else {
+                if ((!currMemberId.equals(memberId))
+                        && !(currMember
+                        .getUserType()
+                        .equals(Member
+                                .UserType
+                                .ADMIN
+                                .toString()))) {
+                    editBtn.setVisibility(View.GONE);
+                }
+                avatar = view.findViewById(R.id.details_member_imgv);
+                //SET DATA TO DISPLAY FROM DB
+                nameTv.setText(member.getName());
+                idTv.setText(member.getId());
+                addressTv.setText(member.getAddress());
+                phoneTv.setText(member.getPhone());
+                if (member.getAvatar() != null) {
+                    Picasso.get()
+                            .load(member.getAvatar())
+                            .into(avatar);
+                }
             }
         });
+                /***********************************/
+                editBtn.setOnClickListener(v -> {
+                    Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId, Model.instance.getUid()));
+                });
 
+                postsBtn.setOnClickListener(v -> {
+                    NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(memberId);
+                    Navigation.findNavController(v).navigate(action);
+                });
+
+        Model.instance.refreshMembersList();
         return view;
 
 

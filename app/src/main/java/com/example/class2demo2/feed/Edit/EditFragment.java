@@ -48,7 +48,6 @@ public class EditFragment extends Fragment {
     private static final String ARG_CURR_MEMBER_ID = "ARG_CURR_MEMBER_ID";
 
 
-
     // TODO: Rename and change types of parameters
     private String memberId;
     private String currMemberId;
@@ -59,11 +58,11 @@ public class EditFragment extends Fragment {
     }
 
     // TODO: Rename and change types and number of parameters
-    public static EditFragment newInstance(String memberId,String currMemberId) {
+    public static EditFragment newInstance(String memberId, String currMemberId) {
         EditFragment fragment = new EditFragment();
         Bundle args = new Bundle();
         args.putString(ARG_MEMBER_ID, memberId);
-        args.putString(ARG_CURR_MEMBER_ID,currMemberId);
+        args.putString(ARG_CURR_MEMBER_ID, currMemberId);
         fragment.setArguments(args);
         return fragment;
     }
@@ -77,14 +76,14 @@ public class EditFragment extends Fragment {
         member.setAvatar(member.getAvatar());
         member.setName(name.getText().toString());
         member.setPhone(phone.getText().toString());
-        if (imageBitmap != null){
+        if (imageBitmap != null) {
             Model.instance.saveImage(imageBitmap, id.getText() + ".jpg", url -> {
                 member.setAvatar(url);
                 Model.instance.addMember(member, () -> {
-                    Navigation.findNavController(name).navigate(EditFragmentDirections.actionEditFragmentToMemberDetailsFragment(member.getId(),Model.instance.getUid()));
+                    Navigation.findNavController(name).navigate(EditFragmentDirections.actionEditFragmentToMemberDetailsFragment(member.getId(), Model.instance.getUid()));
                 });
             });
-        }else{
+        } else {
             Model.instance.addMember(member, () -> {
                 Navigation.findNavController(name).navigate(EditFragmentDirections.actionEditFragmentToMemberDetailsFragment(member.getId(), Model.instance.getUid()));
             });
@@ -96,7 +95,7 @@ public class EditFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             memberId = getArguments().getString(ARG_MEMBER_ID);
-            currMemberId=getArguments().getString(ARG_CURR_MEMBER_ID);
+            currMemberId = getArguments().getString(ARG_CURR_MEMBER_ID);
         }
     }
 
@@ -130,33 +129,33 @@ public class EditFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit, container, false);
 
         memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
-        currMemberId=MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
+        currMemberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
 
-        member = viewModel.getData(memberId).getValue();
+        name = view.findViewById(R.id.edit_name_txt);
+        id = view.findViewById(R.id.edit_id_txt);
+        phone = view.findViewById(R.id.edit_phone_txt);
+        address = view.findViewById(R.id.edit_address_txt);
+        avatar = view.findViewById(R.id.edit_member_imgv);
+        saveBtn = view.findViewById(R.id.edit_save_btn);
+        cancelBtn = view.findViewById(R.id.edit_cancel_btn);
+        deleteBtn = view.findViewById(R.id.edit_delete_btn);
+        progressBar = view.findViewById(R.id.edit_progressbar);
+        progressBar.setVisibility(View.GONE);
+        galleryBtn = view.findViewById(R.id.edit_gallery_btn);
+        cameraBtn = view.findViewById(R.id.edit_camera_btn);
 
-            name = view.findViewById(R.id.edit_name_txt);
-            id = view.findViewById(R.id.edit_id_txt);
-            phone = view.findViewById(R.id.edit_phone_txt);
-            address = view.findViewById(R.id.edit_address_txt);
-            avatar = view.findViewById(R.id.edit_member_imgv);
-            saveBtn = view.findViewById(R.id.edit_save_btn);
-            cancelBtn = view.findViewById(R.id.edit_cancel_btn);
-            deleteBtn = view.findViewById(R.id.edit_delete_btn);
-            progressBar = view.findViewById(R.id.edit_progressbar);
-            progressBar.setVisibility(View.GONE);
-            galleryBtn = view.findViewById(R.id.edit_gallery_btn);
-            cameraBtn = view.findViewById(R.id.edit_camera_btn);
-
-        if(member == null){
-            Toast.makeText(this.getContext(), "This member does no longer exist", Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(container).navigate(NavGraphDirections.actionGlobalMemberListRvFragment());
-        } else {
-            name.setText(member.getName());
-            id.setText(member.getId());
-            phone.setText(member.getPhone());
-            address.setText(member.getAddress());
-        }
-
+        viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {
+            member = member1;
+            if (member == null) {
+                Toast.makeText(this.getContext(), "This member does no longer exist", Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(container).navigate(NavGraphDirections.actionGlobalMemberListRvFragment());
+            } else {
+                name.setText(member.getName());
+                id.setText(member.getId());
+                phone.setText(member.getPhone());
+                address.setText(member.getAddress());
+            }
+        });
         saveBtn.setOnClickListener(v -> {
             save();
         });
@@ -187,8 +186,6 @@ public class EditFragment extends Fragment {
             openGallery();
         });
 
-        viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {});
-
         return view;
     }
 
@@ -206,21 +203,20 @@ public class EditFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE){
-            if(resultCode == RESULT_OK){
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
                 avatar.setImageBitmap(imageBitmap);
             }
-        }
-        else if(requestCode == REQUEST_GALLERY_OPEN){
-            if(resultCode == RESULT_OK){
-                try{
+        } else if (requestCode == REQUEST_GALLERY_OPEN) {
+            if (resultCode == RESULT_OK) {
+                try {
                     final Uri imageUri = data.getData();
                     final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                     imageBitmap = BitmapFactory.decodeStream(imageStream);
                     avatar.setImageBitmap(imageBitmap);
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Failed to select image from gallery", Toast.LENGTH_LONG).show();
                 }

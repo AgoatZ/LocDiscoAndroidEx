@@ -109,20 +109,6 @@ public class Model {
 
     MutableLiveData<Member> retMember = new MutableLiveData<Member>();
 
-    public void refreshMemberDetails(String id) {
-        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("MemberLastUpdateDate", 0);
-        modelFirebase.getMemberById(id, lastUpdateDate, member -> {
-            retMember.setValue(member);
-            executor.execute(() -> {
-                Long localUpdateDate = new Long(0);
-                if (!member.isDeleted())
-                    AppLocalDb.db.memberDao().insertAll(member);
-                Member s = AppLocalDb.db.memberDao().getMemberById(id);
-                retMember.postValue(s);
-            });
-        });
-    }
-
     public LiveData<Member> getMemberById(String id) {
         retMember.postValue(null);
         if (membersList.getValue() == null) {
@@ -163,7 +149,17 @@ public class Model {
     }
 
     public void logicalDelete(Member member, LogicalDeleteListener listener) {
-        modelFirebase.logicalDelete(member, listener);
+        modelFirebase.logicalDelete(member, () -> {
+            refreshMembersList();
+            listener.onComplete();
+        });
+    }
+
+    public boolean isMemberDeletedFromDb(Member member){
+        modelFirebase.getMemberById(member.getId(), member.getUpdateDate(), member1 -> {
+            member.setDeleted(member1.isDeleted());
+        });
+        return member.isDeleted();
     }
 
     /***************POST MODEL*****************/
