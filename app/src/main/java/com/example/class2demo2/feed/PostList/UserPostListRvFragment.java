@@ -21,6 +21,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.class2demo2.R;
 import com.example.class2demo2.feed.Edit.EditFragment;
+import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
 import com.example.class2demo2.model.Member;
@@ -50,30 +51,39 @@ public class UserPostListRvFragment extends Fragment {
 
     //MEMBERS
     PostListViewModel viewModel;
+    MemberViewModel memberViewModel;
     RecyclerView listRv;
     MyAdapter adapter;
     SwipeRefreshLayout swipeRefresh;
+    Member postsOwner;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider(this).get(PostListViewModel.class);
+        memberViewModel = new ViewModelProvider(requireActivity()).get(MemberViewModel.class);
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_user_post_list_rv,container,false);
+        View view = inflater.inflate(R.layout.fragment_user_post_list_rv, container, false);
         userId = PostListRvFragmentArgs.fromBundle(getArguments()).getUserId();
 
-        Member postsOwner = Model.instance.getMemberById(userId).getValue();
-        if(!userId.equals("")) {
-            if(postsOwner != null) {
+        memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
+            for (Member m: members) {
+                if(m.getId().equals(userId)) {
+                    postsOwner = m;
+                }
+            }
+        if (!userId.equals("")) {
+            if (postsOwner != null) {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(postsOwner.getName());
             } else {
                 ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Deleted Member");
             }
         }
+    });
 
         //setting the recycler view
         swipeRefresh = view.findViewById(R.id.user_postlist_swiperefresh);

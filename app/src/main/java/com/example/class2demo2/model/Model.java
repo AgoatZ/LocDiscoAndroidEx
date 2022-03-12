@@ -106,14 +106,7 @@ public class Model {
     public void saveImage(Bitmap imageBitmap, String imageName, SaveImageListener listener) {
         modelFirebase.saveImage(imageBitmap, imageName, listener);
     }
-/*
-    public interface GetMemberByIdListener{
-        void onComplete(Member member);
-    }
 
- */
-
-    //TODO: PUT retval INSIDE
     MutableLiveData<Member> retMember = new MutableLiveData<Member>();
 
     public void refreshMemberDetails(String id) {

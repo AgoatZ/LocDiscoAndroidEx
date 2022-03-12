@@ -122,8 +122,7 @@ public class PostFragment extends Fragment {
                         .load(post.getImage())
                         .into(image);
             }
-            Model.instance.refreshMembersList();
-            //TODO CHANGE MODEL TO VIEWMODEL
+
             memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
                         for (Member m : members) {
                             if (m.getId().equals(postUId)) {
@@ -150,6 +149,9 @@ public class PostFragment extends Fragment {
                             editBtn.setVisibility(View.GONE);
                         }
                     });
+
+            Model.instance.refreshMembersList();
+
             editBtn.setOnClickListener(v -> {
                 Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId, postUId));
             });
@@ -163,7 +165,6 @@ public class PostFragment extends Fragment {
           Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
         }
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {});
-
         return view;
     }
 }

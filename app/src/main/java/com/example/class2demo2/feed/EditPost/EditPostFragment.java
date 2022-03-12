@@ -69,7 +69,7 @@ public class EditPostFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param postId Parameter 1.
+     * @param postId  Parameter 1.
      * @param postUId Parameter 2.
      * @return A new instance of fragment EditPostFragment.
      */
@@ -92,10 +92,11 @@ public class EditPostFragment extends Fragment {
         }
 
     }
-    private void delete(Post post) {
-        Model.instance.postDelete(post,()-> Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostListRvFragment()));
 
+    private void delete(Post post) {
+        Model.instance.postDelete(post, () -> Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostListRvFragment()));
     }
+
     public void save() {
         progressBar.setVisibility(View.VISIBLE);
         saveBtn.setEnabled(false);
@@ -110,22 +111,21 @@ public class EditPostFragment extends Fragment {
 
         Post newPost = new Post(snameTv, postId, scategoryTv, saddressTv, null, sareaTv, postUId, sdescriptionTv);
 
-
-        if (imageBitmap != null){
-            Model.instance.saveImage(imageBitmap, "P" + newPost.getId() + "U"+ newPost.getUserId() + ".jpg", url -> {
+        if (imageBitmap != null) {
+            Model.instance.saveImage(imageBitmap, "P" + newPost.getId() + "U" + newPost.getUserId() + ".jpg", url -> {
                 newPost.setImage(url);
                 Model.instance.addPost(newPost, () -> {
 
-                    Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
+                    Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId, postUId));
                 });
             });
-        }else{
+        } else {
             Model.instance.addPost(newPost, () -> {
-                Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId,postUId));
+                Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId, postUId));
             });
         }
     }
-    //TODO I'VE STOPPED HERE
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_GALLERY_OPEN = 2;
     Bitmap imageBitmap;
@@ -157,9 +157,9 @@ public class EditPostFragment extends Fragment {
 
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
-        postId= EditPostFragmentArgs.fromBundle(getArguments()).getPostId();
-        postUId= EditPostFragmentArgs.fromBundle(getArguments()).getPostUId();
-        Post post =viewModel.getData(postId.toString()).getValue();
+        postId = EditPostFragmentArgs.fromBundle(getArguments()).getPostId();
+        postUId = EditPostFragmentArgs.fromBundle(getArguments()).getPostUId();
+        Post post = viewModel.getData(postId).getValue();
 
 
         progressBar = view.findViewById(R.id.edit_post_progressbar);
@@ -177,13 +177,12 @@ public class EditPostFragment extends Fragment {
         deleteBtn = view.findViewById(R.id.edit_post_delete_btn);
 
 
-
         nameTv.setText(post.getName());
         categoryTv.setText(post.getCategory());
         areaTv.setText(post.getArea());
         addressTv.setText(post.getAddress());
         descriptionTv.setText(post.getDescription());
-        if (post.getImage()!= null) {
+        if (post.getImage() != null) {
             Picasso.get()
                     .load(post.getImage())
                     .into(image);
@@ -209,7 +208,7 @@ public class EditPostFragment extends Fragment {
         List<Category> cat = new ArrayList<Category>();
         cat = viewModel.getCategories().getValue();
 
-        if(cat != null) {
+        if (cat != null) {
             for (Category category : cat) {
                 categories.add(category.getName());
             }
@@ -218,10 +217,9 @@ public class EditPostFragment extends Fragment {
         adapter = new ArrayAdapter<String>(requireContext(), R.layout.category_list_item, categories);
         categoryTv.setAdapter(adapter);
 
-
         viewModel.getCategories().observe(getViewLifecycleOwner(), categoryList -> {
             categories.removeAll(categories);
-            for (Category category: categoryList) {
+            for (Category category : categoryList) {
                 categories.add(category.getName());
             }
             adapter = new ArrayAdapter<String>(requireContext(), R.layout.category_list_item, categories);
@@ -246,21 +244,20 @@ public class EditPostFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE){
-            if(resultCode == RESULT_OK){
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
                 image.setImageBitmap(imageBitmap);
             }
-        }
-        else if(requestCode == REQUEST_GALLERY_OPEN){
-            if(resultCode == RESULT_OK){
-                try{
+        } else if (requestCode == REQUEST_GALLERY_OPEN) {
+            if (resultCode == RESULT_OK) {
+                try {
                     final Uri imageUri = data.getData();
                     final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                     imageBitmap = BitmapFactory.decodeStream(imageStream);
                     image.setImageBitmap(imageBitmap);
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Failed to select image from gallery", Toast.LENGTH_LONG).show();
                 }
