@@ -157,6 +157,7 @@ public class ModelFirebase {
                 .addOnCompleteListener(task -> {
                     Post post = null;
                     if (task.isSuccessful() && task.getResult() != null && ((Timestamp) task.getResult().getData().get("updateDate")).getSeconds() >= lastUpdateDate) {
+                        Log.d("TIMESTAMP: ", ((Timestamp) task.getResult().getData().get("updateDate")).toString());
                         post = Post.create(task.getResult().getData());
                         listener.onComplete(post.isDeleted());
                     }

@@ -87,7 +87,7 @@
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edit_id_txt"
+                android:id="@+id/edit_lastname_txt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#252525"

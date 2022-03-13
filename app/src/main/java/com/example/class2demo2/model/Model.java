@@ -175,8 +175,8 @@ public class Model {
     public void addPost(Post post, AddPostListener listener) {
         modelFirebase.addPost(post, () -> {
             refreshPostsList();
+            listener.onComplete();
         });
-        listener.onComplete();
     }
     public interface PostDeleteListener {
         void onComplete();

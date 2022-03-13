@@ -115,7 +115,6 @@ public class EditPostFragment extends Fragment {
             Model.instance.saveImage(imageBitmap, "P" + newPost.getId() + "U" + newPost.getUserId() + ".jpg", url -> {
                 newPost.setImage(url);
                 Model.instance.addPost(newPost, () -> {
-
                     Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId, postUId));
                 });
             });
