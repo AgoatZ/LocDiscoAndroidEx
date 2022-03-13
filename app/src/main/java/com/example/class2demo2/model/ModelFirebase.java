@@ -176,6 +176,7 @@ public class ModelFirebase {
                     listener.onComplete();
                 });
     }
+
     /***************************CATEGORY MODEL*******************************/
     public interface GetAllCategoriesListener {
         void onComplete(List<Category> list);
@@ -233,7 +234,24 @@ public class ModelFirebase {
                                         listener.onComplete(e);
                                     });
                         } else {
-                            listener.onComplete(new Exception("Category is not empty!"));
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                Post post = Post.create(doc.getData());
+                                if (!post.isDeleted()) {
+                                    listener.onComplete(new Exception("Category is not empty!"));
+                                    return;
+                                }
+                            }
+                            category.setDeleted(true);
+                            Map<String, Object> json = category.toJson();
+                            db.collection(Category.COLLECTION_NAME)
+                                    .document(category.getName())
+                                    .update(json)
+                                    .addOnSuccessListener(unused -> {
+                                        listener.onComplete(new Exception("Deleted"));
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        listener.onComplete(e);
+                                    });
                         }
                     }
                 });
