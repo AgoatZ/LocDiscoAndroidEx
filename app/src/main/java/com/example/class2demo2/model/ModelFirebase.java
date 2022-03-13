@@ -69,19 +69,16 @@ public class ModelFirebase {
                 });
     }
 
-    public interface GetMemberByIdListener {
-        void onComplete(Member member);
-    }
 
-    public void getMemberById(String id, Long lastUpdateDate, GetMemberByIdListener listener) {
+    public void getMemberById(String id, Long lastUpdateDate, Model.GetMemberByIdListener listener) {
         db.collection(Member.COLLECTION_NAME)
                 .document(id)
                 .get()
                 .addOnCompleteListener(task -> {
                     Member member = null;
-                    if (task.isSuccessful() && task.getResult() != null && (Long) task.getResult().getData().get("updateDate") >= lastUpdateDate) {
+                    if (task.isSuccessful() && task.getResult() != null && ((Timestamp) task.getResult().getData().get("updateDate")).getSeconds() >= lastUpdateDate) {
                         member = Member.create(task.getResult().getData());
-                        listener.onComplete(member);
+                        listener.onComplete(member.isDeleted());
                     }
                 });
     }
@@ -153,6 +150,20 @@ public class ModelFirebase {
                 });
     }
 
+    public void getPostById(String id, Long lastUpdateDate, Model.GetPostByIdListener listener) {
+        db.collection(Post.COLLECTION_NAME)
+                .document(id)
+                .get()
+                .addOnCompleteListener(task -> {
+                    Post post = null;
+                    if (task.isSuccessful() && task.getResult() != null && ((Timestamp) task.getResult().getData().get("updateDate")).getSeconds() >= lastUpdateDate) {
+                        Log.d("TIMESTAMP: ", ((Timestamp) task.getResult().getData().get("updateDate")).toString());
+                        post = Post.create(task.getResult().getData());
+                        listener.onComplete(post.isDeleted());
+                    }
+                });
+    }
+
     public void postDelete(Post post, Model.PostDeleteListener listener) {
         post.setDeleted(true);
         Map<String, Object> json = post.toJson();
@@ -166,6 +177,7 @@ public class ModelFirebase {
                     listener.onComplete();
                 });
     }
+
     /***************************CATEGORY MODEL*******************************/
     public interface GetAllCategoriesListener {
         void onComplete(List<Category> list);
@@ -223,7 +235,24 @@ public class ModelFirebase {
                                         listener.onComplete(e);
                                     });
                         } else {
-                            listener.onComplete(new Exception("Category is not empty!"));
+                            for (QueryDocumentSnapshot doc : task.getResult()) {
+                                Post post = Post.create(doc.getData());
+                                if (!post.isDeleted()) {
+                                    listener.onComplete(new Exception("Category is not empty!"));
+                                    return;
+                                }
+                            }
+                            category.setDeleted(true);
+                            Map<String, Object> json = category.toJson();
+                            db.collection(Category.COLLECTION_NAME)
+                                    .document(category.getName())
+                                    .update(json)
+                                    .addOnSuccessListener(unused -> {
+                                        listener.onComplete(new Exception("Deleted"));
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        listener.onComplete(e);
+                                    });
                         }
                     }
                 });

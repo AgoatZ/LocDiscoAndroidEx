@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -29,7 +28,6 @@ import androidx.navigation.Navigation;
 import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
 import com.example.class2demo2.feed.Details.MemberDetailsFragmentArgs;
-import com.example.class2demo2.feed.Details.MemberDetailsFragmentDirections;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Member;
 
@@ -72,12 +70,12 @@ public class EditFragment extends Fragment {
         saveBtn.setEnabled(false);
         cancelBtn.setEnabled(false);
         member.setAddress(address.getText().toString());
-        member.setId(id.getText().toString());
+        member.setId(memberId);
         member.setAvatar(member.getAvatar());
-        member.setName(name.getText().toString());
+        member.setName(name.getText().toString() + " " + lastName.getText().toString());
         member.setPhone(phone.getText().toString());
         if (imageBitmap != null) {
-            Model.instance.saveImage(imageBitmap, id.getText() + ".jpg", url -> {
+            Model.instance.saveImage(imageBitmap, memberId + ".jpg", url -> {
                 member.setAvatar(url);
                 Model.instance.addMember(member, () -> {
                     Navigation.findNavController(name).navigate(EditFragmentDirections.actionEditFragmentToMemberDetailsFragment(member.getId(), Model.instance.getUid()));
@@ -105,7 +103,7 @@ public class EditFragment extends Fragment {
     ProgressBar progressBar;
     EditViewModel viewModel;
     EditText name;
-    EditText id;
+    EditText lastName;
     EditText phone;
     EditText address;
     ImageView avatar;
@@ -133,7 +131,7 @@ public class EditFragment extends Fragment {
         member = viewModel.getData(memberId).getValue();
 
         name = view.findViewById(R.id.edit_name_txt);
-        id = view.findViewById(R.id.edit_id_txt);
+        lastName = view.findViewById(R.id.edit_lastname_txt);
         phone = view.findViewById(R.id.edit_phone_txt);
         address = view.findViewById(R.id.edit_address_txt);
         avatar = view.findViewById(R.id.edit_member_imgv);
@@ -151,8 +149,9 @@ public class EditFragment extends Fragment {
                 Toast.makeText(this.getContext(), "This member does no longer exist", Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(container).navigate(NavGraphDirections.actionGlobalMemberListRvFragment());
             } else {
-                name.setText(member.getName());
-                id.setText(member.getId());
+                String[] strName = member.getName().split(" ");
+                name.setText(strName[0]);
+                lastName.setText(strName[1]);
                 phone.setText(member.getPhone());
                 address.setText(member.getAddress());
             }

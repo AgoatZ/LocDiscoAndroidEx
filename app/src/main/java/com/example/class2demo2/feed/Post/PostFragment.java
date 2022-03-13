@@ -98,7 +98,6 @@ public class PostFragment extends Fragment {
         postId = PostFragmentArgs.fromBundle(getArguments()).getPostId();
         postUId = PostFragmentArgs.fromBundle(getArguments()).getPostUId();
         post = viewModel.getData(postId).getValue();
-
         Model.instance.refreshPostsList();
 
         nameTv = view.findViewById(R.id.post_name_txt);
@@ -115,61 +114,63 @@ public class PostFragment extends Fragment {
         postOwnerNameTv = view.findViewById(R.id.post_user_info_tv);
 
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {
-            post = post1;
-            if (post == null) {
-                Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
-                Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
-            } else {
-                nameTv.setText(post.getName());
-                areaTv.setText(post.getArea());
-                addressTv.setText(post.getAddress());
-                categoryTv.setText(post.getCategory());
-                descriptionTv.setText(post.getDescription());
-                if (post.getImage() != null) {
-                    Picasso.get()
-                            .load(post.getImage())
-                            .into(image);
+            Model.instance.isPostDeletedFromDb(post, isDeleted -> {
+                if (isDeleted) {
+                    Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
+                    Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
+                } else {
+                    post = post1;
+                    nameTv.setText(post.getName());
+                    areaTv.setText(post.getArea());
+                    addressTv.setText(post.getAddress());
+                    categoryTv.setText(post.getCategory());
+                    descriptionTv.setText(post.getDescription());
+                    if (post.getImage() != null) {
+                        Picasso.get()
+                                .load(post.getImage())
+                                .into(image);
+                    }
                 }
-            }
+            });
         });
 
 
-            memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
-                        for (Member m : members) {
-                            if (m.getId().equals(postUId)) {
-                                postOwner = m;
-                            }
-                            if (m.getId().equals(Model.instance.getUid())) {
-                                currMember = m;
-                            }
-                        }
-                        if (postOwner != null) {
-                            Picasso.get().load(postOwner.getAvatar()).into(postOwnerImage);
-                            postOwnerNameTv.setText(postOwner.getName());
-                        } else {
-                            postOwnerNameTv.setText("Deleted Member");
-                        }
+        memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
+            for (Member m : members) {
+                if (m.getId().equals(postUId)) {
+                    postOwner = m;
+                }
+                if (m.getId().equals(Model.instance.getUid())) {
+                    currMember = m;
+                }
+            }
+            if (postOwner != null) {
+                Picasso.get().load(postOwner.getAvatar()).into(postOwnerImage);
+                postOwnerNameTv.setText(postOwner.getName());
+            } else {
+                postOwnerNameTv.setText("Deleted Member");
+            }
 
-                        if (Model.instance.getUid().equals(postUId)
-                                && !currMember
-                                .getUserType()
-                                .equals(Member
-                                        .UserType
-                                        .ADMIN
-                                        .toString())) {
-                            editBtn.setVisibility(View.GONE);
-                        }
-                    });
+            if (!Model.instance.getUid().equals(postUId)
+                    && !currMember
+                    .getUserType()
+                    .equals(Member
+                            .UserType
+                            .ADMIN
+                            .toString())) {
+                editBtn.setVisibility(View.GONE);
+            }
+        });
 
-            Model.instance.refreshMembersList();
+        Model.instance.refreshMembersList();
 
-            editBtn.setOnClickListener(v -> {
-                Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId, postUId));
-            });
+        editBtn.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId, postUId));
+        });
 
-            postOwnerNameTv.setOnClickListener(v -> {
-                Navigation.findNavController(v).navigate(PostFragmentDirections.actionPostFragmentToMemberDetailsFragment(postUId,Model.instance.getUid()));
-            });
+        postOwnerNameTv.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(PostFragmentDirections.actionPostFragmentToMemberDetailsFragment(postUId, Model.instance.getUid()));
+        });
 
         return view;
     }

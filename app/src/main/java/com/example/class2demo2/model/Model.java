@@ -160,12 +160,11 @@ public class Model {
             listener.onComplete();
         });
     }
-
-    public boolean isMemberDeletedFromDb(Member member){
-        modelFirebase.getMemberById(member.getId(), member.getUpdateDate(), member1 -> {
-            member.setDeleted(member1.isDeleted());
-        });
-        return member.isDeleted();
+    public interface GetMemberByIdListener {
+        void onComplete(boolean isDeleted);
+    }
+    public void isMemberDeletedFromDb(Member member, GetMemberByIdListener listener){
+        modelFirebase.getMemberById(member.getId(), member.getUpdateDate(), listener);
     }
 
     /***************POST MODEL*****************/
@@ -182,8 +181,8 @@ public class Model {
     public void addPost(Post post, AddPostListener listener) {
         modelFirebase.addPost(post, () -> {
             refreshPostsList();
+            listener.onComplete();
         });
-        listener.onComplete();
     }
     public interface PostDeleteListener {
         void onComplete();
@@ -297,6 +296,13 @@ public class Model {
             }
         }
         return retPost;
+    }
+    public interface GetPostByIdListener {
+        void onComplete(boolean isDeleted);
+    }
+
+    public void isPostDeletedFromDb(Post post, GetPostByIdListener listener){
+        modelFirebase.getPostById(post.getId(), post.getUpdateDate(), listener);
     }
 
     /***********Category************/

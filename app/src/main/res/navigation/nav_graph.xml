@@ -30,6 +30,9 @@
             android:name="currMemberId"
             app:argType="string"
             app:nullable="true" />
+        <action
+            android:id="@+id/action_memberDetailsFragment_self"
+            app:destination="@id/memberDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/editFragment"
