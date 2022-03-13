@@ -150,6 +150,19 @@ public class ModelFirebase {
                 });
     }
 
+    public void getPostById(String id, Long lastUpdateDate, Model.GetPostByIdListener listener) {
+        db.collection(Post.COLLECTION_NAME)
+                .document(id)
+                .get()
+                .addOnCompleteListener(task -> {
+                    Post post = null;
+                    if (task.isSuccessful() && task.getResult() != null && ((Timestamp) task.getResult().getData().get("updateDate")).getSeconds() >= lastUpdateDate) {
+                        post = Post.create(task.getResult().getData());
+                        listener.onComplete(post.isDeleted());
+                    }
+                });
+    }
+
     public void postDelete(Post post, Model.PostDeleteListener listener) {
         post.setDeleted(true);
         Map<String, Object> json = post.toJson();
