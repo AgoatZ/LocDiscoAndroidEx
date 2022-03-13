@@ -154,12 +154,11 @@ public class Model {
             listener.onComplete();
         });
     }
-
-    public boolean isMemberDeletedFromDb(Member member){
-        modelFirebase.getMemberById(member.getId(), member.getUpdateDate(), member1 -> {
-            member.setDeleted(member1.isDeleted());
-        });
-        return member.isDeleted();
+    public interface GetMemberByIdListener {
+        void onComplete(boolean isDeleted);
+    }
+    public void isMemberDeletedFromDb(Member member, GetMemberByIdListener listener){
+        modelFirebase.getMemberById(member.getId(), member.getUpdateDate(), listener);
     }
 
     /***************POST MODEL*****************/

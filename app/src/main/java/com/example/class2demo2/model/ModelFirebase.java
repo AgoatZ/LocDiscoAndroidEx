@@ -69,19 +69,16 @@ public class ModelFirebase {
                 });
     }
 
-    public interface GetMemberByIdListener {
-        void onComplete(Member member);
-    }
 
-    public void getMemberById(String id, Long lastUpdateDate, GetMemberByIdListener listener) {
+    public void getMemberById(String id, Long lastUpdateDate, Model.GetMemberByIdListener listener) {
         db.collection(Member.COLLECTION_NAME)
                 .document(id)
                 .get()
                 .addOnCompleteListener(task -> {
                     Member member = null;
-                    if (task.isSuccessful() && task.getResult() != null && (Long) task.getResult().getData().get("updateDate") >= lastUpdateDate) {
+                    if (task.isSuccessful() && task.getResult() != null && ((Timestamp) task.getResult().getData().get("updateDate")).getSeconds() >= lastUpdateDate) {
                         member = Member.create(task.getResult().getData());
-                        listener.onComplete(member);
+                        listener.onComplete(member.isDeleted());
                     }
                 });
     }
