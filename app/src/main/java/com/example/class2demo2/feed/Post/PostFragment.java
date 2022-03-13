@@ -97,6 +97,7 @@ public class PostFragment extends Fragment {
 
         postId = PostFragmentArgs.fromBundle(getArguments()).getPostId();
         postUId = PostFragmentArgs.fromBundle(getArguments()).getPostUId();
+        post = viewModel.getData(postId).getValue();
 
         Model.instance.refreshPostsList();
 

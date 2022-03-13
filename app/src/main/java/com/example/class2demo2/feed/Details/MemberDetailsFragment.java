@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -23,6 +24,8 @@ import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -95,7 +98,18 @@ public class MemberDetailsFragment extends Fragment {
         //GET RELEVANT DATA FROM DB
         memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
         currMemberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
+        member = viewModel.getData(memberId).getValue();
 
+        /*
+        viewModel.getData(memberId).observe(getViewLifecycleOwner(), member1 -> {
+            member = member1;
+            if(member == null) {
+                Toast.makeText(this.getContext(), "This member does no longer exist", Toast.LENGTH_SHORT).show();
+                Navigation.findNavController(container).navigate(NavGraphDirections.actionGlobalMemberListRvFragment());
+            }
+        });
+
+         */
         //SET VIEW COMPONENTS
         nameTv = view.findViewById(R.id.details_name_txt);
         idTv = view.findViewById(R.id.details_id_txt);
@@ -104,7 +118,9 @@ public class MemberDetailsFragment extends Fragment {
         editBtn = view.findViewById(R.id.details_to_edit_btn);
         postsBtn = view.findViewById(R.id.details_user_post_list_btn);
 
-        memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
+        //memberViewModel.getData().observe(getViewLifecycleOwner(), members ->
+        List<Member> members = memberViewModel.getData().getValue();
+        {
             for(Member m :members) {
                 if(m.getId().equals(currMemberId)) {
                     currMember = m;
@@ -138,7 +154,7 @@ public class MemberDetailsFragment extends Fragment {
                             .into(avatar);
                 }
             }
-        });
+        }//);
                 /***********************************/
                 editBtn.setOnClickListener(v -> {
                     Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId, Model.instance.getUid()));
@@ -151,7 +167,11 @@ public class MemberDetailsFragment extends Fragment {
 
         Model.instance.refreshMembersList();
         return view;
+    }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        Model.instance.refreshMembersList();
     }
 }

@@ -63,10 +63,13 @@ public class Model {
         // get last local update date
         Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("MemberLastUpdateDate", 0);
 
+        /*
         executor.execute(() -> {
             List<Member> updatedList = AppLocalDb.db.memberDao().getAllMembers();
             membersList.postValue(updatedList);
         });
+        */
+
         // firebase get all updates since last local update date
         modelFirebase.getAllMembers(lastUpdateDate, list -> {
 
@@ -110,7 +113,8 @@ public class Model {
     MutableLiveData<Member> retMember = new MutableLiveData<Member>();
 
     public LiveData<Member> getMemberById(String id) {
-        retMember.postValue(null);
+        boolean flag = false;
+        //retMember.postValue(null);
         if (membersList.getValue() == null) {
             refreshMembersList();
         }
@@ -118,10 +122,12 @@ public class Model {
         if(membersList.getValue() != null) {
             for (Member member : membersList.getValue()) {
                 if (member.getId().equals(id)) {
-                    retMember.postValue(member);
+                    retMember.setValue(member);
+                    flag = true;
                 }
             }
         }
+        if(!flag) retMember.postValue(null);
         return retMember;
     }
 
@@ -287,7 +293,7 @@ public class Model {
         refreshPostsList();
         for (Post post : postsList.getValue()) {
             if (post.getId().equals(id)) {
-                retPost.setValue(post);
+                retPost.postValue(post);
             }
         }
         return retPost;

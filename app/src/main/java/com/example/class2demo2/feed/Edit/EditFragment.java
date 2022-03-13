@@ -130,6 +130,7 @@ public class EditFragment extends Fragment {
 
         memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
         currMemberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getCurrMemberId();
+        member = viewModel.getData(memberId).getValue();
 
         name = view.findViewById(R.id.edit_name_txt);
         id = view.findViewById(R.id.edit_id_txt);
