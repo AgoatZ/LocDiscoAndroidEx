@@ -151,7 +151,7 @@ public class PostFragment extends Fragment {
                     });
 
             Model.instance.refreshMembersList();
-
+            Model.instance.refreshPostsList();
             editBtn.setOnClickListener(v -> {
                 Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId, postUId));
             });
@@ -163,7 +163,12 @@ public class PostFragment extends Fragment {
           Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
           Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
         }
-        viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {});
+        viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {
+            if(post1==null) {
+                Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
+                Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
+            }
+        });
         return view;
     }
 }
