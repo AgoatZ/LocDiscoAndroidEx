@@ -15,6 +15,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
@@ -95,8 +96,9 @@ public class PostFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_post, container, false);
 
         postId = PostFragmentArgs.fromBundle(getArguments()).getPostId();
-        postUId=PostFragmentArgs.fromBundle(getArguments()).getPostUId();
-        post = viewModel.getData(postId).getValue();
+        postUId = PostFragmentArgs.fromBundle(getArguments()).getPostUId();
+
+        Model.instance.refreshPostsList();
 
         nameTv = view.findViewById(R.id.post_name_txt);
         areaTv = view.findViewById(R.id.post_area_txt);
@@ -111,17 +113,25 @@ public class PostFragment extends Fragment {
         postOwnerImage = view.findViewById(R.id.post_user_image_iv);
         postOwnerNameTv = view.findViewById(R.id.post_user_info_tv);
 
-        if(post != null) {
-            nameTv.setText(post.getName());
-            areaTv.setText(post.getArea());
-            addressTv.setText(post.getAddress());
-            categoryTv.setText(post.getCategory());
-            descriptionTv.setText(post.getDescription());
-            if (post.getImage() != null) {
-                Picasso.get()
-                        .load(post.getImage())
-                        .into(image);
+        viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {
+            post = post1;
+            if (post == null) {
+                Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
+                Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
+            } else {
+                nameTv.setText(post.getName());
+                areaTv.setText(post.getArea());
+                addressTv.setText(post.getAddress());
+                categoryTv.setText(post.getCategory());
+                descriptionTv.setText(post.getDescription());
+                if (post.getImage() != null) {
+                    Picasso.get()
+                            .load(post.getImage())
+                            .into(image);
+                }
             }
+        });
+
 
             memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
                         for (Member m : members) {
@@ -139,7 +149,7 @@ public class PostFragment extends Fragment {
                             postOwnerNameTv.setText("Deleted Member");
                         }
 
-                        if (!Model.instance.getUid().equals(postUId)
+                        if (Model.instance.getUid().equals(postUId)
                                 && !currMember
                                 .getUserType()
                                 .equals(Member
@@ -151,7 +161,7 @@ public class PostFragment extends Fragment {
                     });
 
             Model.instance.refreshMembersList();
-            Model.instance.refreshPostsList();
+
             editBtn.setOnClickListener(v -> {
                 Navigation.findNavController(v).navigate(PostFragmentDirections.actionGlobalEditPostFragment(postId, postUId));
             });
@@ -159,16 +169,7 @@ public class PostFragment extends Fragment {
             postOwnerNameTv.setOnClickListener(v -> {
                 Navigation.findNavController(v).navigate(PostFragmentDirections.actionPostFragmentToMemberDetailsFragment(postUId,Model.instance.getUid()));
             });
-        } else {
-          Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
-          Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
-        }
-        viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {
-            if(post1==null) {
-                Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
-                Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
-            }
-        });
+
         return view;
     }
 }

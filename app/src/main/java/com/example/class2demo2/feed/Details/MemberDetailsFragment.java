@@ -2,12 +2,10 @@ package com.example.class2demo2.feed.Details;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,10 +17,12 @@ import androidx.navigation.Navigation;
 
 import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
+import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
-import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,10 +64,10 @@ public class MemberDetailsFragment extends Fragment {
         }
     }
 
-    MemberDetailsViewModel viewModel;
     MemberViewModel memberViewModel;
     Member member;
     Member currMember;
+    List<Member> members;
     TextView nameTv;
     TextView idTv;
     TextView phoneTv;
@@ -79,8 +79,8 @@ public class MemberDetailsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewModel = new ViewModelProvider(this).get(MemberDetailsViewModel.class);
         memberViewModel = new ViewModelProvider(requireActivity()).get(MemberViewModel.class);
+        members = memberViewModel.getData().getValue();
     }
 
     @Override
@@ -91,6 +91,7 @@ public class MemberDetailsFragment extends Fragment {
         Model.instance.getMembersListLoadingState().postValue(Model.MembersListLoadingState.loading);
         View view = inflater.inflate(R.layout.fragment_member_details, container, false);
         Model.instance.refreshMembersList();
+        members = memberViewModel.getData().getValue();
 
         //GET RELEVANT DATA FROM DB
         memberId = MemberDetailsFragmentArgs.fromBundle(getArguments()).getMemberId();
@@ -104,16 +105,16 @@ public class MemberDetailsFragment extends Fragment {
         editBtn = view.findViewById(R.id.details_to_edit_btn);
         postsBtn = view.findViewById(R.id.details_user_post_list_btn);
 
-        memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
-            for(Member m :members) {
-                if(m.getId().equals(currMemberId)) {
-                    currMember = m;
-                }
-                if(m.getId().equals(memberId)) {
-                    member = m;
-                }
+        for (Member m : members) {
+            if (m.getId().equals(currMemberId)) {
+                currMember = m;
             }
-            if (member == null) {
+            if (m.getId().equals(memberId)) {
+                member = m;
+            }
+        }
+        Model.instance.isMemberDeletedFromDb(member, isDeleted -> {
+            if (isDeleted) {
                 Toast.makeText(this.getContext(), "This member does no longer exist", Toast.LENGTH_SHORT).show();
                 Navigation.findNavController(container).navigate(NavGraphDirections.actionGlobalMemberListRvFragment());
             } else {
@@ -139,17 +140,19 @@ public class MemberDetailsFragment extends Fragment {
                 }
             }
         });
-                /***********************************/
-                editBtn.setOnClickListener(v -> {
-                    Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId, Model.instance.getUid()));
-                });
+        /***********************************/
+        editBtn.setOnClickListener(v -> {
+            Navigation.findNavController(v).navigate(MemberDetailsFragmentDirections.actionMemberDetailsFragmentToEditFragment(memberId, Model.instance.getUid()));
+        });
 
-                postsBtn.setOnClickListener(v -> {
-                    NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(memberId);
-                    Navigation.findNavController(v).navigate(action);
-                });
+        postsBtn.setOnClickListener(v -> {
+            NavGraphDirections.ActionGlobalUserPostListRvFragment action = NavGraphDirections.actionGlobalUserPostListRvFragment(memberId);
+            Navigation.findNavController(v).navigate(action);
+        });
 
         Model.instance.refreshMembersList();
+        memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
+        });
         return view;
 
 

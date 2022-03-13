@@ -19,7 +19,7 @@ public class Post {
     String id;
     @ForeignKey(entity = Member.class, parentColumns = {"id"}, childColumns = {"userId"})
     @NonNull
-    String userId;        
+    String userId;
     String name;
     String area;
     String address;
