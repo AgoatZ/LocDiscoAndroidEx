@@ -68,7 +68,6 @@ public class CategoryPostListRvFragment extends Fragment {
         categoryName = PostListRvFragmentArgs.fromBundle(getArguments()).getCategoryName();
 
         if(!categoryName.equals("")) {
-            Log.d("CatTitle: ", categoryName);
             ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(categoryName);
         }
         //setting the recycler view
