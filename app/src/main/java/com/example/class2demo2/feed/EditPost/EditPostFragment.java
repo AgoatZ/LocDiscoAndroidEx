@@ -14,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.provider.MediaStore;
 import android.util.Log;
@@ -115,18 +116,21 @@ public class EditPostFragment extends Fragment {
             Model.instance.saveImage(imageBitmap, "P" + newPost.getId() + "U" + newPost.getUserId() + ".jpg", url -> {
                 newPost.setImage(url);
                 Model.instance.addPost(newPost, () -> {
-                    Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId, postUId));
+                    Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostListRvFragment());
                 });
             });
         } else {
             Model.instance.addPost(newPost, () -> {
-                Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostFragment(postId, postUId));
+                Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_LONG).show();
+                Navigation.findNavController(nameTv).navigate(EditPostFragmentDirections.actionGlobalPostListRvFragment());
             });
         }
     }
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_GALLERY_OPEN = 2;
+    Post post;
     Bitmap imageBitmap;
     EditText nameTv;
     AutoCompleteTextView categoryTv;
@@ -158,7 +162,7 @@ public class EditPostFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_edit_post, container, false);
         postId = EditPostFragmentArgs.fromBundle(getArguments()).getPostId();
         postUId = EditPostFragmentArgs.fromBundle(getArguments()).getPostUId();
-        Post post = viewModel.getData(postId).getValue();
+        post = viewModel.getData(postId).getValue();
 
 
         progressBar = view.findViewById(R.id.edit_post_progressbar);
@@ -176,15 +180,17 @@ public class EditPostFragment extends Fragment {
         deleteBtn = view.findViewById(R.id.edit_post_delete_btn);
 
 
-        nameTv.setText(post.getName());
-        categoryTv.setText(post.getCategory());
-        areaTv.setText(post.getArea());
-        addressTv.setText(post.getAddress());
-        descriptionTv.setText(post.getDescription());
-        if (post.getImage() != null) {
-            Picasso.get()
-                    .load(post.getImage())
-                    .into(image);
+        if(post != null) {
+            nameTv.setText(post.getName());
+            categoryTv.setText(post.getCategory());
+            areaTv.setText(post.getArea());
+            addressTv.setText(post.getAddress());
+            descriptionTv.setText(post.getDescription());
+            if (post.getImage() != null) {
+                Picasso.get()
+                        .load(post.getImage())
+                        .into(image);
+            }
         }
 
         cancelBtn.setOnClickListener(v -> {
@@ -223,6 +229,23 @@ public class EditPostFragment extends Fragment {
             }
             adapter = new ArrayAdapter<String>(requireContext(), R.layout.category_list_item, categories);
             adapter.notifyDataSetChanged();
+        });
+
+        viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {
+            if ( (post == null) || (post.getUpdateDate() < post1.getUpdateDate()) ) {
+                post = post1;
+            }
+            nameTv.setText(post.getName());
+            categoryTv.setText(post.getCategory());
+            categoryTv.setAdapter(adapter);
+            areaTv.setText(post.getArea());
+            addressTv.setText(post.getAddress());
+            descriptionTv.setText(post.getDescription());
+            if (post.getImage() != null) {
+                Picasso.get()
+                        .load(post.getImage())
+                        .into(image);
+            }
         });
 
         return view;

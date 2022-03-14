@@ -76,7 +76,6 @@ public class Model {
             // add all records to the local db
             executor.execute(() -> {
                 Long localUpdateDate = new Long(0);
-                Log.d("TAG", "firebase returned " + list.size());
                 for (Member member : list) {
                     if (!member.isDeleted())
                         AppLocalDb.db.memberDao().insertAll(member);
@@ -212,7 +211,6 @@ public class Model {
             // add all records to the local db
             executor.execute(() -> {
                 Long localUpdateDate = new Long(0);
-                Log.d("TAG", "firebase returned " + list.size());
                 for (Post post : list) {
                     if (!post.isDeleted())
                         AppLocalDb.db.postDao().insertAll(post);
@@ -264,7 +262,6 @@ public class Model {
             // add all records to the local db
             executor.execute(() -> {
                 Long localUpdateDate = new Long(0);
-                Log.d("TAG", "firebase returned " + list.size());
                 for (Post post : list) {
                     if (!post.isDeleted() && post.getCategory().equals(category))
                         arr.add(post);
@@ -330,7 +327,6 @@ public class Model {
             // add all records to the local db
             executor.execute(() -> {
                 Long localUpdateDate = new Long(0);
-                Log.d("TAG", "firebase returned " + list.size());
                 for (Category category : list) {
                     if (!category.isDeleted())
                         AppLocalDb.db.categoryDao().insertAll(category);

@@ -114,12 +114,18 @@ public class PostFragment extends Fragment {
         postOwnerNameTv = view.findViewById(R.id.post_user_info_tv);
 
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {
+            if(post == null) {
+                post = post1;
+            }
+
             Model.instance.isPostDeletedFromDb(post, isDeleted -> {
                 if (isDeleted) {
                     Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
                     Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
                 } else {
-                    post = post1;
+                    if(post1 != null) {
+                        post = post1;
+                    }
                     nameTv.setText(post.getName());
                     areaTv.setText(post.getArea());
                     addressTv.setText(post.getAddress());

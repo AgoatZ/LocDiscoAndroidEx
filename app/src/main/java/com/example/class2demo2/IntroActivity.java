@@ -26,7 +26,6 @@ public class IntroActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
             if (Model.instance.isSignedIn()){
-                Log.d("LOGGEDUSER:",Model.instance.getUid());
                 Model.instance.mainThread.post(()->{
                     toFeedActivity();
                 });

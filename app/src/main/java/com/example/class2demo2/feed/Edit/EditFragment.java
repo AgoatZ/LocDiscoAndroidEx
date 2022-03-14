@@ -78,12 +78,14 @@ public class EditFragment extends Fragment {
             Model.instance.saveImage(imageBitmap, memberId + ".jpg", url -> {
                 member.setAvatar(url);
                 Model.instance.addMember(member, () -> {
-                    Navigation.findNavController(name).navigate(EditFragmentDirections.actionEditFragmentToMemberDetailsFragment(member.getId(), Model.instance.getUid()));
+                    Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_LONG).show();
+                    Navigation.findNavController(name).navigate(EditFragmentDirections.actionGlobalMemberListRvFragment());
                 });
             });
         } else {
             Model.instance.addMember(member, () -> {
-                Navigation.findNavController(name).navigate(EditFragmentDirections.actionEditFragmentToMemberDetailsFragment(member.getId(), Model.instance.getUid()));
+                Toast.makeText(getContext(), "Changes saved", Toast.LENGTH_LONG).show();
+                Navigation.findNavController(name).navigate(EditFragmentDirections.actionGlobalMemberListRvFragment());
             });
         }
     }
@@ -174,10 +176,6 @@ public class EditFragment extends Fragment {
 
         cameraBtn = view.findViewById(R.id.edit_camera_btn);
         galleryBtn = view.findViewById(R.id.edit_gallery_btn);
-
-        cancelBtn.setOnClickListener(v -> {
-            Navigation.findNavController(v).navigateUp();
-        });
 
         cameraBtn.setOnClickListener(v -> {
             openCamera();

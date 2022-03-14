@@ -75,7 +75,6 @@ public class PostListRvFragment extends Fragment {
             ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(Model.instance.getMemberById(userId).getValue().getName());
         }
         if(!categoryName.equals("")) {
-            Log.d("CatTitle: ", categoryName);
             ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(categoryName);
         }
         //setting the recycler view

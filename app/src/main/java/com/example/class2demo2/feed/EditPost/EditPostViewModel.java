@@ -1,6 +1,7 @@
 package com.example.class2demo2.feed.EditPost;
 
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.class2demo2.model.Category;
@@ -14,7 +15,10 @@ public class EditPostViewModel extends ViewModel {
     LiveData<Post> data;
     LiveData<List<Category>> categories;
 
-    public EditPostViewModel() { categories = Model.instance.getAllCategories(); }
+    public EditPostViewModel() {
+        data = new MutableLiveData<Post>();
+        categories = Model.instance.getAllCategories();
+    }
 
     public LiveData<Post> getData(String id) {
         data = Model.instance.getPostById(id);
