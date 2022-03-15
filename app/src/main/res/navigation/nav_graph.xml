@@ -169,5 +169,5 @@
     <action
         android:id="@+id/action_global_categoryPostListRvFragment"
         app:destination="@id/categoryPostListRvFragment"
-        app:popUpTo="@id/categoryListRvFragment" />
+        app:popUpTo="@id/categoryListRvFragment" /><action android:id="@+id/action_global_memberDetailsFragment" app:destination="@id/memberDetailsFragment"/>
 </navigation>

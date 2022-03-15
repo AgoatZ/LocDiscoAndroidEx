@@ -97,6 +97,10 @@ public class MainDrawerActivity extends AppCompatActivity {
                 if(uid.equals(m.getId())) {
                     curNameTv.setText(m.getName());
                     curMailTv.setText(m.getAddress());
+                    header.setOnClickListener(v -> {
+                        navController.navigate(NavGraphDirections.actionGlobalMemberDetailsFragment(uid,uid));
+                        drawer.closeDrawers();
+                    });
                     if(m.getAvatar()!=null) {
                         Picasso.get()
                                 .load(m.getAvatar())
