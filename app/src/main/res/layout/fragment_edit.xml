@@ -118,7 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="4dp"
-            android:hint="@string/address"
+            android:hint="@string/email"
             android:paddingTop="16dp"
             app:boxStrokeColor="#FF9800"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout">
@@ -130,7 +130,8 @@
                 android:background="#252525"
                 android:inputType="text"
                 android:maxLines="1"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:enabled="false"/>
         </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>

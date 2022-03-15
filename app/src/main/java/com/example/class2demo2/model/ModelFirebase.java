@@ -76,7 +76,7 @@ public class ModelFirebase {
                 .get()
                 .addOnCompleteListener(task -> {
                     Member member = null;
-                    if (task.isSuccessful() && task.getResult() != null && ((Timestamp) task.getResult().getData().get("updateDate")).getSeconds() >= lastUpdateDate) {
+                    if (task.isSuccessful() && task.getResult().getData() != null && ((Timestamp) task.getResult().getData().get("updateDate")).getSeconds() >= lastUpdateDate) {
                         member = Member.create(task.getResult().getData());
                         listener.onComplete(member.isDeleted());
                     }
@@ -156,7 +156,7 @@ public class ModelFirebase {
                 .get()
                 .addOnCompleteListener(task -> {
                     Post post = null;
-                    if (task.isSuccessful() && task.getResult() != null && ((Timestamp) task.getResult().getData().get("updateDate")).getSeconds() >= lastUpdateDate) {
+                    if (task.isSuccessful() && task.getResult().getData() != null && ((Timestamp) task.getResult().getData().get("updateDate")).getSeconds() >= lastUpdateDate) {
                         post = Post.create(task.getResult().getData());
                         listener.onComplete(post.isDeleted());
                     }
