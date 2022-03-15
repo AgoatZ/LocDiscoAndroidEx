@@ -109,6 +109,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#252525"
+                android:enabled="false"
                 android:inputType="text"
                 android:maxLines="1"
                 android:textColor="@color/white" />

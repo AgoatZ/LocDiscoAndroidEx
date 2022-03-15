@@ -174,6 +174,7 @@ public class Model {
 
     MutableLiveData<PostsListLoadingState> postsListLoadingState = new MutableLiveData<>();
     MutableLiveData<List<Post>> postsList = new MutableLiveData<List<Post>>();
+
     public interface AddPostListener{
         void onComplete();
     }
@@ -205,6 +206,7 @@ public class Model {
             List<Post> updatedList = AppLocalDb.db.postDao().getAllPosts();
             postsList.postValue(updatedList);
         });
+
         // firebase get all updates since last local update date
         modelFirebase.getAllPosts(lastUpdateDate, list -> {
 
@@ -237,49 +239,10 @@ public class Model {
     }
 
     public LiveData<List<Post>> getAllPosts(){
-        if(postsList == null){
-            refreshPostsList();
-        }
+        refreshPostsList();
         return postsList;
     }
 
-    public LiveData<List<Post>> getPostsByCategory(String category){
-        postsListLoadingState.postValue(PostsListLoadingState.loading);
-
-        MutableLiveData<List<Post>> retList = new MutableLiveData<List<Post>>();
-        ArrayList<Post> arr = new ArrayList<Post>();
-
-        // get last local update date
-        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("PostLastUpdateDate", 0);
-
-        executor.execute(() -> {
-            List<Post> updatedList = AppLocalDb.db.postDao().getAllPosts();
-            postsList.postValue(updatedList);
-        });
-        // firebase get all updates since last local update date
-        modelFirebase.getAllPosts(lastUpdateDate, list -> {
-
-            // add all records to the local db
-            executor.execute(() -> {
-                Long localUpdateDate = new Long(0);
-                for (Post post : list) {
-                    if (!post.isDeleted() && post.getCategory().equals(category))
-                        arr.add(post);
-                    if (localUpdateDate < post.getUpdateDate()) {
-                        localUpdateDate = post.getUpdateDate();
-                    }
-                }
-
-                // return all data to caller
-                retList.postValue(arr);
-                postsListLoadingState.postValue(PostsListLoadingState.loaded);
-            });
-        });
-
-        return retList;
-    }
-
-    //TODO: PUT retval INSIDE
     MutableLiveData<Post> retPost = new MutableLiveData<Post>();
 
     public LiveData<Post> getPostById(String id) {

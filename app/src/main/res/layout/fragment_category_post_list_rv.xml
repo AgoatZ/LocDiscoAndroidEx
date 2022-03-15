@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="#000000"
     tools:context=".feed.PostList.CategoryPostListRvFragment"
-    android:accessibilityPaneTitle="Posts">
+    android:accessibilityPaneTitle="PostsByCategory">
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/category_postlist_swiperefresh"

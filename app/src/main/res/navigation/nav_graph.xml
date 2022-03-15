@@ -60,18 +60,7 @@
         android:id="@+id/postListRvFragment"
         android:name="com.example.class2demo2.feed.PostList.PostListRvFragment"
         android:label="Posts"
-        tools:layout="@layout/fragment_post_list_rv" >
-        <argument
-            android:name="categoryName"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="" />
-        <argument
-            android:name="userId"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="" />
-    </fragment>
+        tools:layout="@layout/fragment_post_list_rv" />
     <action
         android:id="@+id/action_global_postListRvFragment"
         app:destination="@id/postListRvFragment"
@@ -169,5 +158,7 @@
     <action
         android:id="@+id/action_global_categoryPostListRvFragment"
         app:destination="@id/categoryPostListRvFragment"
-        app:popUpTo="@id/categoryListRvFragment" /><action android:id="@+id/action_global_memberDetailsFragment" app:destination="@id/memberDetailsFragment"/>
+        app:launchSingleTop="true"
+        app:popUpTo="@id/categoryPostListRvFragment"
+        app:popUpToInclusive="true" /><action android:id="@+id/action_global_memberDetailsFragment" app:destination="@id/memberDetailsFragment"/>
 </navigation>

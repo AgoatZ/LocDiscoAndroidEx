@@ -68,26 +68,26 @@ public class UserPostListRvFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_user_post_list_rv, container, false);
-        userId = PostListRvFragmentArgs.fromBundle(getArguments()).getUserId();
+        userId = UserPostListRvFragmentArgs.fromBundle(getArguments()).getUserId();
 
         memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
-            for (Member m: members) {
-                if(m.getId().equals(userId)) {
+            for (Member m : members) {
+                if (m.getId().equals(userId)) {
                     postsOwner = m;
                 }
             }
-        if (!userId.equals("")) {
-            if (postsOwner != null) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(postsOwner.getName());
-            } else {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Deleted Member");
+            if (!userId.equals("")) {
+                if (postsOwner != null) {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(postsOwner.getName());
+                } else {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Deleted Member");
+                }
             }
-        }
-    });
+        });
 
         //setting the recycler view
         swipeRefresh = view.findViewById(R.id.user_postlist_swiperefresh);
-        swipeRefresh.setOnRefreshListener(() ->{
+        swipeRefresh.setOnRefreshListener(() -> {
             Model.instance.refreshPostsList();
         });
 
@@ -98,23 +98,12 @@ public class UserPostListRvFragment extends Fragment {
         listRv.setAdapter(adapter);
 
         //setting the adapter listeners
-        adapter.setOnItemClickListener(new OnItemClickListener()
-        {
-            @Override
-            public void onItemClick(View v, int position) {
-                String postId = viewModel.getData().getValue().get(position).getId();
-                String postUId=viewModel.getData().getValue().get(position).getUserId();
-                Navigation.findNavController(v).navigate(UserPostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
-            }
-
-            @Override
-            public void onImageClick(View v, int position) {
-                String postId = viewModel.getData().getValue().get(position).getId();
-                String postUId = viewModel.getData().getValue().get(position).getUserId();
-                Navigation.findNavController(v).navigate(UserPostListRvFragmentDirections.actionGlobalPostFragment(postId,postUId));
-            }
+        adapter.setOnItemClickListener((v, position) -> {
+                String postId = viewModel.getDataByMember(userId).getValue().get(position).getId();
+                String postUId = viewModel.getDataByMember(userId).getValue().get(position).getUserId();
+                Navigation.findNavController(v).navigate(UserPostListRvFragmentDirections.actionGlobalPostFragment(postId, postUId));
         });
-        viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
+        viewModel.getDataByMember(userId).observe(getViewLifecycleOwner(), list -> refresh());
 
         swipeRefresh.setRefreshing(Model.instance.getPostsListLoadingState().getValue() == Model.PostsListLoadingState.loading);
         Model.instance.getPostsListLoadingState().observe(getViewLifecycleOwner(), postsListLoadingState -> {
@@ -130,7 +119,7 @@ public class UserPostListRvFragment extends Fragment {
 
 
     //HOLDER CLASS
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nameTv;
         TextView categoryTv;
         TextView areaTv;
@@ -146,10 +135,6 @@ public class UserPostListRvFragment extends Fragment {
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 listener.onItemClick(itemView, pos);
-            });
-            image.setOnClickListener(v->{
-                int pos = getAdapterPosition();
-                listener.onImageClick(itemView, pos);
             });
         }
 
@@ -168,9 +153,8 @@ public class UserPostListRvFragment extends Fragment {
         }
     }
 
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         void onItemClick(View v, int position);
-        void onImageClick(View v, int position);
     }
 
     //ADAPTER CLASS
@@ -193,41 +177,16 @@ public class UserPostListRvFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-            List<Post> postList = null;
-            if(userId.equals("")) {
-                Post post = viewModel.getData().getValue().get(position);
-                holder.bind(post);
-                return;
-            } else {
-                postList = viewModel.getData().getValue();
-                List<Post> tempList= new ArrayList<Post>();
-                for (Post p : postList) {
-                    if (p.getUserId().equals(userId))
-                        tempList.add(p);
-                }
-                postList.removeAll(postList);
-                postList.addAll(tempList);
-            }
-            Post post = postList.get(position);
+            Post post = viewModel.getDataByMember(userId).getValue().get(position);
             holder.bind(post);
         }
 
         @Override
         public int getItemCount() {
-            if (viewModel.getData().getValue() == null) {
+            if (viewModel.getDataByMember(userId).getValue() == null) {
                 return 0;
             }
-            if (userId.equals("")) {
-                return viewModel.getData().getValue().size();
-            } else {
-                int count = 0;
-                List<Post> postList = viewModel.getData().getValue();
-                for(Post p: postList) {
-                    if(p.getUserId().equals(userId))
-                        count++;
-                }
-                return count;
-            }
+            return viewModel.getDataByMember(userId).getValue().size();
         }
     }
 }

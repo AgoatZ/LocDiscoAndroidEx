@@ -104,13 +104,15 @@ public class MemberListRvFragment extends Fragment {
             });
         }
         public void bind(Member member) {
-            nameTv.setText(member.getName());
-            idTv.setText(member.getId());
-            avatar.setImageResource(R.drawable.avatarsmith);
-            if(member.getAvatar()!=null) {
-                Picasso.get()
-                        .load(member.getAvatar())
-                        .into(avatar);
+            if (member != null) {
+                nameTv.setText(member.getName());
+                idTv.setText(member.getId());
+                avatar.setImageResource(R.drawable.avatarsmith);
+                if (member.getAvatar() != null) {
+                    Picasso.get()
+                            .load(member.getAvatar())
+                            .into(avatar);
+                }
             }
         }
     }
@@ -147,6 +149,7 @@ public class MemberListRvFragment extends Fragment {
             if(viewModel.getData().getValue() == null){
                 return 0;
             }
-            return viewModel.getData().getValue().size(); }
+            return viewModel.getData().getValue().size();
+        }
     }
 }
