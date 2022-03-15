@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
 import android.os.Handler;
 import android.util.Log;
 
@@ -32,8 +33,6 @@ public class Model {
     ModelFirebase modelFirebase = new ModelFirebase();
 
     MutableLiveData<List<Member>> membersList = new MutableLiveData<List<Member>>();
-
-
 
 
     public enum MembersListLoadingState {
@@ -118,7 +117,7 @@ public class Model {
             refreshMembersList();
         }
         refreshMembersList();
-        if(membersList.getValue() != null) {
+        if (membersList.getValue() != null) {
             for (Member member : membersList.getValue()) {
                 if (member.getId().equals(id)) {
                     retMember.setValue(member);
@@ -126,7 +125,7 @@ public class Model {
                 }
             }
         }
-        if(!flag) retMember.postValue(null);
+        if (!flag) retMember.postValue(null);
         return retMember;
     }
 
@@ -159,10 +158,12 @@ public class Model {
             listener.onComplete();
         });
     }
+
     public interface GetMemberByIdListener {
         void onComplete(boolean isDeleted);
     }
-    public void isMemberDeletedFromDb(Member member, GetMemberByIdListener listener){
+
+    public void isMemberDeletedFromDb(Member member, GetMemberByIdListener listener) {
         modelFirebase.getMemberById(member.getId(), member.getUpdateDate(), listener);
     }
 
@@ -175,15 +176,17 @@ public class Model {
     MutableLiveData<PostsListLoadingState> postsListLoadingState = new MutableLiveData<>();
     MutableLiveData<List<Post>> postsList = new MutableLiveData<List<Post>>();
 
-    public interface AddPostListener{
+    public interface AddPostListener {
         void onComplete();
     }
+
     public void addPost(Post post, AddPostListener listener) {
         modelFirebase.addPost(post, () -> {
             refreshPostsList();
             listener.onComplete();
         });
     }
+
     public interface PostDeleteListener {
         void onComplete();
     }
@@ -238,9 +241,125 @@ public class Model {
         });
     }
 
-    public LiveData<List<Post>> getAllPosts(){
+    public LiveData<List<Post>> getAllPosts() {
         refreshPostsList();
         return postsList;
+    }
+
+    MutableLiveData<List<Post>> postsByCategoryList = new MutableLiveData<List<Post>>();
+
+    public void refreshPostsByCategory(String category) {
+        postsListLoadingState.setValue(PostsListLoadingState.loading);
+
+        // get last local update date
+        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("PostLastUpdateDate", 0);
+
+        executor.execute(() -> {
+            List<Post> updatedList = AppLocalDb.db.postDao().getAllPosts();
+            postsList.postValue(updatedList);
+        });
+
+        // firebase get all updates since last local update date
+        modelFirebase.getAllPosts(lastUpdateDate, list -> {
+
+            // add all records to the local db
+            executor.execute(() -> {
+                Long localUpdateDate = new Long(0);
+                for (Post post : list) {
+                    if (!post.isDeleted())
+                        AppLocalDb.db.postDao().insertAll(post);
+                    else
+                        AppLocalDb.db.postDao().delete(post);
+                    if (localUpdateDate < post.getUpdateDate()) {
+                        localUpdateDate = post.getUpdateDate();
+                    }
+                }
+
+                // update last local update date
+                MyApplication.getContext()
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("PostLastUpdateDate", localUpdateDate)
+                        .commit();
+
+                // return all data to caller
+                List<Post> updatedList = AppLocalDb.db.postDao().getAllPosts();
+                postsList.postValue(updatedList);
+                ArrayList<Post> filteredList = new ArrayList<Post>();
+                if (updatedList != null) {
+                    for (Post post : updatedList) {
+                        if (post.getCategory().equals(category)) {
+                            filteredList.add(post);
+                        }
+                    }
+                }
+                postsByCategoryList.postValue(filteredList);
+                postsListLoadingState.postValue(PostsListLoadingState.loaded);
+            });
+        });
+    }
+
+    public LiveData<List<Post>> getPostsByCategory(String category) {
+        refreshPostsByCategory(category);
+        return postsByCategoryList;
+    }
+
+    MutableLiveData<List<Post>> postsByMemberList = new MutableLiveData<List<Post>>();
+
+    public void refreshPostsByMember(String memberId) {
+        postsListLoadingState.setValue(PostsListLoadingState.loading);
+
+        // get last local update date
+        Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("PostLastUpdateDate", 0);
+
+        executor.execute(() -> {
+            List<Post> updatedList = AppLocalDb.db.postDao().getAllPosts();
+            postsList.postValue(updatedList);
+        });
+
+        // firebase get all updates since last local update date
+        modelFirebase.getAllPosts(lastUpdateDate, list -> {
+
+            // add all records to the local db
+            executor.execute(() -> {
+                Long localUpdateDate = new Long(0);
+                for (Post post : list) {
+                    if (!post.isDeleted())
+                        AppLocalDb.db.postDao().insertAll(post);
+                    else
+                        AppLocalDb.db.postDao().delete(post);
+                    if (localUpdateDate < post.getUpdateDate()) {
+                        localUpdateDate = post.getUpdateDate();
+                    }
+                }
+
+                // update last local update date
+                MyApplication.getContext()
+                        .getSharedPreferences("TAG", Context.MODE_PRIVATE)
+                        .edit()
+                        .putLong("PostLastUpdateDate", localUpdateDate)
+                        .commit();
+
+                // return all data to caller
+                List<Post> updatedList = AppLocalDb.db.postDao().getAllPosts();
+                postsList.postValue(updatedList);
+                ArrayList<Post> filteredList = new ArrayList<Post>();
+                if (updatedList != null) {
+                    for (Post post : updatedList) {
+                        if (post.getUserId().equals(memberId)) {
+                            filteredList.add(post);
+                        }
+                    }
+                }
+                postsByMemberList.postValue(filteredList);
+                postsListLoadingState.postValue(PostsListLoadingState.loaded);
+            });
+        });
+    }
+
+    public LiveData<List<Post>> getPostsByMember(String memberId) {
+        refreshPostsByMember(memberId);
+        return postsByMemberList;
     }
 
     MutableLiveData<Post> retPost = new MutableLiveData<Post>();
@@ -257,11 +376,12 @@ public class Model {
         }
         return retPost;
     }
+
     public interface GetPostByIdListener {
         void onComplete(boolean isDeleted);
     }
 
-    public void isPostDeletedFromDb(Post post, GetPostByIdListener listener){
+    public void isPostDeletedFromDb(Post post, GetPostByIdListener listener) {
         modelFirebase.getPostById(post.getId(), post.getUpdateDate(), listener);
     }
 
@@ -327,20 +447,22 @@ public class Model {
         listener.onComplete();
     }
 
-    public LiveData<List<Category>> getAllCategories(){
+    public LiveData<List<Category>> getAllCategories() {
         refreshCategoriesList();
         return categoriesList;
     }
 
-    public interface DeleteCategoryListener{
+    public interface DeleteCategoryListener {
         void onComplete(Exception error);
     }
 
-    public void deleteCategory(Category category,DeleteCategoryListener listener) {
-        modelFirebase.deleteCategory(category,listener);
+    public void deleteCategory(Category category, DeleteCategoryListener listener) {
+        modelFirebase.deleteCategory(category, listener);
     }
 
-    public MutableLiveData<CategoriesListLoadingState> getCategoriesListLoadingState(){ return categoriesListLoadingState; }
+    public MutableLiveData<CategoriesListLoadingState> getCategoriesListLoadingState() {
+        return categoriesListLoadingState;
+    }
 
     /********Authentication********/
     public interface SignInListener {
@@ -359,15 +481,15 @@ public class Model {
         modelFirebase.signIn(email, password, listener);
     }
 
-    public void signOut(){
-        executor.execute(()->modelFirebase.signOut());
+    public void signOut() {
+        executor.execute(() -> modelFirebase.signOut());
     }
 
-    public interface RegisterListener{
+    public interface RegisterListener {
         void onComplete(FirebaseUser user, Exception error);
     }
 
-    public void register(@NonNull String email,@NonNull String password, RegisterListener listener) {
+    public void register(@NonNull String email, @NonNull String password, RegisterListener listener) {
         modelFirebase.register(email, password, listener);
     }
 

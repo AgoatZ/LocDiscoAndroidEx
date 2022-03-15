@@ -68,6 +68,7 @@ public class CategoryPostListRvFragment extends Fragment {
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.category_postlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> {
             Model.instance.refreshPostsList();
+            Model.instance.refreshPostsByCategory(categoryName);
         });
 
         listRv = view.findViewById(R.id.category_postlist_rv);
@@ -91,6 +92,7 @@ public class CategoryPostListRvFragment extends Fragment {
             swipeRefresh.setRefreshing(Model.instance.getPostsListLoadingState().getValue() == Model.PostsListLoadingState.loading);
         });
         Model.instance.refreshPostsList();
+        Model.instance.refreshPostsByCategory(categoryName);
         return view;
     }
 

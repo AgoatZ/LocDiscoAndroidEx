@@ -89,6 +89,7 @@ public class UserPostListRvFragment extends Fragment {
         swipeRefresh = view.findViewById(R.id.user_postlist_swiperefresh);
         swipeRefresh.setOnRefreshListener(() -> {
             Model.instance.refreshPostsList();
+            Model.instance.refreshPostsByMember(userId);
         });
 
         listRv = view.findViewById(R.id.user_postlist_rv);
@@ -110,6 +111,7 @@ public class UserPostListRvFragment extends Fragment {
             swipeRefresh.setRefreshing(Model.instance.getPostsListLoadingState().getValue() == Model.PostsListLoadingState.loading);
         });
         Model.instance.refreshPostsList();
+        Model.instance.refreshPostsByMember(userId);
         return view;
     }
 
