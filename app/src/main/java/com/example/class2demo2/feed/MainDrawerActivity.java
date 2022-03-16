@@ -137,9 +137,13 @@ public class MainDrawerActivity extends AppCompatActivity {
         if (!super.onOptionsItemSelected(item)) {
             NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main_drawer);
             switch (item.getItemId()) {
-                case android.R.id.home:
+                case android.R.id.home: {
+                    Model.instance.refreshPostsList();
+                    Model.instance.refreshCategoriesList();
+                    Model.instance.refreshMembersList();
                     NavigationUI.navigateUp(navController, mAppBarConfiguration);
                     return true;
+                }
                 default:
                     NavigationUI.onNavDestinationSelected(item, navController);
             }
