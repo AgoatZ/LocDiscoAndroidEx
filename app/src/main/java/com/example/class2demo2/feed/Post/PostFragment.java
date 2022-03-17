@@ -100,6 +100,7 @@ public class PostFragment extends Fragment {
         post = viewModel.getData(postId).getValue();
         Model.instance.refreshPostsList();
 
+        //Set view components
         nameTv = view.findViewById(R.id.post_name_txt);
         areaTv = view.findViewById(R.id.post_area_txt);
         addressTv = view.findViewById(R.id.post_address_txt);
@@ -118,6 +119,7 @@ public class PostFragment extends Fragment {
                 post = post1;
             }
 
+            //Set relevant data if post is not deleted
             Model.instance.isPostDeletedFromDb(post, isDeleted -> {
                 if (isDeleted) {
                     Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
@@ -140,7 +142,7 @@ public class PostFragment extends Fragment {
             });
         });
 
-
+        //Get users info and set view accordingly
         memberViewModel.getData().observe(getViewLifecycleOwner(), members -> {
             for (Member m : members) {
                 if (m.getId().equals(postUId)) {

@@ -90,11 +90,12 @@ public class ModelFirebase {
                 .document(member.getId())
                 .update(json)
                 .addOnSuccessListener(unused -> {
-                    mAuth.getCurrentUser().delete();
-                    listener.onComplete();
+                    mAuth.getCurrentUser().delete().addOnCompleteListener(task -> {
+                    listener.onComplete(task.getException());
+                    });
                 })
                 .addOnFailureListener(e -> {
-                    listener.onComplete();
+                    listener.onComplete(e);
                 });
     }
 

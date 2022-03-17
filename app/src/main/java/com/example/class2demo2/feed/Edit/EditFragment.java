@@ -28,6 +28,7 @@ import androidx.navigation.Navigation;
 import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
 import com.example.class2demo2.feed.Details.MemberDetailsFragmentArgs;
+import com.example.class2demo2.login.LoginActivity;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Member;
 
@@ -158,21 +159,33 @@ public class EditFragment extends Fragment {
                 address.setText(member.getAddress());
             }
         });
+
+        if(!currMemberId.equals(memberId)) {
+            deleteBtn.setVisibility(View.GONE);
+        }
+
         saveBtn.setOnClickListener(v -> {
             save();
         });
-
 
         cancelBtn.setOnClickListener(v -> {
             Navigation.findNavController(v).navigateUp();
         });
 
+        deleteBtn.setOnClickListener(v -> {
+            Model.instance.delete(member, exception -> {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                startActivity(intent);
+                requireActivity().finish();
+            });
+        });
 
+        /*
         deleteBtn.setOnClickListener(v -> {
             Model.instance.logicalDelete(member, () -> {
                 Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToMemberListRvFragment());
             });
-        });
+        });*/
 
         cameraBtn = view.findViewById(R.id.edit_camera_btn);
         galleryBtn = view.findViewById(R.id.edit_gallery_btn);

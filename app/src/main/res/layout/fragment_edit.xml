@@ -27,7 +27,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_margin="10dp"
-            android:backgroundTint="#FF9800"
+            android:backgroundTint="#C10D0D"
             android:text="Delete" />
 
         <Button

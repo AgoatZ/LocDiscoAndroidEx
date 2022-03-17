@@ -141,7 +141,7 @@ public class Model {
     }
 
     public interface DeleteListener {
-        void onComplete();
+        void onComplete(Exception e);
     }
 
     public void delete(Member member, DeleteListener listener) {
@@ -164,6 +164,10 @@ public class Model {
     }
 
     public void isMemberDeletedFromDb(Member member, GetMemberByIdListener listener) {
+        if(member == null) {
+            listener.onComplete(true);
+            return;
+        }
         modelFirebase.getMemberById(member.getId(), member.getUpdateDate(), listener);
     }
 
@@ -382,6 +386,10 @@ public class Model {
     }
 
     public void isPostDeletedFromDb(Post post, GetPostByIdListener listener) {
+        if(post == null) {
+            listener.onComplete(true);
+            return;
+        }
         modelFirebase.getPostById(post.getId(), post.getUpdateDate(), listener);
     }
 
