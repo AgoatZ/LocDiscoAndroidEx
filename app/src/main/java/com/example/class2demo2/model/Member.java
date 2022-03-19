@@ -12,10 +12,11 @@ import java.util.Map;
 
 @Entity
 public class Member {
-    public enum UserType{
+    public enum UserType {
         USER,
         ADMIN;
     }
+
     final public static String COLLECTION_NAME = "members";
     @PrimaryKey
     @NonNull
@@ -28,10 +29,10 @@ public class Member {
     boolean isDeleted;
     String userType;
 
-    public Member(){
+    public Member() {
     }
 
-    public Member(Member m){
+    public Member(Member m) {
         this.name = m.name;
         this.id = m.id;
         this.address = m.address;
@@ -41,7 +42,7 @@ public class Member {
         this.userType = m.userType;
     }
 
-    public Member(String name, String id, String phone, String address, String avatar,String userType) {
+    public Member(String name, String id, String phone, String address, String avatar, String userType) {
         this.name = name;
         this.id = id;
         this.address = address;
@@ -115,14 +116,14 @@ public class Member {
         String address = (String) json.get("address");
         String avatar = null;
         String userType = (String) json.get("userType");
-        if(json.get("avatar") != null) {
+        if (json.get("avatar") != null) {
             avatar = json.get("avatar").toString();
         }
-        Timestamp ts = (Timestamp)json.get("updateDate");
+        Timestamp ts = (Timestamp) json.get("updateDate");
         Long updateDate = ts.getSeconds();
         boolean isDeleted = (boolean) json.get("isDeleted");
 
-        Member member = new Member(name,id,phone,address,avatar,userType);
+        Member member = new Member(name, id, phone, address, avatar, userType);
         member.setUpdateDate(updateDate);
         member.setDeleted(isDeleted);
         return member;
@@ -130,20 +131,21 @@ public class Member {
 
     public Map<String, Object> toJson() {
         Map<String, Object> json = new HashMap<String, Object>();
-        json.put("id",id);
-        json.put("name",name);
-        json.put("phone",phone);
-        json.put("address",address);
-        json.put("avatar",avatar);
+        json.put("id", id);
+        json.put("name", name);
+        json.put("phone", phone);
+        json.put("address", address);
+        json.put("avatar", avatar);
         json.put("updateDate", FieldValue.serverTimestamp());
-        json.put("isDeleted",isDeleted);
-        json.put("userType",userType);
+        json.put("isDeleted", isDeleted);
+        json.put("userType", userType);
         return json;
     }
-//TODO:...
+
     public Long getUpdateDate() {
         return updateDate;
     }
+
     public void setUpdateDate(Long updateDate) {
         this.updateDate = updateDate;
     }

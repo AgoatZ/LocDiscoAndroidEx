@@ -8,16 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,13 +21,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.example.class2demo2.NavGraphDirections;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
 import com.example.class2demo2.R;
-import com.example.class2demo2.feed.Details.MemberDetailsFragmentArgs;
-import com.example.class2demo2.feed.Edit.EditFragmentDirections;
-import com.example.class2demo2.feed.Edit.EditViewModel;
 import com.example.class2demo2.model.Category;
-import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
 import com.squareup.picasso.Picasso;
@@ -44,7 +36,6 @@ import com.squareup.picasso.Picasso;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,12 +44,9 @@ import java.util.UUID;
  */
 public class EditPostFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_POST_ID = "ARG_POST_ID";
     private static final String ARG_POST_UID = "ARG_POST_UID";
 
-    // TODO: Rename and change types of parameters
     private String postId;
     private String postUId;
 
@@ -74,7 +62,6 @@ public class EditPostFragment extends Fragment {
      * @param postUId Parameter 2.
      * @return A new instance of fragment EditPostFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static EditPostFragment newInstance(String postId, String postUId) {
         EditPostFragment fragment = new EditPostFragment();
         Bundle args = new Bundle();
@@ -180,7 +167,7 @@ public class EditPostFragment extends Fragment {
         deleteBtn = view.findViewById(R.id.edit_post_delete_btn);
 
 
-        if(post != null) {
+        if (post != null) {
             nameTv.setText(post.getName());
             categoryTv.setText(post.getCategory());
             areaTv.setText(post.getArea());
@@ -232,7 +219,7 @@ public class EditPostFragment extends Fragment {
         });
 
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {
-            if ( (post == null) || (post.getUpdateDate() < post1.getUpdateDate()) ) {
+            if ((post == null) || (post.getUpdateDate() < post1.getUpdateDate())) {
                 post = post1;
             }
             nameTv.setText(post.getName());

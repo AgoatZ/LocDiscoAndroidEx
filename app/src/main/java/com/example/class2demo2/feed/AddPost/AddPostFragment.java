@@ -8,15 +8,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,10 +21,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+
 import com.example.class2demo2.R;
-import com.example.class2demo2.feed.MemberList.MemberListRvViewModel;
 import com.example.class2demo2.model.Category;
-import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
 
@@ -49,19 +44,11 @@ import java.util.UUID;
  */
 public class AddPostFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-
-    // TODO: Rename and change types of parameters
-
-
     public AddPostFragment() {
         // Required empty public constructor
     }
 
 
-    // TODO: Rename and change types and number of parameters
     public static AddPostFragment newInstance() {
         AddPostFragment fragment = new AddPostFragment();
         Bundle args = new Bundle();
@@ -93,19 +80,20 @@ public class AddPostFragment extends Fragment {
         String sdescriptionTv = descriptionTv.getText().toString();
 
         Post post = new Post(snameTv, UUID.randomUUID().toString(), scategoryTv, saddressTv, null, sareaTv, Model.instance.getUid(), sdescriptionTv);
-        if (imageBitmap != null){
-            Model.instance.saveImage(imageBitmap, "P" + post.getId() + "U"+ post.getUserId() + ".jpg", url -> {
+        if (imageBitmap != null) {
+            Model.instance.saveImage(imageBitmap, "P" + post.getId() + "U" + post.getUserId() + ".jpg", url -> {
                 post.setImage(url);
                 Model.instance.addPost(post, () -> {
                     Navigation.findNavController(nameTv).navigateUp();
                 });
             });
-        }else{
+        } else {
             Model.instance.addPost(post, () -> {
                 Navigation.findNavController(nameTv).navigateUp();
             });
         }
     }
+
     ArrayAdapter<String> adapter;
     AddPostViewModel viewModel;
     List<String> categories;
@@ -123,6 +111,7 @@ public class AddPostFragment extends Fragment {
     ImageButton cameraBtn;
     ImageButton galleryBtn;
     ProgressBar progressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -160,7 +149,7 @@ public class AddPostFragment extends Fragment {
         List<Category> cat = new ArrayList<Category>();
         cat = viewModel.getData().getValue();
 
-        if(cat != null) {
+        if (cat != null) {
             for (Category category : cat) {
                 categories.add(category.getName());
             }
@@ -172,7 +161,7 @@ public class AddPostFragment extends Fragment {
 
         viewModel.getData().observe(getViewLifecycleOwner(), categoryList -> {
             categories.removeAll(categories);
-            for (Category category: categoryList) {
+            for (Category category : categoryList) {
                 categories.add(category.getName());
             }
             adapter = new ArrayAdapter<String>(requireContext(), R.layout.category_list_item, categories);
@@ -196,21 +185,20 @@ public class AddPostFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_IMAGE_CAPTURE){
-            if(resultCode == RESULT_OK){
+        if (requestCode == REQUEST_IMAGE_CAPTURE) {
+            if (resultCode == RESULT_OK) {
                 Bundle extras = data.getExtras();
                 imageBitmap = (Bitmap) extras.get("data");
                 image.setImageBitmap(imageBitmap);
             }
-        }
-        else if(requestCode == REQUEST_GALLERY_OPEN){
-            if(resultCode == RESULT_OK){
-                try{
+        } else if (requestCode == REQUEST_GALLERY_OPEN) {
+            if (resultCode == RESULT_OK) {
+                try {
                     final Uri imageUri = data.getData();
                     final InputStream imageStream = getContext().getContentResolver().openInputStream(imageUri);
                     imageBitmap = BitmapFactory.decodeStream(imageStream);
                     image.setImageBitmap(imageBitmap);
-                } catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getContext(), "Failed to select image from gallery", Toast.LENGTH_LONG).show();
                 }

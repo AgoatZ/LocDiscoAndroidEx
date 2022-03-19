@@ -29,9 +29,10 @@ public class Post {
     Long updateDate = new Long(0);
     boolean isDeleted;
 
-    public Post(){}
+    public Post() {
+    }
 
-    public Post(Post p){
+    public Post(Post p) {
         this.userId = p.userId;
         this.name = p.name;
         this.id = p.id;
@@ -43,7 +44,7 @@ public class Post {
         this.description = p.description;
     }
 
-    public Post(String name, String id,String category,String address, String image, String area, String userId, String description) {
+    public Post(String name, String id, String category, String address, String image, String area, String userId, String description) {
         this.name = name;
         this.id = id;
         this.address = address;
@@ -139,10 +140,10 @@ public class Post {
         String category = (String) json.get("category");
         String description = (String) json.get("description");
         String image = null;
-        if(json.get("image") != null) {
+        if (json.get("image") != null) {
             image = json.get("image").toString();
         }
-        Timestamp ts = (Timestamp)json.get("updateDate");
+        Timestamp ts = (Timestamp) json.get("updateDate");
         Long updateDate = ts.getSeconds();
         boolean isDeleted = (boolean) json.get("isDeleted");
 
@@ -154,22 +155,23 @@ public class Post {
 
     public Map<String, Object> toJson() {
         Map<String, Object> json = new HashMap<String, Object>();
-        json.put("id",id);
-        json.put("name",name);
-        json.put("area",area);
-        json.put("address",address);
-        json.put("image",image);
-        json.put("userId",userId);
-        json.put("category",category);
-        json.put("description",description);
+        json.put("id", id);
+        json.put("name", name);
+        json.put("area", area);
+        json.put("address", address);
+        json.put("image", image);
+        json.put("userId", userId);
+        json.put("category", category);
+        json.put("description", description);
         json.put("updateDate", FieldValue.serverTimestamp());
-        json.put("isDeleted",isDeleted);
+        json.put("isDeleted", isDeleted);
         return json;
     }
-    //TODO:...
+
     public Long getUpdateDate() {
         return updateDate;
     }
+
     public void setUpdateDate(Long updateDate) {
         this.updateDate = updateDate;
     }

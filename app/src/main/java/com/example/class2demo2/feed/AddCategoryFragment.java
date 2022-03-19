@@ -18,19 +18,10 @@ import com.example.class2demo2.model.Model;
 
 public class AddCategoryFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-
-
-    // TODO: Rename and change types of parameters
-
-
     public AddCategoryFragment() {
         // Required empty public constructor
     }
 
-
-    // TODO: Rename and change types and number of parameters
     public static AddCategoryFragment newInstance() {
         AddCategoryFragment fragment = new AddCategoryFragment();
         Bundle args = new Bundle();
@@ -52,7 +43,7 @@ public class AddCategoryFragment extends Fragment {
         String snameTv = nameTv.getText().toString();
 
         Category category = new Category(snameTv);
-        Model.instance.addCategory(category, ()->Navigation.findNavController(nameTv).navigate(AddCategoryFragmentDirections.actionGlobalPostListRvFragment()));
+        Model.instance.addCategory(category, () -> Navigation.findNavController(nameTv).navigate(AddCategoryFragmentDirections.actionGlobalPostListRvFragment()));
     }
 
     EditText nameTv;

@@ -29,8 +29,8 @@ import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
 import com.example.class2demo2.feed.Details.MemberDetailsFragmentArgs;
 import com.example.class2demo2.login.LoginActivity;
-import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Member;
+import com.example.class2demo2.model.Model;
 
 import java.io.InputStream;
 
@@ -41,13 +41,10 @@ import java.io.InputStream;
  */
 public class EditFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_MEMBER_ID = "ARG_MEMBER_ID";
     private static final String ARG_CURR_MEMBER_ID = "ARG_CURR_MEMBER_ID";
 
 
-    // TODO: Rename and change types of parameters
     private String memberId;
     private String currMemberId;
 
@@ -56,7 +53,6 @@ public class EditFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static EditFragment newInstance(String memberId, String currMemberId) {
         EditFragment fragment = new EditFragment();
         Bundle args = new Bundle();
@@ -160,7 +156,7 @@ public class EditFragment extends Fragment {
             }
         });
 
-        if(!currMemberId.equals(memberId)) {
+        if (!currMemberId.equals(memberId)) {
             deleteBtn.setVisibility(View.GONE);
         }
 
@@ -180,12 +176,6 @@ public class EditFragment extends Fragment {
             });
         });
 
-        /*
-        deleteBtn.setOnClickListener(v -> {
-            Model.instance.logicalDelete(member, () -> {
-                Navigation.findNavController(v).navigate(EditFragmentDirections.actionEditFragmentToMemberListRvFragment());
-            });
-        });*/
 
         cameraBtn = view.findViewById(R.id.edit_camera_btn);
         galleryBtn = view.findViewById(R.id.edit_gallery_btn);

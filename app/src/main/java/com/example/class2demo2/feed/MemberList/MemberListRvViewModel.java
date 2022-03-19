@@ -1,11 +1,10 @@
 package com.example.class2demo2.feed.MemberList;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Member;
+import com.example.class2demo2.model.Model;
 
 import java.util.List;
 

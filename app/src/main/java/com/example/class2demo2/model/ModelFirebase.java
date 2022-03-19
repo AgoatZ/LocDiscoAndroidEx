@@ -3,7 +3,6 @@ package com.example.class2demo2.model;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -91,7 +90,7 @@ public class ModelFirebase {
                 .update(json)
                 .addOnSuccessListener(unused -> {
                     mAuth.getCurrentUser().delete().addOnCompleteListener(task -> {
-                    listener.onComplete(task.getException());
+                        listener.onComplete(task.getException());
                     });
                 })
                 .addOnFailureListener(e -> {

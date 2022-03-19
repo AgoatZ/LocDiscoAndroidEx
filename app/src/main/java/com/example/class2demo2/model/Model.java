@@ -2,28 +2,21 @@ package com.example.class2demo2.model;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Handler;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
 import androidx.core.os.HandlerCompat;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.room.Database;
 
 import com.example.class2demo2.MyApplication;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import android.os.Handler;
-import android.util.Log;
 
 public class Model {
     public static final Model instance = new Model();
@@ -61,13 +54,6 @@ public class Model {
 
         // get last local update date
         Long lastUpdateDate = MyApplication.getContext().getSharedPreferences("TAG", Context.MODE_PRIVATE).getLong("MemberLastUpdateDate", 0);
-
-        /*
-        executor.execute(() -> {
-            List<Member> updatedList = AppLocalDb.db.memberDao().getAllMembers();
-            membersList.postValue(updatedList);
-        });
-        */
 
         // firebase get all updates since last local update date
         modelFirebase.getAllMembers(lastUpdateDate, list -> {
@@ -112,7 +98,6 @@ public class Model {
 
     public LiveData<Member> getMemberById(String id) {
         boolean flag = false;
-        //retMember.postValue(null);
         if (membersList.getValue() == null) {
             refreshMembersList();
         }
@@ -164,7 +149,7 @@ public class Model {
     }
 
     public void isMemberDeletedFromDb(Member member, GetMemberByIdListener listener) {
-        if(member == null) {
+        if (member == null) {
             listener.onComplete(true);
             return;
         }
@@ -386,7 +371,7 @@ public class Model {
     }
 
     public void isPostDeletedFromDb(Post post, GetPostByIdListener listener) {
-        if(post == null) {
+        if (post == null) {
             listener.onComplete(true);
             return;
         }

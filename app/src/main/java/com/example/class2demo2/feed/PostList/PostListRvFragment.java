@@ -2,7 +2,6 @@ package com.example.class2demo2.feed.PostList;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -20,14 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.class2demo2.R;
-import com.example.class2demo2.feed.Edit.EditFragment;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
-import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class PostListRvFragment extends Fragment {

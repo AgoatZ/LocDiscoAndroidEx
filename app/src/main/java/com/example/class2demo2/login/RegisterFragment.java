@@ -2,10 +2,6 @@ package com.example.class2demo2.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +9,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
 import com.example.class2demo2.R;
 import com.example.class2demo2.feed.MainDrawerActivity;
 import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.Model;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
-import com.google.firebase.firestore.auth.User;
 
 public class RegisterFragment extends Fragment {
 
@@ -36,26 +33,26 @@ public class RegisterFragment extends Fragment {
         TextInputEditText lastNameTil = view.findViewById(R.id.register_lastname_et);
         TextView loginTv = view.findViewById(R.id.register_login_tv);
 
-        loginTv.setOnClickListener(v ->{
+        loginTv.setOnClickListener(v -> {
             Navigation.findNavController(v).navigate(RegisterFragmentDirections.actionGlobalLoginFragment());
         });
 
-        registerBtn.setOnClickListener(v ->{
+        registerBtn.setOnClickListener(v -> {
             Model.instance.register(emailTil.getEditableText().toString(),
                     passwordTil.getEditableText().toString(),
-                    (user,error) -> {
-                    if(user!=null)
-                        Model.instance.addMember(new Member
-                                        (firstNameTil.getEditableText().toString()+ " " + lastNameTil.getEditableText().toString(),
-                                         user.getUid(),
-                                        null,
-                                        user.getEmail(),
-                                        null,
-                                                Member.UserType.USER.toString()),
-                                () -> toFeedActivity());
-                    else
-                        Toast.makeText(this.getContext(), error.getMessage().toString(), Toast.LENGTH_LONG).show();
-            });
+                    (user, error) -> {
+                        if (user != null)
+                            Model.instance.addMember(new Member
+                                            (firstNameTil.getEditableText().toString() + " " + lastNameTil.getEditableText().toString(),
+                                                    user.getUid(),
+                                                    null,
+                                                    user.getEmail(),
+                                                    null,
+                                                    Member.UserType.USER.toString()),
+                                    () -> toFeedActivity());
+                        else
+                            Toast.makeText(this.getContext(), error.getMessage().toString(), Toast.LENGTH_LONG).show();
+                    });
         });
         return view;
     }

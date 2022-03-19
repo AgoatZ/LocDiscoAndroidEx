@@ -1,7 +1,5 @@
 package com.example.class2demo2.feed.AddPost;
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 

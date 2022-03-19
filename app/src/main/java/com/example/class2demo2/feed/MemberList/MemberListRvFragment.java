@@ -2,21 +2,14 @@ package com.example.class2demo2.feed.MemberList;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Layout;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
@@ -24,18 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.example.class2demo2.MyApplication;
 import com.example.class2demo2.R;
-import com.example.class2demo2.databinding.ActivityMainDrawer2Binding;
-import com.example.class2demo2.feed.MainDrawerActivity;
+import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
-import com.example.class2demo2.model.Member;
-import com.google.android.material.navigation.NavigationView;
 import com.squareup.picasso.Picasso;
-
-import java.util.concurrent.Executors;
-import java.util.logging.XMLFormatter;
 
 
 public class MemberListRvFragment extends Fragment {
@@ -57,10 +43,10 @@ public class MemberListRvFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_member_list,container,false);
+        View view = inflater.inflate(R.layout.fragment_member_list, container, false);
 
         swipeRefresh = view.findViewById(R.id.memberlist_swiperefresh);
-        swipeRefresh.setOnRefreshListener(() ->{
+        swipeRefresh.setOnRefreshListener(() -> {
             Model.instance.refreshMembersList();
         });
         listRv = view.findViewById(R.id.memberlist_rv);
@@ -70,9 +56,9 @@ public class MemberListRvFragment extends Fragment {
         listRv.setAdapter(adapter);
 
 
-        adapter.setOnItemClickListener((v,position) -> {
-                String memberId = viewModel.getData().getValue().get(position).getId();
-                Navigation.findNavController(v).navigate(MemberListRvFragmentDirections.actionMemberListRvFragmentToMemberDetailsFragment(memberId, Model.instance.getUid()));
+        adapter.setOnItemClickListener((v, position) -> {
+            String memberId = viewModel.getData().getValue().get(position).getId();
+            Navigation.findNavController(v).navigate(MemberListRvFragmentDirections.actionMemberListRvFragmentToMemberDetailsFragment(memberId, Model.instance.getUid()));
         });
         viewModel.getData().observe(getViewLifecycleOwner(), list -> refresh());
 
@@ -89,10 +75,11 @@ public class MemberListRvFragment extends Fragment {
 
 
     //HOLDER CLASS
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    class MyViewHolder extends RecyclerView.ViewHolder {
         TextView nameTv;
         TextView idTv;
         ImageView avatar;
+
         public MyViewHolder(@NonNull View itemView, OnItemClickListener listener) {
             super(itemView);
             nameTv = itemView.findViewById(R.id.listrow_name_tv);
@@ -103,6 +90,7 @@ public class MemberListRvFragment extends Fragment {
                 listener.onItemClick(itemView, pos);
             });
         }
+
         public void bind(Member member) {
             if (member != null) {
                 nameTv.setText(member.getName());
@@ -117,22 +105,23 @@ public class MemberListRvFragment extends Fragment {
         }
     }
 
-    interface OnItemClickListener{
+    interface OnItemClickListener {
         void onItemClick(View v, int position);
     }
+
     //ADAPTER CLASS
-    class MyAdapter extends RecyclerView.Adapter<MyViewHolder>{
+    class MyAdapter extends RecyclerView.Adapter<MyViewHolder> {
 
         OnItemClickListener listener;
 
-        public void setOnItemClickListener(OnItemClickListener listener){
+        public void setOnItemClickListener(OnItemClickListener listener) {
             this.listener = listener;
         }
 
         @NonNull
         @Override
         public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.member_list_row,parent,false);
+            View view = getLayoutInflater().inflate(R.layout.member_list_row, parent, false);
             MyViewHolder holder = new MyViewHolder(view, listener);
 
             return holder;
@@ -146,7 +135,7 @@ public class MemberListRvFragment extends Fragment {
 
         @Override
         public int getItemCount() {
-            if(viewModel.getData().getValue() == null){
+            if (viewModel.getData().getValue() == null) {
                 return 0;
             }
             return viewModel.getData().getValue().size();

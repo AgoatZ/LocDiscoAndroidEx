@@ -2,7 +2,6 @@ package com.example.class2demo2.feed.PostList;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,15 +19,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.class2demo2.R;
-import com.example.class2demo2.feed.Edit.EditFragment;
+import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
-import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class UserPostListRvFragment extends Fragment {
@@ -100,9 +95,9 @@ public class UserPostListRvFragment extends Fragment {
 
         //setting the adapter listeners
         adapter.setOnItemClickListener((v, position) -> {
-                String postId = viewModel.getDataByMember(userId).getValue().get(position).getId();
-                String postUId = viewModel.getDataByMember(userId).getValue().get(position).getUserId();
-                Navigation.findNavController(v).navigate(UserPostListRvFragmentDirections.actionGlobalPostFragment(postId, postUId));
+            String postId = viewModel.getDataByMember(userId).getValue().get(position).getId();
+            String postUId = viewModel.getDataByMember(userId).getValue().get(position).getUserId();
+            Navigation.findNavController(v).navigate(UserPostListRvFragmentDirections.actionGlobalPostFragment(postId, postUId));
         });
         viewModel.getDataByMember(userId).observe(getViewLifecycleOwner(), list -> refresh());
 

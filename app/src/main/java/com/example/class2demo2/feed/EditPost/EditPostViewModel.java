@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel;
 
 import com.example.class2demo2.model.Category;
 import com.example.class2demo2.model.Model;
-import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.Post;
 
 import java.util.List;
@@ -25,5 +24,7 @@ public class EditPostViewModel extends ViewModel {
         return data;
     }
 
-    public LiveData<List<Category>> getCategories(){ return categories; }
+    public LiveData<List<Category>> getCategories() {
+        return categories;
+    }
 }

@@ -80,9 +80,9 @@ public class CategoryPostListRvFragment extends Fragment {
 
         //setting the adapter listeners
         adapter.setOnItemClickListener((v, position) -> {
-                String postId = viewModel.getDataByCategory(categoryName).getValue().get(position).getId();
-                String postUId = viewModel.getDataByCategory(categoryName).getValue().get(position).getUserId();
-                Navigation.findNavController(v).navigate(CategoryPostListRvFragmentDirections.actionGlobalPostFragment(postId, postUId));
+            String postId = viewModel.getDataByCategory(categoryName).getValue().get(position).getId();
+            String postUId = viewModel.getDataByCategory(categoryName).getValue().get(position).getUserId();
+            Navigation.findNavController(v).navigate(CategoryPostListRvFragmentDirections.actionGlobalPostFragment(postId, postUId));
         });
 
         viewModel.getDataByCategory(categoryName).observe(getViewLifecycleOwner(), list -> refresh());

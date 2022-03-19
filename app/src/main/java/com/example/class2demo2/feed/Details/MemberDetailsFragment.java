@@ -31,12 +31,9 @@ import java.util.List;
  */
 public class MemberDetailsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_MEMBER_ID = "ARG_MEMBER_ID";
     private static final String ARG_CURR_MEMBER_ID = "ARG_CURR_MEMBER_ID";
 
-    // TODO: Rename and change types of parameters
     private String memberId;
     private String currMemberId;
 
@@ -45,7 +42,6 @@ public class MemberDetailsFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static MemberDetailsFragment newInstance(String memberId, String currMemberId) {
         MemberDetailsFragment fragment = new MemberDetailsFragment();
         Bundle args = new Bundle();

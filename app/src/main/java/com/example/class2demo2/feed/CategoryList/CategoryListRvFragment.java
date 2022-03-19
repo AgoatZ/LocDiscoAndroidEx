@@ -1,21 +1,7 @@
 package com.example.class2demo2.feed.CategoryList;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
-
-import androidx.annotation.ColorInt;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +9,21 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
-import com.example.class2demo2.feed.PostList.PostListRvFragment;
-import com.example.class2demo2.feed.PostList.PostListViewModel;
 import com.example.class2demo2.model.Category;
 import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
-import com.example.class2demo2.model.Post;
-
-import java.util.ArrayList;
-import java.util.List;
 
 
 public class CategoryListRvFragment extends Fragment {
@@ -42,7 +31,6 @@ public class CategoryListRvFragment extends Fragment {
     //MEMBERS
     CategoryListViewModel viewModel;
     String userType;
-    //PostListViewModel postViewModel;
     MemberViewModel memberViewModel;
     MyAdapter adapter;
     RecyclerView listRv;
@@ -52,7 +40,6 @@ public class CategoryListRvFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         viewModel = new ViewModelProvider(this).get(CategoryListViewModel.class);
-        //postViewModel = new ViewModelProvider(requireActivity()).get(PostListViewModel.class);
         memberViewModel = new ViewModelProvider(requireActivity()).get(MemberViewModel.class);
     }
 
@@ -95,9 +82,9 @@ public class CategoryListRvFragment extends Fragment {
         });
 
         viewModel.getData().observe(getViewLifecycleOwner(), list -> adapter.notifyDataSetChanged());
-        memberViewModel.getData().observe(getViewLifecycleOwner(), list-> {
-            for(Member member: list){
-                if(Model.instance.getUid().equals(member.getId()))
+        memberViewModel.getData().observe(getViewLifecycleOwner(), list -> {
+            for (Member member : list) {
+                if (Model.instance.getUid().equals(member.getId()))
                     userType = member.getUserType();
             }
         });
@@ -130,7 +117,7 @@ public class CategoryListRvFragment extends Fragment {
                 int pos = getAdapterPosition();
                 listener.onItemClick(itemView, pos);
             });
-            if(userType.equals(Member.UserType.ADMIN.toString())) {
+            if (userType.equals(Member.UserType.ADMIN.toString())) {
                 delete_btn.setOnClickListener(v -> {
                     int pos = getAdapterPosition();
                     listener.onDeleteClick(itemView, pos);

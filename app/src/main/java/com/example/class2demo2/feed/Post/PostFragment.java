@@ -2,12 +2,10 @@ package com.example.class2demo2.feed.Post;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,16 +13,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavOptions;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.class2demo2.NavGraphDirections;
 import com.example.class2demo2.R;
+import com.example.class2demo2.model.Member;
 import com.example.class2demo2.model.MemberViewModel;
 import com.example.class2demo2.model.Model;
 import com.example.class2demo2.model.Post;
-import com.example.class2demo2.model.Member;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -37,7 +33,6 @@ public class PostFragment extends Fragment {
     private static final String ARG_POST_ID = "ARG_POST_ID";
     private static final String ARG_POST_UID = "ARG_POST_UID";
 
-    // TODO: Rename and change types of parameters
     private String postId;
     private String postUId;
 
@@ -46,7 +41,6 @@ public class PostFragment extends Fragment {
         // Required empty public constructor
     }
 
-    // TODO: Rename and change types and number of parameters
     public static PostFragment newInstance(String postId, String postUId) {
         PostFragment fragment = new PostFragment();
         Bundle args = new Bundle();
@@ -115,7 +109,7 @@ public class PostFragment extends Fragment {
         postOwnerNameTv = view.findViewById(R.id.post_user_info_tv);
 
         viewModel.getData(postId).observe(getViewLifecycleOwner(), post1 -> {
-            if(post == null) {
+            if (post == null) {
                 post = post1;
             }
 
@@ -125,7 +119,7 @@ public class PostFragment extends Fragment {
                     Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
                     Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
                 } else {
-                    if(post1 != null) {
+                    if (post1 != null) {
                         post = post1;
                     }
                     nameTv.setText(post.getName());
