@@ -354,9 +354,7 @@ public class Model {
     MutableLiveData<Post> retPost = new MutableLiveData<Post>();
 
     public LiveData<Post> getPostById(String id) {
-        if (postsList.getValue() == null) {
-            refreshPostsList();
-        }
+
         refreshPostsList();
         for (Post post : postsList.getValue()) {
             if (post.getId().equals(id)) {

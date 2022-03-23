@@ -119,18 +119,20 @@ public class PostFragment extends Fragment {
                     Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
                     Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
                 } else {
-                    if (post1 != null) {
+                    if (post1 != null && post1.getId().equals(postId)) {
                         post = post1;
                     }
-                    nameTv.setText(post.getName());
-                    areaTv.setText(post.getArea());
-                    addressTv.setText(post.getAddress());
-                    categoryTv.setText(post.getCategory());
-                    descriptionTv.setText(post.getDescription());
-                    if (post.getImage() != null) {
-                        Picasso.get()
-                                .load(post.getImage())
-                                .into(image);
+                    if(post.getId().equals(postId)) {
+                        nameTv.setText(post.getName());
+                        areaTv.setText(post.getArea());
+                        addressTv.setText(post.getAddress());
+                        categoryTv.setText(post.getCategory());
+                        descriptionTv.setText(post.getDescription());
+                        if (post.getImage() != null) {
+                            Picasso.get()
+                                    .load(post.getImage())
+                                    .into(image);
+                        }
                     }
                 }
             });
