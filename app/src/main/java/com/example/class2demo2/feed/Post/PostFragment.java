@@ -115,14 +115,13 @@ public class PostFragment extends Fragment {
 
             //Set relevant data if post is not deleted
             Model.instance.isPostDeletedFromDb(post, isDeleted -> {
-                if (isDeleted) {
-                    Navigation.findNavController(nameTv).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
+                if (isDeleted && post.getId().equals(postId)) {
+                    Navigation.findNavController(container).navigate(NavGraphDirections.actionGlobalPostListRvFragment());
                     Toast.makeText(getContext(), "This post does not exist anymore", Toast.LENGTH_LONG).show();
                 } else {
-                    if (post1 != null && post1.getId().equals(postId)) {
+                    if (post1 != null) {
                         post = post1;
                     }
-                    if(post.getId().equals(postId)) {
                         nameTv.setText(post.getName());
                         areaTv.setText(post.getArea());
                         addressTv.setText(post.getAddress());
@@ -132,9 +131,10 @@ public class PostFragment extends Fragment {
                             Picasso.get()
                                     .load(post.getImage())
                                     .into(image);
+                        } else {
+                            image.setImageResource(R.drawable.avatarsmith);
                         }
                     }
-                }
             });
         });
 
